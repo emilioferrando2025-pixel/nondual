@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Control de Fichaje · NonDual In Salons</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F5F1;
+  --bg2: #EDEAE3;
+  --bg3: #E2DDD5;
+  --dark: #1A1815;
+  --dark2: #2C2925;
+  --dark3: #3D3A34;
+  --gold: #B8933A;
+  --gold-light: #D4AF6A;
+  --gold-dim: rgba(184,147,58,0.12);
+  --cream: #F7F5F1;
+  --muted: #8A8070;
+  --red: #C94C4C;
+  --green: #3A9E6A;
+  --green-dim: rgba(58,158,106,0.1);
+  --amber: #D4831A;
+  --amber-dim: rgba(212,131,26,0.1);
+  --blue: #3A6A9E;
+  --shadow: 0 2px 16px rgba(26,24,21,0.08);
+  --shadow-lg: 0 8px 32px rgba(26,24,21,0.12);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { font-size: 16px; }
+body { background:var(--bg); color:var(--dark); font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+/* ── SCREENS ── */
+.screen { display:none; min-height:100vh; }
+.screen.active { display:flex; flex-direction:column; }
+
+/* ── HOME SCREEN ── */
+#screen-home {
+  align-items:center; justify-content:center;
+  padding:40px 24px;
+  background: linear-gradient(160deg, #1A1815 0%, #2C2925 100%);
+  position:relative; overflow:hidden;
+}
+
+#screen-home::before {
+  content:'';
+  position:absolute; top:-40%; left:-20%;
+  width:140%; height:140%;
+  background: radial-gradient(ellipse at 30% 40%, rgba(184,147,58,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 70%, rgba(184,147,58,0.07) 0%, transparent 50%);
+  pointer-events:none;
+}
+
+.home-content { position:relative; z-index:1; text-align:center; width:100%; max-width:360px; }
+
+.home-brand {
+  font-size:10px; color:var(--gold-light); letter-spacing:3px;
+  text-transform:uppercase; margin-bottom:32px; font-weight:500;
+}
+
+.home-title {
+  font-family:'Playfair Display',serif;
+  font-size:32px; font-weight:900; color:#F7F5F1;
+  line-height:1.15; margin-bottom:8px;
+}
+.home-title em { color:var(--gold-light); font-style:italic; }
+
+.home-sub {
+  font-size:13px; color:rgba(247,245,241,0.5);
+  line-height:1.6; margin-bottom:48px;
+}
+
+.home-time {
+  font-family:'Playfair Display',serif;
+  font-size:52px; font-weight:700; color:#F7F5F1;
+  letter-spacing:-1px; margin-bottom:4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.home-date {
+  font-size:12px; color:rgba(247,245,241,0.4);
+  margin-bottom:40px; text-transform:capitalize;
+}
+
+.home-btns { display:flex; flex-direction:column; gap:12px; }
+
+.btn-home-main {
+  width:100%; padding:16px;
+  background:linear-gradient(135deg, var(--gold), var(--gold-light));
+  color:var(--dark); font-family:'DM Sans',sans-serif;
+  font-size:15px; font-weight:700; border:none;
+  border-radius:14px; cursor:pointer;
+  box-shadow:0 6px 24px rgba(184,147,58,0.3);
+  transition:transform 0.15s;
+}
+.btn-home-main:active { transform:scale(0.97); }
+
+.btn-home-sec {
+  width:100%; padding:15px;
+  background:rgba(247,245,241,0.06);
+  color:rgba(247,245,241,0.7); font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:400; border:1px solid rgba(247,245,241,0.1);
+  border-radius:14px; cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-home-sec:active { background:rgba(247,245,241,0.1); }
+
+/* ── EMPLOYEE SELECT ── */
+#screen-select {
+  background:var(--bg);
+}
+
+.top-bar {
+  display:flex; align-items:center; gap:12px;
+  padding:20px 20px 0;
+}
+
+.btn-back {
+  width:38px; height:38px; border-radius:10px;
+  background:var(--bg2); border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; color:var(--dark3); flex-shrink:0;
+  transition:background 0.15s;
+}
+.btn-back:active { background:var(--bg3); }
+
+.top-title {
+  font-family:'Playfair Display',serif;
+  font-size:18px; font-weight:700; color:var(--dark);
+}
+
+.select-content { padding:24px 20px; flex:1; }
+
+.select-label {
+  font-size:10px; color:var(--muted); text-transform:uppercase;
+  letter-spacing:1.5px; margin-bottom:14px; font-weight:600;
+}
+
+.employee-list { display:flex; flex-direction:column; gap:10px; }
+
+.employee-btn {
+  display:flex; align-items:center; gap:14px;
+  background:#fff; border:1.5px solid var(--bg3);
+  border-radius:14px; padding:14px 16px;
+  cursor:pointer; transition:all 0.2s; width:100%;
+  text-align:left;
+}
+.employee-btn:active { border-color:var(--gold); background:var(--gold-dim); }
+
+.emp-avatar {
+  width:40px; height:40px; border-radius:50%;
+  background:linear-gradient(135deg, var(--gold), var(--gold-light));
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:700; color:#fff; flex-shrink:0;
+  font-family:'DM Sans',sans-serif;
+}
+
+.emp-info { flex:1; }
+.emp-name { font-size:14px; font-weight:600; color:var(--dark); }
+.emp-status { font-size:11px; color:var(--muted); margin-top:2px; }
+.emp-status.working { color:var(--green); }
+.emp-status.paused { color:var(--amber); }
+
+.emp-chevron { font-size:14px; color:var(--muted); }
+
+.add-emp-btn {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; padding:14px;
+  background:transparent; border:1.5px dashed var(--bg3);
+  border-radius:14px; cursor:pointer;
+  font-family:'DM Sans',sans-serif; font-size:13px; color:var(--muted);
+  transition:all 0.2s; margin-top:10px;
+}
+.add-emp-btn:active { border-color:var(--gold); color:var(--gold); }
+
+/* ── FICHAJE SCREEN ── */
+#screen-fichaje { background:var(--bg); }
+
+.fichaje-header {
+  background:linear-gradient(160deg, var(--dark) 0%, var(--dark2) 100%);
+  padding:24px 20px 32px;
+  position:relative; overflow:hidden;
+}
+
+.fichaje-header::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 80% 20%, rgba(184,147,58,0.15) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+.fichaje-header .top-bar { padding:0 0 20px; }
+.fichaje-header .top-title { color:#F7F5F1; }
+.fichaje-header .btn-back { background:rgba(247,245,241,0.1); color:#F7F5F1; }
+
+.fichaje-emp-name {
+  font-family:'Playfair Display',serif;
+  font-size:26px; font-weight:700; color:#F7F5F1;
+  position:relative; z-index:1;
+}
+
+.fichaje-emp-role {
+  font-size:11px; color:rgba(247,245,241,0.5);
+  margin-top:4px; position:relative; z-index:1;
+}
+
+.status-pill {
+  display:inline-flex; align-items:center; gap:6px;
+  border-radius:20px; padding:5px 12px;
+  font-size:11px; font-weight:600; margin-top:12px;
+  position:relative; z-index:1;
+}
+.pill-free { background:rgba(247,245,241,0.1); color:rgba(247,245,241,0.6); }
+.pill-working { background:rgba(58,158,106,0.2); color:#7AE8A0; }
+.pill-paused { background:rgba(212,131,26,0.2); color:#F0C070; }
+
+.pill-dot { width:6px; height:6px; border-radius:50%; }
+.dot-free { background:rgba(247,245,241,0.4); }
+.dot-working { background:#7AE8A0; animation:blink 1.5s infinite; }
+.dot-paused { background:#F0C070; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+.fichaje-body { padding:20px; flex:1; }
+
+/* Timer display */
+.timer-card {
+  background:#fff; border-radius:16px; padding:20px;
+  box-shadow:var(--shadow); margin-bottom:16px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.timer-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+.timer-value { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--dark); font-variant-numeric:tabular-nums; }
+.timer-value.running { color:var(--green); }
+.timer-value.paused { color:var(--amber); }
+
+/* Action buttons */
+.action-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+.action-btn {
+  padding:16px 12px; border-radius:14px; border:none;
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
+  cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+.action-btn:active { transform:scale(0.96); }
+.action-btn .btn-icon { font-size:22px; }
+
+.btn-entrada {
+  background:linear-gradient(135deg, #2A7A50, var(--green));
+  color:#fff; grid-column:1/-1;
+  box-shadow:0 4px 16px rgba(58,158,106,0.25);
+}
+.btn-pausa {
+  background:var(--amber-dim); color:var(--amber);
+  border:1.5px solid rgba(212,131,26,0.2);
+}
+.btn-reanudar {
+  background:var(--green-dim); color:var(--green);
+  border:1.5px solid rgba(58,158,106,0.2);
+}
+.btn-salida {
+  background:rgba(201,76,76,0.08); color:var(--red);
+  border:1.5px solid rgba(201,76,76,0.15);
+  grid-column:1/-1;
+}
+
+.btn-disabled {
+  opacity:0.35; cursor:default;
+  pointer-events:none;
+}
+
+/* Log del día */
+.day-log { background:#fff; border-radius:16px; padding:16px; box-shadow:var(--shadow); }
+.day-log-title { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; font-weight:600; }
+.log-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--bg2); }
+.log-item:last-child { border-bottom:none; }
+.log-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.log-dot-entrada { background:var(--green); }
+.log-dot-pausa { background:var(--amber); }
+.log-dot-reanuda { background:var(--blue); }
+.log-dot-salida { background:var(--red); }
+.log-text { font-size:12px; color:var(--dark3); flex:1; }
+.log-time { font-size:12px; color:var(--muted); font-weight:500; font-variant-numeric:tabular-nums; }
+.log-empty { font-size:12px; color:var(--muted); text-align:center; padding:12px 0; font-style:italic; }
+
+/* ── ADMIN LOGIN ── */
+#screen-admin-login {
+  background:var(--bg);
+  align-items:center; justify-content:center;
+  padding:40px 24px;
+}
+
+.admin-login-box {
+  width:100%; max-width:360px; text-align:center;
+}
+
+.admin-icon {
+  width:60px; height:60px; border-radius:16px;
+  background:var(--dark); margin:0 auto 20px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px;
+}
+
+.admin-title {
+  font-family:'Playfair Display',serif;
+  font-size:24px; font-weight:700; color:var(--dark); margin-bottom:6px;
+}
+.admin-sub { font-size:13px; color:var(--muted); margin-bottom:28px; line-height:1.5; }
+
+.form-field { margin-bottom:12px; text-align:left; }
+.form-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:6px; }
+.form-input {
+  width:100%; background:#fff; border:1.5px solid var(--bg3);
+  border-radius:11px; padding:13px 15px; color:var(--dark);
+  font-family:'DM Sans',sans-serif; font-size:15px; outline:none;
+  transition:border-color 0.2s;
+}
+.form-input:focus { border-color:var(--gold); }
+.form-input.error { border-color:var(--red); }
+.form-error { font-size:11px; color:var(--red); margin-top:5px; display:none; }
+.form-error.show { display:block; }
+
+.btn-admin-login {
+  width:100%; padding:14px; border-radius:12px; border:none;
+  background:var(--dark); color:#F7F5F1;
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700;
+  cursor:pointer; transition:transform 0.15s; margin-top:4px;
+}
+.btn-admin-login:active { transform:scale(0.97); }
+
+.back-link {
+  display:block; margin-top:16px; font-size:12px; color:var(--muted);
+  cursor:pointer; text-decoration:underline;
+}
+
+/* ── ADMIN PANEL ── */
+#screen-admin { background:var(--bg); }
+
+.admin-header {
+  background:var(--dark);
+  padding:20px 20px 24px;
+}
+.admin-header .top-bar { padding:0 0 16px; }
+.admin-header .top-title { color:#F7F5F1; }
+.admin-header .btn-back { background:rgba(247,245,241,0.1); color:#F7F5F1; }
+
+.admin-tabs {
+  display:flex; gap:6px; padding:0 20px 16px;
+  background:var(--dark);
+}
+.admin-tab {
+  flex:1; padding:8px; border-radius:9px; border:none;
+  font-family:'DM Sans',sans-serif; font-size:12px; font-weight:600;
+  cursor:pointer; transition:all 0.2s;
+  background:rgba(247,245,241,0.08); color:rgba(247,245,241,0.5);
+}
+.admin-tab.active { background:var(--gold); color:var(--dark); }
+
+.admin-body { padding:20px; flex:1; overflow-y:auto; }
+
+/* Summary cards */
+.summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+.summary-card { background:#fff; border-radius:14px; padding:14px; box-shadow:var(--shadow); }
+.summary-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+.summary-value { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--dark); }
+.summary-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+
+/* Employee rows */
+.admin-section-title { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:12px; }
+
+.emp-row {
+  background:#fff; border-radius:14px; padding:14px 16px;
+  margin-bottom:10px; box-shadow:var(--shadow);
+}
+.emp-row-top { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.emp-row-avatar {
+  width:36px; height:36px; border-radius:50%;
+  background:linear-gradient(135deg, var(--gold), var(--gold-light));
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; color:#fff; flex-shrink:0;
+}
+.emp-row-name { font-size:14px; font-weight:600; color:var(--dark); flex:1; }
+.emp-row-status { font-size:10px; font-weight:600; padding:3px 8px; border-radius:20px; }
+.rs-working { background:var(--green-dim); color:var(--green); }
+.rs-paused { background:var(--amber-dim); color:var(--amber); }
+.rs-free { background:var(--bg2); color:var(--muted); }
+
+.emp-row-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.emp-stat { text-align:center; background:var(--bg); border-radius:8px; padding:8px 4px; }
+.emp-stat-val { font-size:13px; font-weight:600; color:var(--dark); font-variant-numeric:tabular-nums; }
+.emp-stat-lbl { font-size:9px; color:var(--muted); margin-top:2px; }
+
+/* Log table */
+.log-table { background:#fff; border-radius:14px; overflow:hidden; box-shadow:var(--shadow); margin-bottom:16px; }
+.log-table-head { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0; background:var(--bg2); padding:10px 14px; }
+.log-th { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }
+.log-table-row { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0; padding:10px 14px; border-bottom:1px solid var(--bg); }
+.log-table-row:last-child { border-bottom:none; }
+.log-td { font-size:12px; color:var(--dark3); font-variant-numeric:tabular-nums; }
+.log-td.name { font-weight:600; color:var(--dark); }
+.log-td.hours { color:var(--green); font-weight:600; }
+
+/* Export btn */
+.export-bar { display:flex; gap:10px; margin-bottom:20px; }
+.btn-export {
+  flex:1; padding:13px; border-radius:12px; border:none;
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
+  cursor:pointer; transition:transform 0.15s; display:flex;
+  align-items:center; justify-content:center; gap:6px;
+}
+.btn-export:active { transform:scale(0.97); }
+.btn-export-csv { background:var(--green-dim); color:var(--green); border:1.5px solid rgba(58,158,106,0.2); }
+.btn-export-pdf { background:var(--gold-dim); color:var(--gold); border:1.5px solid rgba(184,147,58,0.2); }
+
+/* Add employee modal */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(26,24,21,0.6);
+  z-index:200; display:none; align-items:flex-end; justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open { display:flex; }
+.modal-box {
+  background:#fff; border-radius:20px 20px 0 0; padding:24px;
+  width:100%; max-width:480px;
+  animation:slideUp 0.3s cubic-bezier(0.34,1.3,0.64,1);
+}
+@keyframes slideUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
+.modal-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--dark); margin-bottom:20px; }
+.modal-actions { display:flex; gap:10px; margin-top:16px; }
+.btn-modal-cancel { flex:1; padding:13px; border-radius:11px; border:1.5px solid var(--bg3); background:transparent; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--muted); cursor:pointer; }
+.btn-modal-confirm { flex:1; padding:13px; border-radius:11px; border:none; background:var(--dark); color:#F7F5F1; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; }
+
+.toast {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(100px);
+  background:var(--dark); color:#F7F5F1; padding:12px 20px;
+  border-radius:12px; font-size:13px; font-weight:500; z-index:300;
+  transition:transform 0.3s cubic-bezier(0.34,1.3,0.64,1);
+  white-space:nowrap;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+/* Period selector */
+.period-select {
+  display:flex; gap:6px; margin-bottom:16px;
+}
+.period-btn {
+  flex:1; padding:8px; border-radius:9px; border:1.5px solid var(--bg3);
+  background:transparent; font-family:'DM Sans',sans-serif; font-size:12px;
+  color:var(--muted); cursor:pointer; transition:all 0.2s; font-weight:500;
+}
+.period-btn.active { background:var(--dark); color:#F7F5F1; border-color:var(--dark); }
+</style>
+</head>
+<body>
+
+<!-- ── HOME ── -->
+<div class="screen active" id="screen-home">
+  <div class="home-content">
+    <div class="home-brand">NonDual In Salons · Fichaje</div>
+    <div class="home-title">Control de<br><em>Horas</em></div>
+    <div class="home-sub">Registro oficial de jornada laboral<br>según normativa española</div>
+    <div class="home-time" id="homeClock">--:--:--</div>
+    <div class="home-date" id="homeDate">--</div>
+    <div class="home-btns">
+      <button class="btn-home-main" onclick="showScreen('screen-select')">✂ Fichar mi jornada</button>
+      <button class="btn-home-sec" onclick="showScreen('screen-admin-login')">🔒 Panel de administración</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── EMPLOYEE SELECT ── -->
+<div class="screen" id="screen-select">
+  <div class="top-bar">
+    <button class="btn-back" onclick="showScreen('screen-home')">←</button>
+    <div class="top-title">¿Quién eres?</div>
+  </div>
+  <div class="select-content">
+    <div class="select-label">Selecciona tu nombre</div>
+    <div class="employee-list" id="employeeList"></div>
+    <button class="add-emp-btn" onclick="openAddModal()">+ Añadir empleada</button>
+  </div>
+</div>
+
+<!-- ── FICHAJE ── -->
+<div class="screen" id="screen-fichaje">
+  <div class="fichaje-header">
+    <div class="top-bar">
+      <button class="btn-back" onclick="showScreen('screen-select')">←</button>
+      <div class="top-title" id="fichajeEmpName">—</div>
+    </div>
+    <div class="fichaje-emp-role">Empleada · <span id="fichajeDate">—</span></div>
+    <div class="status-pill pill-free" id="statusPill">
+      <span class="pill-dot dot-free" id="pillDot"></span>
+      <span id="pillText">Sin fichar</span>
+    </div>
+  </div>
+
+  <div class="fichaje-body">
+    <!-- Timer -->
+    <div class="timer-card">
+      <div>
+        <div class="timer-label">Tiempo trabajado</div>
+        <div class="timer-value" id="timerWorked">0:00:00</div>
+      </div>
+      <div style="text-align:right">
+        <div class="timer-label">Tiempo pausa</div>
+        <div class="timer-value" id="timerPaused">0:00:00</div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="action-grid" id="actionGrid">
+      <button class="action-btn btn-entrada" onclick="doAction('entrada')">
+        <span class="btn-icon">▶</span> Registrar Entrada
+      </button>
+    </div>
+
+    <!-- Log -->
+    <div class="day-log">
+      <div class="day-log-title">Registro del día</div>
+      <div id="dayLog"><div class="log-empty">Sin registros hoy</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADMIN LOGIN ── -->
+<div class="screen" id="screen-admin-login">
+  <div class="admin-login-box">
+    <div class="admin-icon">🔐</div>
+    <div class="admin-title">Panel Admin</div>
+    <div class="admin-sub">Acceso exclusivo para el propietario del salón.</div>
+    <div class="form-field">
+      <label class="form-label">Contraseña</label>
+      <input type="password" class="form-input" id="adminPwInput" placeholder="Introduce la contraseña" onkeydown="if(event.key==='Enter')checkAdminLogin()">
+      <div class="form-error" id="adminPwError">Contraseña incorrecta</div>
+    </div>
+    <button class="btn-admin-login" onclick="checkAdminLogin()">Acceder al panel →</button>
+    <span class="back-link" onclick="showScreen('screen-home')">← Volver al inicio</span>
+  </div>
+</div>
+
+<!-- ── ADMIN PANEL ── -->
+<div class="screen" id="screen-admin">
+  <div class="admin-header">
+    <div class="top-bar">
+      <button class="btn-back" onclick="adminLogout()">←</button>
+      <div class="top-title">Panel Admin</div>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('resumen')">Resumen</button>
+      <button class="admin-tab" onclick="switchTab('registro')">Registro</button>
+      <button class="admin-tab" onclick="switchTab('empleadas')">Empleadas</button>
+    </div>
+  </div>
+  <div class="admin-body" id="adminBody"></div>
+</div>
+
+<!-- ADD EMPLOYEE MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal-box">
+    <div class="modal-title">Añadir empleada</div>
+    <div class="form-field">
+      <label class="form-label">Nombre completo</label>
+      <input type="text" class="form-input" id="newEmpName" placeholder="Ej: María García">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Puesto</label>
+      <input type="text" class="form-input" id="newEmpRole" placeholder="Ej: Estilista">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeAddModal()">Cancelar</button>
+      <button class="btn-modal-confirm" onclick="confirmAddEmp()">Añadir</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════
+const ADMIN_PASSWORD = 'NonDual2025Admin';
+
+// ════════════════════════════════════
+// STATE
+// ════════════════════════════════════
+let state = loadState();
+let currentEmp = null;
+let timerInterval = null;
+let clockInterval = null;
+let activeAdminTab = 'resumen';
+let activePeriod = 'hoy';
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('nd_fichaje');
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return {
+    employees: [],
+    records: []
+  };
+}
+
+function saveState() {
+  localStorage.setItem('nd_fichaje', JSON.stringify(state));
+}
+
+// ════════════════════════════════════
+// SCREEN NAV
+// ════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'screen-select') renderEmployeeList();
+  if (id === 'screen-admin') renderAdmin();
+}
+
+// ════════════════════════════════════
+// CLOCK
+// ════════════════════════════════════
+function updateClock() {
+  const now = new Date();
+  document.getElementById('homeClock').textContent = now.toLocaleTimeString('es-ES');
+  document.getElementById('homeDate').textContent = now.toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ════════════════════════════════════
+// EMPLOYEE LIST
+// ════════════════════════════════════
+function renderEmployeeList() {
+  const list = document.getElementById('employeeList');
+  list.innerHTML = '';
+  if (state.employees.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:32px 16px;color:var(--muted);font-size:13px;line-height:1.7;">Aún no hay empleadas registradas.<br>Pulsa <strong style=\'color:var(--gold);\'>+ Añadir empleada</strong> para empezar.</div>';
+  }
+  state.employees.forEach(emp => {
+    const status = getEmpStatus(emp.id);
+    const statusText = status === 'working' ? 'Trabajando' : status === 'paused' ? 'En pausa' : 'Sin fichar';
+    const statusClass = status === 'working' ? 'working' : status === 'paused' ? 'paused' : '';
+    list.innerHTML += `
+      <button class="employee-btn" onclick="selectEmployee('${emp.id}')">
+        <div class="emp-avatar">${emp.initials}</div>
+        <div class="emp-info">
+          <div class="emp-name">${emp.name}</div>
+          <div class="emp-status ${statusClass}">${statusText}</div>
+        </div>
+        <div class="emp-chevron">›</div>
+      </button>`;
+  });
+}
+
+function getEmpStatus(empId) {
+  const today = todayStr();
+  const todayRecs = state.records.filter(r => r.empId === empId && r.date === today);
+  if (!todayRecs.length) return 'free';
+  const last = todayRecs[todayRecs.length - 1];
+  if (last.type === 'entrada' || last.type === 'reanuda') return 'working';
+  if (last.type === 'pausa') return 'paused';
+  return 'free';
+}
+
+// ════════════════════════════════════
+// SELECT EMPLOYEE
+// ════════════════════════════════════
+function selectEmployee(empId) {
+  currentEmp = state.employees.find(e => e.id === empId);
+  document.getElementById('fichajeEmpName').textContent = currentEmp.name;
+  document.getElementById('fichajeDate').textContent = new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' });
+  showScreen('screen-fichaje');
+  renderFichaje();
+  startTimer();
+}
+
+// ════════════════════════════════════
+// FICHAJE LOGIC
+// ════════════════════════════════════
+function todayStr() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function nowStr() {
+  return new Date().toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+}
+
+function doAction(type) {
+  const rec = { id: Date.now(), empId: currentEmp.id, date: todayStr(), time: nowStr(), type, ts: Date.now() };
+  state.records.push(rec);
+  saveState();
+  renderFichaje();
+  showToast(type === 'entrada' ? '✅ Entrada registrada' : type === 'pausa' ? '⏸ Pausa iniciada' : type === 'reanuda' ? '▶ Jornada reanudada' : '🔴 Salida registrada');
+}
+
+function renderFichaje() {
+  const status = getEmpStatus(currentEmp.id);
+  const pill = document.getElementById('statusPill');
+  const dot = document.getElementById('pillDot');
+  const pillText = document.getElementById('pillText');
+
+  pill.className = 'status-pill ' + (status === 'working' ? 'pill-working' : status === 'paused' ? 'pill-paused' : 'pill-free');
+  dot.className = 'pill-dot ' + (status === 'working' ? 'dot-working' : status === 'paused' ? 'dot-paused' : 'dot-free');
+  pillText.textContent = status === 'working' ? 'Trabajando' : status === 'paused' ? 'En pausa' : 'Sin fichar';
+
+  // Action grid
+  const grid = document.getElementById('actionGrid');
+  if (status === 'free') {
+    grid.innerHTML = `<button class="action-btn btn-entrada" onclick="doAction('entrada')"><span class="btn-icon">▶</span> Registrar Entrada</button>`;
+  } else if (status === 'working') {
+    grid.innerHTML = `
+      <button class="action-btn btn-pausa" onclick="doAction('pausa')"><span class="btn-icon">⏸</span> Iniciar Pausa</button>
+      <button class="action-btn btn-salida" onclick="confirmSalida()"><span class="btn-icon">⏹</span> Registrar Salida</button>`;
+  } else if (status === 'paused') {
+    grid.innerHTML = `
+      <button class="action-btn btn-reanudar" onclick="doAction('reanuda')"><span class="btn-icon">▶</span> Reanudar</button>
+      <button class="action-btn btn-salida" onclick="confirmSalida()"><span class="btn-icon">⏹</span> Registrar Salida</button>`;
+  }
+
+  // Log
+  renderDayLog();
+}
+
+function confirmSalida() {
+  if (confirm('¿Confirmas que quieres registrar tu salida?')) doAction('salida');
+}
+
+function renderDayLog() {
+  const today = todayStr();
+  const recs = state.records.filter(r => r.empId === currentEmp.id && r.date === today);
+  const log = document.getElementById('dayLog');
+  if (!recs.length) { log.innerHTML = '<div class="log-empty">Sin registros hoy</div>'; return; }
+  log.innerHTML = recs.map(r => `
+    <div class="log-item">
+      <div class="log-dot log-dot-${r.type}"></div>
+      <div class="log-text">${r.type === 'entrada' ? 'Entrada' : r.type === 'pausa' ? 'Pausa iniciada' : r.type === 'reanuda' ? 'Jornada reanudada' : 'Salida'}</div>
+      <div class="log-time">${r.time}</div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════
+// TIMER
+// ════════════════════════════════════
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(updateTimers, 1000);
+  updateTimers();
+}
+
+function updateTimers() {
+  if (!currentEmp) return;
+  const today = todayStr();
+  const recs = state.records.filter(r => r.empId === currentEmp.id && r.date === today);
+  let worked = 0, paused = 0;
+  let lastTs = null, lastType = null;
+  const now = Date.now();
+
+  recs.forEach(r => {
+    if (r.type === 'entrada' || r.type === 'reanuda') { lastTs = r.ts; lastType = 'working'; }
+    else if (r.type === 'pausa') {
+      if (lastType === 'working' && lastTs) worked += r.ts - lastTs;
+      lastTs = r.ts; lastType = 'paused';
+    }
+    else if (r.type === 'salida') {
+      if (lastType === 'working' && lastTs) worked += r.ts - lastTs;
+      if (lastType === 'paused' && lastTs) paused += r.ts - lastTs;
+      lastTs = null; lastType = 'done';
+    }
+  });
+
+  if (lastType === 'working' && lastTs) worked += now - lastTs;
+  if (lastType === 'paused' && lastTs) paused += now - lastTs;
+
+  document.getElementById('timerWorked').textContent = msToHMS(worked);
+  document.getElementById('timerPaused').textContent = msToHMS(paused);
+
+  const tw = document.getElementById('timerWorked');
+  const tp = document.getElementById('timerPaused');
+  const status = getEmpStatus(currentEmp.id);
+  tw.className = 'timer-value' + (status === 'working' ? ' running' : '');
+  tp.className = 'timer-value' + (status === 'paused' ? ' paused' : '');
+}
+
+function msToHMS(ms) {
+  const s = Math.floor(ms / 1000);
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sc = s % 60;
+  return `${h}:${String(m).padStart(2,'0')}:${String(sc).padStart(2,'0')}`;
+}
+
+function msToHM(ms) {
+  const s = Math.floor(ms / 1000);
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  return `${h}h ${String(m).padStart(2,'0')}m`;
+}
+
+// ════════════════════════════════════
+// ADD EMPLOYEE
+// ════════════════════════════════════
+function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+function closeAddModal() { document.getElementById('addModal').classList.remove('open'); }
+
+function confirmAddEmp() {
+  const name = document.getElementById('newEmpName').value.trim();
+  const role = document.getElementById('newEmpRole').value.trim() || 'Empleada';
+  if (!name) { showToast('⚠ Escribe un nombre'); return; }
+  const initials = name.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+  const emp = { id: 'emp' + Date.now(), name, role, initials };
+  state.employees.push(emp);
+  saveState();
+  closeAddModal();
+  renderEmployeeList();
+  document.getElementById('newEmpName').value = '';
+  document.getElementById('newEmpRole').value = '';
+  showToast('✅ Empleada añadida');
+}
+
+// ════════════════════════════════════
+// ADMIN
+// ════════════════════════════════════
+function checkAdminLogin() {
+  const pw = document.getElementById('adminPwInput').value;
+  const err = document.getElementById('adminPwError');
+  const input = document.getElementById('adminPwInput');
+  if (pw === ADMIN_PASSWORD) {
+    input.classList.remove('error');
+    err.classList.remove('show');
+    document.getElementById('adminPwInput').value = '';
+    showScreen('screen-admin');
+  } else {
+    input.classList.add('error');
+    err.classList.add('show');
+    setTimeout(() => input.classList.remove('error'), 400);
+  }
+}
+
+function adminLogout() { showScreen('screen-home'); }
+
+function switchTab(tab) {
+  activeAdminTab = tab;
+  document.querySelectorAll('.admin-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['resumen','registro','empleadas'][i] === tab);
+  });
+  renderAdmin();
+}
+
+function renderAdmin() {
+  const body = document.getElementById('adminBody');
+  if (activeAdminTab === 'resumen') renderAdminResumen(body);
+  else if (activeAdminTab === 'registro') renderAdminRegistro(body);
+  else renderAdminEmpleadas(body);
+}
+
+function getWorkedMs(empId, dateStr) {
+  const recs = state.records.filter(r => r.empId === empId && r.date === dateStr);
+  let worked = 0, lastTs = null, lastType = null;
+  const now = Date.now();
+  recs.forEach(r => {
+    if (r.type === 'entrada' || r.type === 'reanuda') { lastTs = r.ts; lastType = 'working'; }
+    else if (r.type === 'pausa') { if (lastType === 'working' && lastTs) worked += r.ts - lastTs; lastTs = r.ts; lastType = 'paused'; }
+    else if (r.type === 'salida') { if (lastType === 'working' && lastTs) worked += r.ts - lastTs; lastTs = null; lastType = 'done'; }
+  });
+  if (lastType === 'working' && lastTs) worked += now - lastTs;
+  return worked;
+}
+
+function getDatesForPeriod(period) {
+  const today = new Date();
+  const dates = [];
+  if (period === 'hoy') {
+    dates.push(todayStr());
+  } else if (period === 'semana') {
+    const day = today.getDay() || 7;
+    for (let i = 1; i <= day; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - (day - i));
+      dates.push(d.toISOString().split('T')[0]);
+    }
+  } else if (period === 'mes') {
+    const year = today.getFullYear(), month = today.getMonth();
+    const days = today.getDate();
+    for (let i = 1; i <= days; i++) {
+      const d = new Date(year, month, i);
+      dates.push(d.toISOString().split('T')[0]);
+    }
+  }
+  return dates;
+}
+
+function renderAdminResumen(body) {
+  const dates = getDatesForPeriod(activePeriod);
+  let totalMs = 0;
+  let activoHoy = 0;
+  state.employees.forEach(emp => {
+    dates.forEach(d => { totalMs += getWorkedMs(emp.id, d); });
+    if (getEmpStatus(emp.id) === 'working') activoHoy++;
+  });
+
+  const periodLabel = activePeriod === 'hoy' ? 'hoy' : activePeriod === 'semana' ? 'esta semana' : 'este mes';
+
+  body.innerHTML = `
+    <div class="period-select">
+      <button class="period-btn ${activePeriod==='hoy'?'active':''}" onclick="setPeriod('hoy')">Hoy</button>
+      <button class="period-btn ${activePeriod==='semana'?'active':''}" onclick="setPeriod('semana')">Semana</button>
+      <button class="period-btn ${activePeriod==='mes'?'active':''}" onclick="setPeriod('mes')">Mes</button>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Horas totales</div>
+        <div class="summary-value">${msToHM(totalMs)}</div>
+        <div class="summary-sub">${periodLabel}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Activas ahora</div>
+        <div class="summary-value">${activoHoy}</div>
+        <div class="summary-sub">de ${state.employees.length} empleadas</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Empleadas</div>
+        <div class="summary-value">${state.employees.length}</div>
+        <div class="summary-sub">en el sistema</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Días analizados</div>
+        <div class="summary-value">${dates.length}</div>
+        <div class="summary-sub">${periodLabel}</div>
+      </div>
+    </div>
+    <div class="admin-section-title">Estado actual por empleada</div>
+    ${state.employees.map(emp => {
+      const status = getEmpStatus(emp.id);
+      const workedToday = getWorkedMs(emp.id, todayStr());
+      const workedPeriod = dates.reduce((acc, d) => acc + getWorkedMs(emp.id, d), 0);
+      const statusLabel = status === 'working' ? 'Trabajando' : status === 'paused' ? 'En pausa' : 'Sin fichar';
+      const statusClass = status === 'working' ? 'rs-working' : status === 'paused' ? 'rs-paused' : 'rs-free';
+      return `
+        <div class="emp-row">
+          <div class="emp-row-top">
+            <div class="emp-row-avatar">${emp.initials}</div>
+            <div class="emp-row-name">${emp.name}</div>
+            <div class="emp-row-status ${statusClass}">${statusLabel}</div>
+          </div>
+          <div class="emp-row-stats">
+            <div class="emp-stat"><div class="emp-stat-val">${msToHM(workedToday)}</div><div class="emp-stat-lbl">Hoy</div></div>
+            <div class="emp-stat"><div class="emp-stat-val">${msToHM(workedPeriod)}</div><div class="emp-stat-lbl">${periodLabel}</div></div>
+            <div class="emp-stat"><div class="emp-stat-val">${status === 'free' ? '—' : status === 'working' ? '✅' : '⏸'}</div><div class="emp-stat-lbl">Estado</div></div>
+          </div>
+        </div>`;
+    }).join('')}`;
+}
+
+function setPeriod(p) { activePeriod = p; renderAdmin(); }
+
+function renderAdminRegistro(body) {
+  const dates = getDatesForPeriod(activePeriod);
+  const recs = state.records.filter(r => dates.includes(r.date));
+
+  body.innerHTML = `
+    <div class="period-select">
+      <button class="period-btn ${activePeriod==='hoy'?'active':''}" onclick="setPeriod('hoy')">Hoy</button>
+      <button class="period-btn ${activePeriod==='semana'?'active':''}" onclick="setPeriod('semana')">Semana</button>
+      <button class="period-btn ${activePeriod==='mes'?'active':''}" onclick="setPeriod('mes')">Mes</button>
+    </div>
+    <div class="export-bar">
+      <button class="btn-export btn-export-csv" onclick="exportCSV()">📊 Exportar CSV</button>
+      <button class="btn-export btn-export-pdf" onclick="exportPDF()">📄 Exportar PDF</button>
+    </div>
+    <div class="log-table">
+      <div class="log-table-head">
+        <div class="log-th">Empleada</div>
+        <div class="log-th">Fecha</div>
+        <div class="log-th">Acción</div>
+        <div class="log-th">Hora</div>
+      </div>
+      ${recs.length === 0 ? '<div style="padding:16px;text-align:center;font-size:12px;color:var(--muted);">Sin registros en este período</div>' :
+        recs.slice().reverse().map(r => {
+          const emp = state.employees.find(e => e.id === r.empId);
+          return `<div class="log-table-row">
+            <div class="log-td name">${emp ? emp.name.split(' ')[0] : '—'}</div>
+            <div class="log-td">${r.date}</div>
+            <div class="log-td">${r.type === 'entrada' ? '▶ Entrada' : r.type === 'pausa' ? '⏸ Pausa' : r.type === 'reanuda' ? '↺ Reanuda' : '⏹ Salida'}</div>
+            <div class="log-td">${r.time}</div>
+          </div>`;
+        }).join('')}
+    </div>`;
+}
+
+function renderAdminEmpleadas(body) {
+  body.innerHTML = `
+    <div class="admin-section-title">Empleadas registradas</div>
+    ${state.employees.map(emp => `
+      <div class="emp-row">
+        <div class="emp-row-top">
+          <div class="emp-row-avatar">${emp.initials}</div>
+          <div class="emp-row-name">${emp.name}</div>
+          <div class="emp-row-status rs-free">${emp.role}</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px;">
+          <button onclick="deleteEmp('${emp.id}')" style="flex:1;padding:9px;border-radius:9px;border:1.5px solid rgba(201,76,76,0.2);background:rgba(201,76,76,0.06);color:var(--red);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;">🗑 Eliminar</button>
+        </div>
+      </div>`).join('')}
+    <button class="add-emp-btn" onclick="openAddModal()" style="margin-top:4px;">+ Añadir empleada</button>`;
+}
+
+function deleteEmp(empId) {
+  const emp = state.employees.find(e => e.id === empId);
+  if (confirm(`¿Eliminar a ${emp.name}? Sus registros se conservarán.`)) {
+    state.employees = state.employees.filter(e => e.id !== empId);
+    saveState();
+    renderAdmin();
+    showToast('🗑 Empleada eliminada');
+  }
+}
+
+// ════════════════════════════════════
+// EXPORT
+// ════════════════════════════════════
+function exportCSV() {
+  const dates = getDatesForPeriod(activePeriod);
+  const recs = state.records.filter(r => dates.includes(r.date));
+  let csv = 'Empleada,Fecha,Acción,Hora\n';
+  recs.forEach(r => {
+    const emp = state.employees.find(e => e.id === r.empId);
+    const name = emp ? emp.name : 'Desconocida';
+    const action = r.type === 'entrada' ? 'Entrada' : r.type === 'pausa' ? 'Pausa' : r.type === 'reanuda' ? 'Reanuda' : 'Salida';
+    csv += `"${name}","${r.date}","${action}","${r.time}"\n`;
+  });
+  // Resumen por empleada
+  csv += '\nRESUMEN DE HORAS\n';
+  csv += 'Empleada,Horas trabajadas\n';
+  state.employees.forEach(emp => {
+    const total = dates.reduce((acc, d) => acc + getWorkedMs(emp.id, d), 0);
+    csv += `"${emp.name}","${msToHM(total)}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `fichaje_${activePeriod}_${todayStr()}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast('📊 CSV descargado');
+}
+
+function exportPDF() {
+  const dates = getDatesForPeriod(activePeriod);
+  const periodLabel = activePeriod === 'hoy' ? 'Hoy' : activePeriod === 'semana' ? 'Esta semana' : 'Este mes';
+
+  let html = `<html><head><meta charset="UTF-8"><style>
+    body{font-family:Arial,sans-serif;padding:32px;color:#1A1815;}
+    h1{font-size:22px;margin-bottom:4px;}
+    h2{font-size:15px;color:#8A8070;margin-bottom:24px;font-weight:normal;}
+    table{width:100%;border-collapse:collapse;margin-bottom:24px;}
+    th{background:#1A1815;color:#fff;padding:10px 12px;text-align:left;font-size:12px;}
+    td{padding:9px 12px;border-bottom:1px solid #EDEAE3;font-size:12px;}
+    tr:last-child td{border-bottom:none;}
+    .resumen{background:#F7F5F1;border-radius:8px;padding:16px;margin-bottom:24px;}
+    .res-row{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;}
+    .gold{color:#B8933A;font-weight:bold;}
+    .footer{margin-top:32px;font-size:10px;color:#8A8070;border-top:1px solid #EDEAE3;padding-top:12px;}
+  </style></head><body>
+    <h1>NonDual In Salons · Control de Fichaje</h1>
+    <h2>${periodLabel} · Generado el ${new Date().toLocaleDateString('es-ES')}</h2>
+    <div class="resumen">
+      ${state.employees.map(emp => {
+        const total = dates.reduce((acc, d) => acc + getWorkedMs(emp.id, d), 0);
+        return `<div class="res-row"><span>${emp.name}</span><span class="gold">${msToHM(total)}</span></div>`;
+      }).join('')}
+    </div>
+    <table>
+      <tr><th>Empleada</th><th>Fecha</th><th>Acción</th><th>Hora</th></tr>
+      ${state.records.filter(r => dates.includes(r.date)).map(r => {
+        const emp = state.employees.find(e => e.id === r.empId);
+        const action = r.type === 'entrada' ? '▶ Entrada' : r.type === 'pausa' ? '⏸ Pausa' : r.type === 'reanuda' ? '↺ Reanuda' : '⏹ Salida';
+        return `<tr><td>${emp ? emp.name : '—'}</td><td>${r.date}</td><td>${action}</td><td>${r.time}</td></tr>`;
+      }).join('')}
+    </table>
+    <div class="footer">NonDual In Salons · Emilio Ferrando · Registro oficial de jornada laboral (RDL 8/2019)</div>
+  </body></html>`;
+
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => win.print(), 500);
+  showToast('📄 PDF generado');
+}
+
+// ════════════════════════════════════
+// TOAST
+// ════════════════════════════════════
+let toastTimeout;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>

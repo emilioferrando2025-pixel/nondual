@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>4 Pilares de Venta de Producto · NonDual In Salons</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F8F5F0;
+  --bg2: #EEE9E0;
+  --bg3: #E4DDD2;
+  --ink: #18160F;
+  --ink2: #2A2720;
+  --ink3: #3C3830;
+  --gold: #B8933A;
+  --gold-light: #D4AF6A;
+  --gold-dim: rgba(184,147,58,0.1);
+  --muted: #8A8070;
+  --p1: #9E3A3A; --p1d: rgba(158,58,58,0.1);
+  --p2: #3A7A5A; --p2d: rgba(58,122,90,0.1);
+  --p3: #2A4A8A; --p3d: rgba(42,74,138,0.1);
+  --p4: #7A5A9E; --p4d: rgba(122,90,158,0.1);
+  --shadow: 0 2px 16px rgba(24,22,15,0.07);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;}
+
+/* HEADER */
+.header{
+  background:var(--ink);
+  padding:32px 20px 28px;position:relative;overflow:hidden;
+}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.header-brand{font-size:10px;color:var(--gold-light);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;opacity:0.7;}
+.header-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#F8F5F0;line-height:1.15;margin-bottom:6px;}
+.header-title em{color:var(--gold-light);font-style:italic;}
+.header-sub{font-size:12px;color:rgba(248,245,240,0.45);line-height:1.6;max-width:320px;}
+
+/* PROGRESS OVERVIEW */
+.overview{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ov-card{background:#fff;border-radius:14px;padding:14px;box-shadow:var(--shadow);text-align:center;}
+.ov-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--ink);}
+.ov-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.ov-bar-wrap{grid-column:1/-1;background:#fff;border-radius:14px;padding:14px;box-shadow:var(--shadow);}
+.ov-bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.ov-bar-label{font-size:12px;font-weight:600;color:var(--ink);}
+.ov-bar-pct{font-size:12px;color:var(--gold);font-weight:600;}
+.ov-bar{height:8px;background:var(--bg2);border-radius:8px;overflow:hidden;}
+.ov-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:8px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1);width:0%;}
+
+/* PILLAR SECTIONS */
+.body{padding:0 20px 80px;}
+.pillar-card{background:#fff;border-radius:18px;margin-bottom:16px;box-shadow:var(--shadow);overflow:hidden;}
+.pillar-header{padding:18px 18px 14px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;}
+.pillar-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.pi-1{background:var(--p1d);}
+.pi-2{background:var(--p2d);}
+.pi-3{background:var(--p3d);}
+.pi-4{background:var(--p4d);}
+.pillar-meta{flex:1;}
+.pillar-num{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:3px;}
+.pn-1{color:var(--p1);}
+.pn-2{color:var(--p2);}
+.pn-3{color:var(--p3);}
+.pn-4{color:var(--p4);}
+.pillar-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--ink);line-height:1.2;}
+.pillar-desc{font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:4px;}
+.pillar-toggle{font-size:18px;color:var(--muted);transition:transform 0.3s;flex-shrink:0;margin-top:2px;}
+.pillar-toggle.open{transform:rotate(180deg);}
+
+.pillar-progress{padding:0 18px 14px;}
+.pp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.pp-done{font-size:11px;color:var(--muted);}
+.pp-pct{font-size:11px;font-weight:600;}
+.pct-1{color:var(--p1);}
+.pct-2{color:var(--p2);}
+.pct-3{color:var(--p3);}
+.pct-4{color:var(--p4);}
+.pp-bar{height:5px;background:var(--bg2);border-radius:5px;overflow:hidden;}
+.pp-fill{height:100%;border-radius:5px;transition:width 0.6s ease;}
+.pf-1{background:var(--p1);}
+.pf-2{background:var(--p2);}
+.pf-3{background:var(--p3);}
+.pf-4{background:var(--p4);}
+
+.pillar-items{border-top:1px solid var(--bg2);display:none;}
+.pillar-items.open{display:block;}
+
+.check-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:13px 18px;border-bottom:1px solid var(--bg);
+  cursor:pointer;transition:background 0.15s;
+}
+.check-item:last-child{border-bottom:none;}
+.check-item:active{background:var(--bg);}
+
+.check-box{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;
+  border:1.5px solid var(--bg3);background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;margin-top:1px;
+}
+.check-item.done .check-box{border-color:currentColor;}
+.cb-1{color:var(--p1);}
+.cb-2{color:var(--p2);}
+.cb-3{color:var(--p3);}
+.cb-4{color:var(--p4);}
+.check-box-inner{font-size:13px;display:none;}
+.check-item.done .check-box-inner{display:block;}
+
+.check-content{flex:1;}
+.check-text{font-size:13px;color:var(--ink3);line-height:1.45;font-weight:400;transition:color 0.2s;}
+.check-item.done .check-text{color:var(--muted);text-decoration:line-through;}
+.check-tip{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;display:none;}
+.check-item.done .check-tip{display:none;}
+
+/* TIP TAGS */
+.tip-tag{
+  display:inline-block;font-size:9.5px;font-weight:600;
+  padding:2px 8px;border-radius:20px;margin-top:5px;
+  text-transform:uppercase;letter-spacing:0.5px;
+}
+.tt-quick{background:rgba(58,122,90,0.1);color:var(--p2);}
+.tt-team{background:rgba(42,74,138,0.1);color:var(--p3);}
+.tt-system{background:rgba(184,147,58,0.1);color:var(--gold);}
+.tt-mindset{background:rgba(122,90,158,0.1);color:var(--p4);}
+
+/* RESULT BANNER */
+.result-banner{
+  background:linear-gradient(135deg,var(--ink),var(--ink2));
+  border-radius:16px;padding:20px;margin-bottom:16px;
+  text-align:center;display:none;
+}
+.result-banner.show{display:block;}
+.rb-emoji{font-size:40px;margin-bottom:10px;}
+.rb-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#F8F5F0;margin-bottom:6px;}
+.rb-sub{font-size:12px;color:rgba(248,245,240,0.5);line-height:1.6;}
+
+/* RESET BTN */
+.reset-btn{
+  width:100%;padding:13px;border-radius:12px;
+  border:1.5px solid var(--bg3);background:transparent;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);
+  cursor:pointer;margin-top:4px;transition:all 0.2s;
+}
+.reset-btn:active{background:var(--bg2);}
+
+/* WA BTN */
+.wa-section{padding:0 20px 20px;}
+.wa-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:15px;border-radius:13px;
+  background:#25D366;color:#fff;font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:700;border:none;cursor:pointer;
+  text-decoration:none;box-shadow:0 4px 18px rgba(37,211,102,0.25);
+  transition:transform 0.15s;
+}
+.wa-btn:active{transform:scale(0.97);}
+.footer-note{font-size:10px;color:var(--muted);text-align:center;margin-top:10px;padding-bottom:16px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">NonDual In Salons · Herramienta</div>
+  <div class="header-title">Los 4 Pilares de<br><em>Venta de Producto</em></div>
+  <div class="header-sub">Evalúa el estado actual de tu salón en cada pilar y marca los puntos que ya tienes implementados.</div>
+</div>
+
+<div class="overview">
+  <div class="ov-card">
+    <div class="ov-val" id="ovDone">0</div>
+    <div class="ov-lbl">Implementados</div>
+  </div>
+  <div class="ov-card">
+    <div class="ov-val" id="ovTotal">0</div>
+    <div class="ov-lbl">Total puntos</div>
+  </div>
+  <div class="ov-bar-wrap">
+    <div class="ov-bar-top">
+      <span class="ov-bar-label">Progreso general</span>
+      <span class="ov-bar-pct" id="ovPct">0%</span>
+    </div>
+    <div class="ov-bar"><div class="ov-bar-fill" id="ovFill"></div></div>
+  </div>
+</div>
+
+<div class="body" id="body">
+  <div class="result-banner" id="resultBanner">
+    <div class="rb-emoji">🏆</div>
+    <div class="rb-title">¡Sistema completo!</div>
+    <div class="rb-sub">Has implementado todos los pilares de venta de producto. Tu salón tiene el sistema más sólido del sector.</div>
+  </div>
+</div>
+
+<div class="wa-section">
+  <a class="wa-btn" href="https://wa.me/34637516751?text=Hola%20Emilio%2C%20he%20completado%20el%20checklist%20de%20los%204%20pilares%20de%20venta%20de%20producto%20y%20me%20gustar%C3%ADa%20hablar%20contigo." target="_blank">
+    💬 Hablar con Emilio sobre mi resultado
+  </a>
+  <div class="footer-note">NonDual In Salons · por Emilio Ferrando</div>
+</div>
+
+<script>
+const PILLARS = [
+  {
+    id: 1,
+    icon: '📚',
+    name: 'Formación del Equipo',
+    desc: 'Tu equipo conoce los productos en profundidad y recibe formación continua.',
+    items: [
+      { text: 'Realizamos al menos una formación de producto por trimestre', tip: 'Coordina con tus proveedores — suelen ofrecer formaciones gratuitas.', tag: 'system' },
+      { text: 'Cada estilista conoce los ingredientes y beneficios clave de cada producto que vendemos', tip: 'Haz fichas de producto simples y repásalas en las reuniones semanales.', tag: 'team' },
+      { text: 'El equipo sabe para qué tipo de cabello es óptimo cada producto', tip: 'El conocimiento específico por tipo de cabello convierte la recomendación en algo personal.', tag: 'team' },
+      { text: 'Contamos con un sistema para probar los productos nuevos antes de venderlos', tip: 'El testimonio personal es la herramienta de venta más poderosa que existe.', tag: 'mindset' },
+      { text: 'El front desk también conoce los productos y puede reforzar las recomendaciones', tip: 'La venta en equipo aumenta la tasa de cierre y el importe medio de la compra.', tag: 'team' },
+    ]
+  },
+  {
+    id: 2,
+    icon: '💰',
+    name: 'Incentivos que Motivan',
+    desc: 'La estructura de comisiones realmente motiva al equipo a recomendar producto.',
+    items: [
+      { text: 'Tenemos una estructura de comisiones clara y documentada para la venta de producto', tip: 'Si no está escrito, no existe. Pon por escrito el sistema de incentivos.', tag: 'system' },
+      { text: 'La comisión por producto es suficientemente atractiva para que el equipo lo priorice', tip: 'Si el estilista gana 5 veces más por servicio que por producto, no venderá.', tag: 'mindset' },
+      { text: 'El margen del producto nos permite ofrecer una comisión competitiva', tip: 'Si el margen es tan bajo que no puedes incentivar, reconsidera esa línea de producto.', tag: 'system' },
+      { text: 'Reconocemos y celebramos públicamente los logros de venta del equipo', tip: 'El reconocimiento público es tan motivador como el incentivo económico.', tag: 'team' },
+      { text: 'Revisamos y actualizamos los incentivos al menos una vez al año', tip: 'Un sistema que no se revisa pierde efectividad. Ajústalo según resultados.', tag: 'system' },
+    ]
+  },
+  {
+    id: 3,
+    icon: '🤝',
+    name: 'Recomendación Honesta',
+    desc: 'El equipo recomienda desde el conocimiento y el cuidado genuino, sin presión.',
+    items: [
+      { text: 'Nuestro equipo recomienda durante el servicio, no solo al cobrar', tip: 'Mostrar el producto en acción mientras lo usas es 3 veces más efectivo que mencionarlo en caja.', tag: 'quick' },
+      { text: 'Las recomendaciones son personalizadas al tipo de cabello de cada clienta', tip: '"Te lo recomiendo porque noté que tu cabello está poroso" vale por 10 "es muy bueno".', tag: 'mindset' },
+      { text: 'Respetamos el ciclo de vida del producto: no ofrecemos lo que ya tienen en casa', tip: 'Respetar el ciclo construye confianza. La clienta volverá a comprar cuando lo necesite.', tag: 'mindset' },
+      { text: 'El equipo se siente cómodo recomendando sin sentir que está siendo pesado', tip: 'La recomendación desde el conocimiento no presiona, informa. Esa es la diferencia.', tag: 'team' },
+      { text: 'Contamos con frases guía o un pequeño protocolo de recomendación para el equipo', tip: 'No se trata de un script rígido, sino de un marco que da confianza al equipo.', tag: 'system' },
+    ]
+  },
+  {
+    id: 4,
+    icon: '⏱️',
+    name: 'Tiempo y Estructura',
+    desc: 'La agenda y el espacio físico están diseñados para facilitar la venta natural.',
+    items: [
+      { text: 'Los estilistas tienen tiempo de transición entre clientes (mínimo 10-15 min)', tip: 'Sin tiempo de buffer, la venta se convierte en una carrera. El cliente lo nota.', tag: 'system' },
+      { text: 'El mostrador de productos está visible y bien organizado desde el sillón del cliente', tip: 'El producto visible durante el servicio se vende solo. El invisible no existe.', tag: 'quick' },
+      { text: 'Los productos están etiquetados con precios visibles sin necesidad de preguntar', tip: 'La fricción de tener que preguntar el precio mata muchas ventas potenciales.', tag: 'quick' },
+      { text: 'El checkout incluye un momento natural para cerrar la recomendación del estilista', tip: 'Front desk: "¿Te llevas el sérum que te recomendó Ana?" Es simple y muy efectivo.', tag: 'team' },
+      { text: 'Medimos mensualmente las ventas de producto por estilista', tip: 'Lo que no se mide no mejora. El ticket de producto individual es tu principal KPI de retail.', tag: 'system' },
+    ]
+  }
+];
+
+// STATE
+let checks = loadChecks();
+
+function loadChecks() {
+  try {
+    const s = localStorage.getItem('nd_pilares');
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return {};
+}
+
+function saveChecks() {
+  localStorage.setItem('nd_pilares', JSON.stringify(checks));
+}
+
+function getKey(pId, iIdx) { return `p${pId}_i${iIdx}`; }
+
+// RENDER
+function render() {
+  const body = document.getElementById('body');
+  const banner = document.getElementById('resultBanner');
+
+  let totalDone = 0;
+  const totalItems = PILLARS.reduce((acc, p) => acc + p.items.length, 0);
+
+  PILLARS.forEach(p => {
+    let pDone = p.items.filter((_, i) => checks[getKey(p.id, i)]).length;
+    totalDone += pDone;
+  });
+
+  // Overview
+  document.getElementById('ovDone').textContent = totalDone;
+  document.getElementById('ovTotal').textContent = totalItems;
+  const pct = Math.round((totalDone / totalItems) * 100);
+  document.getElementById('ovPct').textContent = pct + '%';
+  document.getElementById('ovFill').style.width = pct + '%';
+
+  // Banner
+  if (totalDone === totalItems) banner.classList.add('show');
+  else banner.classList.remove('show');
+
+  // Pillars
+  const existing = body.querySelectorAll('.pillar-card');
+  existing.forEach(e => e.remove());
+
+  PILLARS.forEach(p => {
+    const pDone = p.items.filter((_, i) => checks[getKey(p.id, i)]).length;
+    const pPct = Math.round((pDone / p.items.length) * 100);
+    const isOpen = body.querySelector(`#pillar-items-${p.id}`)?.classList.contains('open') || false;
+
+    const card = document.createElement('div');
+    card.className = 'pillar-card';
+    card.innerHTML = `
+      <div class="pillar-header" onclick="togglePillar(${p.id})">
+        <div class="pillar-icon pi-${p.id}">${p.icon}</div>
+        <div class="pillar-meta">
+          <div class="pillar-num pn-${p.id}">Pilar ${p.id}</div>
+          <div class="pillar-name">${p.name}</div>
+          <div class="pillar-desc">${p.desc}</div>
+        </div>
+        <div class="pillar-toggle${isOpen ? ' open' : ''}" id="toggle-${p.id}">⌄</div>
+      </div>
+      <div class="pillar-progress">
+        <div class="pp-row">
+          <span class="pp-done">${pDone} de ${p.items.length} implementados</span>
+          <span class="pp-pct pct-${p.id}">${pPct}%</span>
+        </div>
+        <div class="pp-bar"><div class="pp-fill pf-${p.id}" style="width:${pPct}%"></div></div>
+      </div>
+      <div class="pillar-items${isOpen ? ' open' : ''}" id="pillar-items-${p.id}">
+        ${p.items.map((item, i) => {
+          const key = getKey(p.id, i);
+          const done = checks[key];
+          const tagMap = { quick: ['tt-quick','Acción rápida'], team: ['tt-team','Equipo'], system: ['tt-system','Sistema'], mindset: ['tt-mindset','Mentalidad'] };
+          const [tagCls, tagLabel] = tagMap[item.tag] || ['tt-quick',''];
+          return `<div class="check-item cb-${p.id}${done ? ' done' : ''}" onclick="toggleCheck(${p.id}, ${i})">
+            <div class="check-box">
+              <span class="check-box-inner">✓</span>
+            </div>
+            <div class="check-content">
+              <div class="check-text">${item.text}</div>
+              ${!done ? `<div class="check-tip">${item.tip}</div><span class="tip-tag ${tagCls}">${tagLabel}</span>` : ''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+
+    body.appendChild(card);
+  });
+
+  // Reset btn
+  if (!body.querySelector('.reset-btn')) {
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'reset-btn';
+    resetBtn.textContent = '↺ Reiniciar checklist';
+    resetBtn.onclick = resetAll;
+    body.appendChild(resetBtn);
+  }
+}
+
+function togglePillar(pId) {
+  const items = document.getElementById(`pillar-items-${pId}`);
+  const toggle = document.getElementById(`toggle-${pId}`);
+  items.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+function toggleCheck(pId, iIdx) {
+  const key = getKey(pId, iIdx);
+  checks[key] = !checks[key];
+  saveChecks();
+  render();
+}
+
+function resetAll() {
+  if (confirm('¿Quieres reiniciar todos los checks?')) {
+    checks = {};
+    saveChecks();
+    render();
+  }
+}
+
+// INIT
+render();
+</script>
+</body>
+</html>

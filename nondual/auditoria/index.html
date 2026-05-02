@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditoría de Explotación · Salón</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0f;
+  --surface: #181818;
+  --surface2: #222222;
+  --border: #2e2e2e;
+  --gold: #d4a853;
+  --gold-dim: #8a6830;
+  --gold-bg: rgba(212,168,83,0.08);
+  --white: #f0ede8;
+  --muted: #777;
+  --green: #4caf7d;
+  --green-bg: rgba(76,175,125,0.1);
+  --orange: #e8924a;
+  --orange-bg: rgba(232,146,74,0.1);
+  --red: #e05555;
+  --red-bg: rgba(224,85,85,0.1);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ─── LAYOUT ─── */
+.app { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* ─── HEADER ─── */
+.header {
+  padding: 40px 0 32px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.header-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; margin-bottom: 16px;
+}
+.pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
+  animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 700; line-height: 1.15;
+  margin-bottom: 12px;
+}
+h1 em { font-style: italic; color: var(--gold); }
+.header-sub {
+  font-size: 14px; color: var(--muted); max-width: 520px; line-height: 1.7;
+}
+.iva-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--gold-bg); border: 1px solid var(--gold-dim);
+  color: var(--gold); font-size: 12px; font-weight: 600;
+  padding: 6px 14px; border-radius: 50px; margin-top: 16px;
+  letter-spacing: .04em;
+}
+
+/* ─── FACTURACIÓN ─── */
+.facturacion-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px; margin-bottom: 32px;
+}
+.facturacion-wrap label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--gold); font-weight: 600; display: block; margin-bottom: 10px;
+}
+.facturacion-input-wrap {
+  display: flex; align-items: center; gap: 0;
+}
+.currency-prefix {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-right: none; border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  padding: 0 16px; height: 52px; display: flex; align-items: center;
+  font-size: 18px; color: var(--gold); font-weight: 700;
+}
+.facturacion-input-wrap input {
+  flex: 1; height: 52px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-left: none; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--white); font-family: 'Outfit', sans-serif;
+  font-size: 22px; font-weight: 600; padding: 0 16px;
+  -moz-appearance: textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.facturacion-input-wrap input:focus { outline: none; border-color: var(--gold); }
+.facturacion-hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+/* ─── PARTIDAS ─── */
+.partida {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: border-color .3s;
+}
+.partida:focus-within { border-color: var(--gold-dim); }
+
+.partida-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px; cursor: pointer;
+  user-select: none;
+}
+.partida-head-left { display: flex; align-items: center; gap: 14px; }
+.partida-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--gold-bg); border: 1px solid var(--gold-dim);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.partida-info h3 { font-size: 15px; font-weight: 600; }
+.partida-info .ratio-tag {
+  font-size: 11px; color: var(--muted); margin-top: 2px;
+}
+.partida-head-right {
+  display: flex; align-items: center; gap: 12px;
+}
+.partida-total-preview {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; color: var(--gold);
+  min-width: 80px; text-align: right;
+}
+.chevron {
+  color: var(--muted); font-size: 12px; transition: transform .3s;
+  flex-shrink: 0;
+}
+.partida.open .chevron { transform: rotate(180deg); }
+
+.partida-body {
+  display: none; padding: 0 20px 20px;
+  border-top: 1px solid var(--border);
+}
+.partida.open .partida-body { display: block; }
+
+/* ─── LÍNEAS DE GASTO ─── */
+.lineas-list { margin-top: 16px; }
+.linea {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px; animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+
+.linea-nombre {
+  flex: 1; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--white); font-family: 'Outfit', sans-serif;
+  font-size: 14px; padding: 10px 14px; transition: border-color .2s;
+}
+.linea-nombre:focus { outline: none; border-color: var(--gold-dim); }
+.linea-nombre::placeholder { color: #444; }
+
+.linea-importe-wrap {
+  position: relative; width: 130px; flex-shrink: 0;
+}
+.linea-importe {
+  width: 100%; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--white); font-family: 'Outfit', sans-serif;
+  font-size: 14px; font-weight: 600; padding: 10px 32px 10px 14px;
+  -moz-appearance: textfield; transition: border-color .2s;
+}
+.linea-importe:focus { outline: none; border-color: var(--gold-dim); }
+.linea-importe::placeholder { color: #444; font-weight: 400; }
+.linea-euro {
+  position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
+  font-size: 13px; color: var(--muted); pointer-events: none;
+}
+
+.btn-remove {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .2s; line-height: 1;
+}
+.btn-remove:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+
+.btn-add-linea {
+  display: flex; align-items: center; gap: 8px;
+  background: transparent; border: 1px dashed var(--border);
+  border-radius: var(--radius-sm); color: var(--muted);
+  font-family: 'Outfit', sans-serif; font-size: 13px;
+  padding: 9px 14px; cursor: pointer; width: 100%;
+  margin-top: 6px; transition: all .2s;
+}
+.btn-add-linea:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+.partida-subtotal {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+.partida-subtotal span { color: var(--muted); }
+.partida-subtotal strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; color: var(--gold);
+}
+
+/* ─── NOTA IVA EN BODY DE PARTIDA ─── */
+.nota-iva {
+  font-size: 11px; color: var(--gold-dim);
+  background: var(--gold-bg); border-radius: var(--radius-sm);
+  padding: 7px 12px; margin-top: 12px;
+  letter-spacing: .02em;
+}
+
+/* ─── BOTÓN CALCULAR ─── */
+.calcular-wrap { margin-top: 36px; }
+.btn-calcular {
+  width: 100%; padding: 18px;
+  background: var(--gold); color: #0f0f0f;
+  border: none; border-radius: var(--radius);
+  font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; letter-spacing: .02em;
+  transition: all .25s; display: flex; align-items: center;
+  justify-content: center; gap: 10px;
+}
+.btn-calcular:hover { background: #e0b860; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,168,83,.25); }
+.btn-calcular:active { transform: translateY(0); }
+
+/* ─── RESULTADOS ─── */
+#resultados { display: none; margin-top: 48px; }
+#resultados.visible { display: block; animation: fadeIn .5s ease; }
+
+.res-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 32px;
+}
+.res-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+}
+.res-divider {
+  height: 1px; background: var(--border); margin: 28px 0;
+}
+
+/* Tarjeta beneficio principal */
+.beneficio-card {
+  border-radius: var(--radius); padding: 32px;
+  text-align: center; margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.beneficio-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(212,168,83,.15) 0%, transparent 70%);
+}
+.beneficio-card.positivo { background: var(--green-bg); border: 1px solid var(--green); }
+.beneficio-card.negativo { background: var(--red-bg); border: 1px solid var(--red); }
+.beneficio-label { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-bottom: 10px; }
+.beneficio-valor {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 8vw, 56px);
+}
+.beneficio-card.positivo .beneficio-valor { color: var(--green); }
+.beneficio-card.negativo .beneficio-valor { color: var(--red); }
+.beneficio-pct { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+/* Grid KPIs */
+.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.kpi {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 18px;
+}
+.kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+.kpi-val { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--white); }
+
+/* Partidas resultado */
+.res-partida {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 18px; margin-bottom: 10px;
+}
+.res-partida-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.res-partida-name { font-size: 14px; font-weight: 600; }
+.semaforo {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 4px 12px;
+  border-radius: 50px;
+}
+.semaforo.ok { background: var(--green-bg); color: var(--green); border: 1px solid rgba(76,175,125,.3); }
+.semaforo.warn { background: var(--orange-bg); color: var(--orange); border: 1px solid rgba(232,146,74,.3); }
+.semaforo.bad { background: var(--red-bg); color: var(--red); border: 1px solid rgba(224,85,85,.3); }
+
+.bar-wrap { position: relative; height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 8px; }
+.bar-fill { height: 6px; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+.bar-fill.ok { background: var(--green); }
+.bar-fill.warn { background: var(--orange); }
+.bar-fill.bad { background: var(--red); }
+.bar-limit { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--white); border-radius: 1px; opacity: .5; }
+
+.res-partida-nums {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--muted);
+}
+.res-partida-nums .actual { font-weight: 700; color: var(--white); }
+.res-partida-tip { font-size: 12px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); line-height: 1.5; }
+
+/* Detalle lineas en resultado */
+.res-lineas { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.res-lineas-toggle {
+  font-size: 12px; color: var(--muted); cursor: pointer;
+  background: none; border: none; font-family: 'Outfit', sans-serif;
+  padding: 0; display: flex; align-items: center; gap: 4px;
+  transition: color .2s;
+}
+.res-lineas-toggle:hover { color: var(--gold); }
+.res-lineas-list { display: none; margin-top: 10px; }
+.res-lineas-list.open { display: block; }
+.res-linea-item {
+  display: flex; justify-content: space-between;
+  font-size: 12px; padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+.res-linea-item:last-child { border-bottom: none; }
+.res-linea-item span:last-child { font-weight: 600; color: var(--white); }
+
+/* Diagnóstico */
+.diag-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 20px; margin-bottom: 10px;
+}
+.diag-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.diag-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* CTA */
+.cta {
+  background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius); padding: 36px; text-align: center;
+  margin-top: 36px;
+}
+.cta h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; color: var(--gold); margin-bottom: 10px;
+}
+.cta p { font-size: 13px; color: var(--muted); margin-bottom: 22px; line-height: 1.7; }
+.btn-cta {
+  display: inline-block; padding: 14px 36px;
+  background: var(--gold); color: #0f0f0f;
+  border-radius: 50px; font-weight: 700; font-size: 14px;
+  cursor: pointer; border: none; font-family: 'Outfit', sans-serif;
+  transition: all .2s; letter-spacing: .02em;
+}
+.btn-cta:hover { background: #e0b860; transform: translateY(-1px); }
+
+.btn-reiniciar {
+  display: block; width: 100%; margin-top: 14px;
+  background: none; border: 1px solid var(--border);
+  border-radius: 50px; padding: 12px;
+  color: var(--muted); font-family: 'Outfit', sans-serif;
+  font-size: 13px; cursor: pointer; transition: all .2s;
+}
+.btn-reiniciar:hover { border-color: var(--muted); color: var(--white); }
+
+@media(max-width:480px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .linea { flex-wrap: wrap; }
+  .linea-nombre { min-width: 100%; }
+  .linea-importe-wrap { flex: 1; }
+}
+
+
+
+
+/* ─── LOGIN ─── */
+#login-screen{position:fixed;inset:0;background:#0C0B09;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;}
+.lg-brand{font-size:10px;color:#C9A84C;letter-spacing:3px;text-transform:uppercase;margin-bottom:24px;font-weight:500;}
+.lg-icon{font-size:44px;margin-bottom:18px;}
+.lg-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#F5F0E8;margin-bottom:6px;}
+.lg-sub{font-size:12px;color:#6A6050;line-height:1.6;margin-bottom:28px;max-width:300px;}
+.lg-box{width:100%;max-width:340px;background:#161410;border:1px solid #2e2e2e;border-radius:16px;padding:22px;}
+.lg-label{font-size:10px;color:#6A6050;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:7px;text-align:left;}
+.lg-input{width:100%;background:#0C0B09;border:1.5px solid #2e2e2e;border-radius:10px;padding:13px 15px;color:#F5F0E8;font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;margin-bottom:12px;}
+.lg-input:focus{border-color:#C9A84C;}
+.lg-input.err{border-color:#C94C4C;animation:lgShake 0.3s ease;}
+@keyframes lgShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.lg-error{font-size:11px;color:#E87A7A;margin-bottom:10px;display:none;text-align:left;}
+.lg-error.show{display:block;}
+.lg-btn{width:100%;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#C9A84C,#E8C97A);color:#0C0B09;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:transform 0.15s;}
+.lg-btn:active{transform:scale(0.97);}
+.lg-back{margin-top:16px;font-size:12px;color:#6A6050;text-decoration:underline;cursor:pointer;}
+
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="lg-brand">NonDual In Salons</div>
+  <div class="lg-icon">📊</div>
+  <div class="lg-title">Acceso privado</div>
+  <div class="lg-sub">Esta herramienta es exclusiva para clientes de NonDual In Salons.</div>
+  <div class="lg-box">
+    <label class="lg-label">Tu contraseña de acceso</label>
+    <input type="password" class="lg-input" id="lgInput" placeholder="Introduce tu contraseña" onkeydown="if(event.key==='Enter')lgCheck()">
+    <div class="lg-error" id="lgErr">Contraseña incorrecta. Contacta con NonDual.</div>
+    <button class="lg-btn" onclick="lgCheck()">Acceder →</button>
+  </div>
+  <span class="lg-back" onclick="history.back()">← Volver</span>
+</div>
+<script>
+const LG_PWS = ["NDSalon-A1-Xk9m", "NDSalon-A2-Pj4w", "NDSalon-A3-Tz7r", "NDSalon-A4-Qb2v", "NDSalon-A5-Lc8n", "NDSalon-A6-Wd5f", "NDSalon-A7-Ry3h", "NDSalon-A8-Uf6s", "NDSalon-A9-Mg1p", "NDSalon-A10-Jk0e"];
+function lgCheck(){
+  const inp=document.getElementById('lgInput');
+  const err=document.getElementById('lgErr');
+  if(LG_PWS.includes(inp.value.trim())){
+    document.getElementById('login-screen').style.display='none';
+    document.body.style.overflow='';
+    sessionStorage.setItem('nd_auditoria','1');
+  }else{
+    inp.classList.add('err');
+    err.classList.add('show');
+    setTimeout(()=>inp.classList.remove('err'),400);
+  }
+}
+if(sessionStorage.getItem('nd_auditoria')==='1'){
+  document.addEventListener('DOMContentLoaded',()=>{const s=document.getElementById('login-screen');if(s)s.style.display='none';});
+}else{
+  document.body.style.overflow='hidden';
+}
+</script>
+
+
+
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-eyebrow"><span class="pulse"></span> Herramienta de análisis</div>
+    <h1>Auditoría de tu<br><em>cuenta de explotación</em></h1>
+    <p class="header-sub">Introduce cada gasto de tu salón línea por línea para obtener un diagnóstico preciso de tu situación financiera real.</p>
+    <div class="iva-badge">⚠ Todas las cantidades deben introducirse sin IVA</div>
+  </div>
+
+  <!-- FACTURACIÓN -->
+  <div class="facturacion-wrap">
+    <label>📈 Facturación mensual media (sin IVA)</label>
+    <div class="facturacion-input-wrap">
+      <div class="currency-prefix">€</div>
+      <input type="number" id="facturacion" placeholder="0,00" min="0" step="0.01" oninput="actualizarPreviews()">
+    </div>
+    <div class="facturacion-hint">💡 Usa la media de los últimos 3 meses · Sin IVA</div>
+  </div>
+
+  <!-- PARTIDAS -->
+  <div id="partidas-container"></div>
+
+  <!-- CALCULAR -->
+  <div class="calcular-wrap">
+    <button class="btn-calcular" onclick="calcular()">
+      <span>Ver mi diagnóstico completo</span> <span>→</span>
+    </button>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div id="resultados">
+    <div class="res-divider"></div>
+    <div class="res-header">
+      <h2>Tu diagnóstico</h2>
+    </div>
+    <div id="res-contenido"></div>
+  </div>
+
+</div>
+
+<script>
+// ─── DEFINICIÓN DE PARTIDAS ───────────────────────────────
+const PARTIDAS = [
+  {
+    id: 'salarial',
+    icon: '💼',
+    nombre: 'Masa salarial',
+    ratioLabel: 'Ratio ideal: máximo 45–50% sobre facturación',
+    limMax: 50,
+    warnMax: 55,
+    placeholder: ['Nómina estilista 1', 'Nómina estilista 2', 'Tu sueldo (autónomo)', 'Seguridad Social', 'Pagas extras (÷12)'],
+    tip: {
+      ok: 'Tu coste de personal está dentro del rango óptimo del sector.',
+      warn: 'Estás ligeramente por encima del 50%. Antes de reducir personal, analiza si se puede aumentar la productividad o la facturación por estilista.',
+      bad: 'El coste salarial supera el 55% de tu facturación. Es la partida más crítica. Revisa la productividad de cada puesto y el equilibrio entre equipo fijo y variable.'
+    }
+  },
+  {
+    id: 'alquiler',
+    icon: '🏠',
+    nombre: 'Alquiler del local',
+    ratioLabel: 'Ratio ideal: máximo 10% sobre facturación',
+    limMax: 10,
+    warnMax: 13,
+    placeholder: ['Alquiler mensual del local', 'Plaza de garaje / trastero', 'Cuota comunidad'],
+    tip: {
+      ok: 'El alquiler está bien ajustado a tu nivel de ingresos.',
+      warn: 'Superas ligeramente el 10% recomendado. En la próxima renovación intenta negociar o plantéate si la facturación puede crecer para equilibrar el ratio.',
+      bad: 'El alquiler lastra tu margen. Si no puedes renegociarlo, necesitas aumentar facturación urgentemente o valorar un cambio de local.'
+    }
+  },
+  {
+    id: 'producto',
+    icon: '🧴',
+    nombre: 'Compra de producto',
+    ratioLabel: 'Ideal: 10–13% técnico · hasta 15% con reventa',
+    limMax: 15,
+    warnMax: 18,
+    placeholder: ['Tintes y coloración', 'Tratamientos y máscaras', 'Champús y acondicionadores', 'Queratina / alisados', 'Producto de reventa', 'Material fungible (guantes, papel...)'],
+    tip: {
+      ok: 'El consumo de producto está controlado y dentro del rango del sector.',
+      warn: 'Revisa si hay mermas en los procesos técnicos o si estás regalando producto en los servicios.',
+      bad: 'Consumo de producto muy elevado. Audita el inventario, controla las mermas y revisa si los precios de los servicios técnicos cubren el coste real de producto.'
+    }
+  },
+  {
+    id: 'fijos',
+    icon: '📋',
+    nombre: 'Gastos fijos mensuales',
+    ratioLabel: 'Costes que existen aunque el salón esté cerrado',
+    limMax: 12,
+    warnMax: 16,
+    placeholder: ['Electricidad', 'Agua', 'Gas', 'Gestoría / asesoría', 'Seguro del local', 'Alarma y seguridad', 'Internet y teléfono', 'Software de gestión', 'Comisiones TPV / datáfono', 'Prevención de riesgos (÷12)', 'Protección de datos (÷12)', 'Otros seguros (÷12)'],
+    tip: {
+      ok: 'Los gastos fijos están en un nivel razonable.',
+      warn: 'Revisa si hay servicios que no estás usando o contratos que se pueden renegociar.',
+      bad: 'Gastos fijos elevados. Haz una auditoría partida a partida y elimina o renegocia todo lo que puedas.'
+    }
+  },
+  {
+    id: 'variables',
+    icon: '📣',
+    nombre: 'Gastos variables',
+    ratioLabel: 'Costes que varían según la actividad del mes',
+    limMax: 8,
+    warnMax: 11,
+    placeholder: ['Marketing y publicidad', 'Redes sociales / contenido', 'Limpieza del local', 'Cafés, infusiones, agua clientes', 'Material de papelería / impresión', 'Formaciones y cursos (÷12)', 'Transporte y dietas', 'Gastos de representación'],
+    tip: {
+      ok: 'Variables bien controlados.',
+      warn: 'Revisa qué acciones están generando retorno real y cuáles son solo gasto.',
+      bad: 'Gastos variables altos. Prioriza únicamente las acciones que generan facturación directa y mide el retorno de cada una.'
+    }
+  }
+];
+
+// ─── ESTADO ──────────────────────────────────────────────
+const estado = {};
+PARTIDAS.forEach(p => { estado[p.id] = [{ nombre: '', importe: '' }]; });
+
+// ─── RENDER PARTIDAS ─────────────────────────────────────
+function renderPartidas() {
+  const cont = document.getElementById('partidas-container');
+  cont.innerHTML = '';
+  PARTIDAS.forEach((p, pi) => {
+    const div = document.createElement('div');
+    div.className = 'partida' + (pi === 0 ? ' open' : '');
+    div.id = 'partida-' + p.id;
+    div.innerHTML = `
+      <div class="partida-head" onclick="togglePartida('${p.id}')">
+        <div class="partida-head-left">
+          <div class="partida-icon">${p.icon}</div>
+          <div class="partida-info">
+            <h3>${p.nombre}</h3>
+            <div class="ratio-tag">${p.ratioLabel}</div>
+          </div>
+        </div>
+        <div class="partida-head-right">
+          <div class="partida-total-preview" id="preview-${p.id}">0 €</div>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="partida-body">
+        <div class="nota-iva">⚠ Introduce todos los importes sin IVA</div>
+        <div class="lineas-list" id="lineas-${p.id}"></div>
+        <button class="btn-add-linea" onclick="addLinea('${p.id}')">+ Añadir gasto</button>
+        <div class="partida-subtotal">
+          <span>Total ${p.nombre.toLowerCase()}</span>
+          <strong id="subtotal-${p.id}">0,00 €</strong>
+        </div>
+      </div>`;
+    cont.appendChild(div);
+    renderLineas(p.id);
+  });
+}
+
+function renderLineas(pid) {
+  const partida = PARTIDAS.find(p => p.id === pid);
+  const cont = document.getElementById('lineas-' + pid);
+  cont.innerHTML = '';
+  estado[pid].forEach((linea, i) => {
+    const ph = partida.placeholder[i % partida.placeholder.length] || 'Concepto';
+    const row = document.createElement('div');
+    row.className = 'linea';
+    row.innerHTML = `
+      <input class="linea-nombre" type="text" placeholder="${ph}"
+        value="${linea.nombre}" oninput="updateLinea('${pid}',${i},'nombre',this.value)">
+      <div class="linea-importe-wrap">
+        <input class="linea-importe" type="number" placeholder="0,00" min="0" step="0.01"
+          value="${linea.importe}" oninput="updateLinea('${pid}',${i},'importe',this.value)">
+        <span class="linea-euro">€</span>
+      </div>
+      <button class="btn-remove" onclick="removeLinea('${pid}',${i})" title="Eliminar">×</button>`;
+    cont.appendChild(row);
+  });
+  actualizarSubtotal(pid);
+}
+
+function addLinea(pid) {
+  estado[pid].push({ nombre: '', importe: '' });
+  renderLineas(pid);
+  // Focus en el nuevo nombre
+  const lineas = document.querySelectorAll('#lineas-' + pid + ' .linea-nombre');
+  if (lineas.length) lineas[lineas.length - 1].focus();
+}
+
+function removeLinea(pid, idx) {
+  if (estado[pid].length === 1) {
+    estado[pid][0] = { nombre: '', importe: '' };
+  } else {
+    estado[pid].splice(idx, 1);
+  }
+  renderLineas(pid);
+}
+
+function updateLinea(pid, idx, field, val) {
+  estado[pid][idx][field] = val;
+  actualizarSubtotal(pid);
+}
+
+function totalPartida(pid) {
+  return estado[pid].reduce((s, l) => s + (parseFloat(l.importe) || 0), 0);
+}
+
+function actualizarSubtotal(pid) {
+  const t = totalPartida(pid);
+  document.getElementById('subtotal-' + pid).textContent = fmt(t);
+  document.getElementById('preview-' + pid).textContent = fmtShort(t);
+  actualizarPreviews();
+}
+
+function actualizarPreviews() { /* previews ya se actualizan en actualizarSubtotal */ }
+
+function togglePartida(pid) {
+  const el = document.getElementById('partida-' + pid);
+  el.classList.toggle('open');
+}
+
+// ─── FORMATO ─────────────────────────────────────────────
+function fmt(n) {
+  return n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+function fmtShort(n) {
+  if (n >= 1000) return (n/1000).toFixed(1).replace('.',',') + 'k €';
+  return n.toLocaleString('es-ES', { maximumFractionDigits: 0 }) + ' €';
+}
+function pctOf(val, base) { return base > 0 ? (val / base * 100) : 0; }
+
+// ─── CALCULAR ────────────────────────────────────────────
+function calcular() {
+  const F = parseFloat(document.getElementById('facturacion').value) || 0;
+  if (F <= 0) {
+    document.getElementById('facturacion').focus();
+    document.getElementById('facturacion').style.borderColor = 'var(--red)';
+    setTimeout(() => document.getElementById('facturacion').style.borderColor = '', 1500);
+    alert('Introduce tu facturación mensual para continuar.');
+    return;
+  }
+
+  const totales = {};
+  let totalGastos = 0;
+  PARTIDAS.forEach(p => {
+    totales[p.id] = totalPartida(p.id);
+    totalGastos += totales[p.id];
+  });
+  const beneficio = F - totalGastos;
+  const benPct = pctOf(beneficio, F);
+
+  let html = '';
+
+  // Beneficio
+  const esPos = beneficio >= 0;
+  html += `
+    <div class="beneficio-card ${esPos ? 'positivo' : 'negativo'}">
+      <div class="beneficio-label">Resultado mensual estimado</div>
+      <div class="beneficio-valor">${esPos ? '+' : ''}${fmt(beneficio)}</div>
+      <div class="beneficio-pct">${benPct.toFixed(1)}% sobre facturación · ${esPos ? 'Salón rentable' : 'Salón en pérdidas'}</div>
+    </div>`;
+
+  // KPIs
+  html += `<div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Facturación mensual</div><div class="kpi-val">${fmt(F)}</div></div>
+    <div class="kpi"><div class="kpi-label">Total gastos</div><div class="kpi-val">${fmt(totalGastos)}</div></div>
+  </div>`;
+
+  html += `<div class="res-divider"></div>
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px;font-weight:600">Análisis por partida</div>`;
+
+  // Partidas
+  PARTIDAS.forEach(p => {
+    const val = totales[p.id];
+    const pctReal = pctOf(val, F);
+    const estado_p = pctReal <= p.limMax ? 'ok' : (pctReal <= p.warnMax ? 'warn' : 'bad');
+    const semLabel = { ok: '✓ Óptimo', warn: '⚠ Atención', bad: '✗ Revisar' }[estado_p];
+    const tip = p.tip[estado_p];
+
+    // Barra: escala relativa al límite + margen
+    const escala = p.limMax * 2;
+    const barW = Math.min((pctReal / escala) * 100, 100);
+    const limitPos = (p.limMax / escala) * 100;
+
+    // Detalle líneas
+    const lineasConValor = estado[p.id].filter(l => l.nombre || parseFloat(l.importe) > 0);
+    const lineasHTML = lineasConValor.length > 0 ? lineasConValor.map(l =>
+      `<div class="res-linea-item">
+        <span>${l.nombre || '(sin nombre)'}</span>
+        <span>${fmt(parseFloat(l.importe) || 0)}</span>
+      </div>`).join('') : '<div style="font-size:12px;color:var(--muted);padding:4px 0">Sin gastos registrados</div>';
+
+    html += `
+      <div class="res-partida">
+        <div class="res-partida-top">
+          <div class="res-partida-name">${p.icon} ${p.nombre}</div>
+          <span class="semaforo ${estado_p}">${semLabel}</span>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-fill ${estado_p}" style="width:${barW}%"></div>
+          <div class="bar-limit" style="left:${limitPos}%"></div>
+        </div>
+        <div class="res-partida-nums">
+          <span class="actual">${fmt(val)} · ${pctReal.toFixed(1)}% s/facturación</span>
+          <span>Límite recomendado: ${p.limMax}%</span>
+        </div>
+        <div class="res-partida-tip">${tip}</div>
+        <div class="res-lineas">
+          <button class="res-lineas-toggle" onclick="toggleDetalle(this)">▶ Ver detalle de gastos (${lineasConValor.length} conceptos)</button>
+          <div class="res-lineas-list">${lineasHTML}</div>
+        </div>
+      </div>`;
+  });
+
+  // Diagnóstico
+  html += `<div class="res-divider"></div>
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px;font-weight:600">Diagnóstico y prioridades</div>`;
+
+  const diagnosticos = [];
+  const sal = pctOf(totales.salarial, F);
+  const alq = pctOf(totales.alquiler, F);
+  const prod = pctOf(totales.producto, F);
+
+  if (!esPos) diagnosticos.push({ t: '🔴 El salón está en pérdidas', d: 'Los gastos superan la facturación. La prioridad es actuar de forma inmediata: aumenta el ticket medio con micro-servicios, optimiza la agenda y revisa las dos partidas más grandes.' });
+  if (sal > 50) diagnosticos.push({ t: '💼 Masa salarial por encima del límite', d: 'Es la partida que más impacto tiene. Antes de reducir personal, analiza la productividad por estilista y si la facturación por hora trabajada es la adecuada. A menudo el problema es de precio, no de equipo.' });
+  if (alq > 10) diagnosticos.push({ t: '🏠 Alquiler fuera del ratio óptimo', d: 'Con un alquiler alto, necesitas más facturación para compensar. Si hay renovación próxima, negocia. Si no, trabaja en llenar la agenda y subir el ticket medio.' });
+  if (prod > 15) diagnosticos.push({ t: '🧴 Consumo de producto elevado', d: 'Revisa si los precios de los servicios técnicos cubren el coste de producto. Un control de inventario mensual puede revelar dónde se pierde margen sin saberlo.' });
+  if (benPct > 0 && benPct < 10) diagnosticos.push({ t: '⚠ Margen ajustado', d: 'El salón es rentable pero con poco colchón. Cualquier mes flojo puede llevar a pérdidas. El objetivo del sector está entre el 15 y el 25% de margen sobre facturación.' });
+  if (diagnosticos.length === 0) diagnosticos.push({ t: '✅ Salud financiera correcta', d: 'Tus ratios están dentro de los rangos del sector y el resultado es positivo. El siguiente paso es crecer la facturación sin escalar los costes en la misma proporción.' });
+
+  diagnosticos.forEach(d => {
+    html += `<div class="diag-card"><h4>${d.t}</h4><p>${d.d}</p></div>`;
+  });
+
+  // CTA
+  html += `
+    <div class="cta">
+      <h3>¿Quieres mejorar estos números?</h3>
+      <p>Agenda una sesión de consultoría gratuita de 30 minutos con <strong style="color:var(--gold)">Nondual in Salon</strong> y analizamos juntos qué palancas activar en tu salón para mejorar el margen este mes.</p>
+      <a href="https://wa.me/34637516751?text=Hola%2C%20acabo%20de%20hacer%20la%20auditor%C3%ADa%20de%20mi%20sal%C3%B3n%20y%20me%20gustar%C3%ADa%20hablar%20contigo." target="_blank" style="text-decoration:none"><button class="btn-cta">💬 Escríbenos por WhatsApp →</button></a>
+    </div>
+    <button class="btn-reiniciar" onclick="reiniciar()">Hacer la auditoría de nuevo</button>`;
+
+  document.getElementById('res-contenido').innerHTML = html;
+  const resDiv = document.getElementById('resultados');
+  resDiv.classList.add('visible');
+  setTimeout(() => resDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function toggleDetalle(btn) {
+  const list = btn.nextElementSibling;
+  list.classList.toggle('open');
+  btn.textContent = list.classList.contains('open')
+    ? btn.textContent.replace('▶','▼')
+    : btn.textContent.replace('▼','▶');
+}
+
+function reiniciar() {
+  PARTIDAS.forEach(p => { estado[p.id] = [{ nombre: '', importe: '' }]; });
+  document.getElementById('facturacion').value = '';
+  document.getElementById('resultados').classList.remove('visible');
+  renderPartidas();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── INIT ────────────────────────────────────────────────
+renderPartidas();
+</script>
+</body>
+</html>

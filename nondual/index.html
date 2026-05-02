@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NonDual In Salons · Growth Partner para salones de peluquería</title>
+<meta name="description" content="Growth Partner para salones de peluquería. Sistemas, estrategias y herramientas para escalar tu negocio y aumentar tu rentabilidad.">
+<meta property="og:title" content="NonDual In Salons">
+<meta property="og:description" content="Growth Partner para salones de peluquería. Herramientas exclusivas para escalar tu negocio.">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dim: rgba(201,168,76,0.12);
+  --dark: #0C0B09;
+  --dark2: #141210;
+  --dark3: #1C1A15;
+  --dark4: #242118;
+  --cream: #F5F0E8;
+  --cream2: #C8BEA8;
+  --muted: #6A6050;
+  --green: #4CAF7A;
+  --wa: #25D366;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* BG */
+.bg-layer {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(201,168,76,0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 90% 100%, rgba(201,168,76,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 50% 40%, rgba(201,168,76,0.03) 0%, transparent 70%);
+}
+
+/* Grain */
+.grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.page { position: relative; z-index: 1; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 60px 24px 80px;
+  position: relative;
+}
+
+.hero::after {
+  content: '';
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, rgba(201,168,76,0.4), transparent);
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--dark3); border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 24px; padding: 6px 16px;
+  font-size: 10px; color: var(--gold); text-transform: uppercase;
+  letter-spacing: 2px; font-weight: 500; margin-bottom: 32px;
+  animation: fadeDown 0.8s ease both;
+}
+
+.live-dot {
+  width: 6px; height: 6px; background: var(--green);
+  border-radius: 50%; animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+.brand {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 8vw, 72px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  color: var(--cream);
+  margin-bottom: 6px;
+  animation: fadeUp 0.8s ease 0.1s both;
+}
+
+.brand em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.brand-sub {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(14px, 3vw, 18px);
+  color: var(--muted);
+  font-style: italic;
+  letter-spacing: 2px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+
+.hero-divider {
+  width: 48px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0 auto 28px;
+  animation: fadeUp 0.8s ease 0.3s both;
+}
+
+.hero-desc {
+  font-size: clamp(14px, 3.5vw, 17px);
+  color: var(--cream2);
+  line-height: 1.7;
+  max-width: 480px;
+  font-weight: 300;
+  margin-bottom: 40px;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+
+.hero-desc strong {
+  color: var(--cream);
+  font-weight: 500;
+}
+
+.hero-cta {
+  display: flex; flex-direction: column; gap: 12px; align-items: center;
+  width: 100%; max-width: 320px;
+  animation: fadeUp 0.8s ease 0.5s both;
+}
+
+.btn-primary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 15px 24px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--dark); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.3px;
+  border: none; border-radius: 13px; cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 6px 28px rgba(201,168,76,0.28);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-primary:active { transform: scale(0.97); }
+
+.btn-ghost {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 14px 24px;
+  background: transparent;
+  color: var(--cream2); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 400;
+  border: 1px solid rgba(201,168,76,0.2); border-radius: 13px;
+  cursor: pointer; text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: rgba(201,168,76,0.4); color: var(--cream); }
+
+/* STATS */
+.stats-row {
+  display: flex; justify-content: center; gap: 32px;
+  margin-top: 48px;
+  animation: fadeUp 0.8s ease 0.6s both;
+}
+.stat { text-align: center; }
+.stat-n {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px; font-weight: 700; color: var(--gold);
+}
+.stat-l { font-size: 10px; color: var(--muted); margin-top: 3px; letter-spacing: 0.5px; }
+
+/* ── TOOLS SECTION ── */
+.tools-section {
+  padding: 80px 24px 100px;
+  max-width: 480px; margin: 0 auto;
+}
+
+.section-label {
+  text-align: center;
+  font-size: 10px; color: var(--gold);
+  text-transform: uppercase; letter-spacing: 2.5px;
+  font-weight: 600; margin-bottom: 14px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 6vw, 32px);
+  font-weight: 700; color: var(--cream);
+  text-align: center; line-height: 1.25;
+  margin-bottom: 10px;
+}
+
+.section-title em { color: var(--gold); font-style: italic; }
+
+.section-sub {
+  font-size: 13px; color: var(--muted);
+  text-align: center; line-height: 1.65;
+  margin-bottom: 40px;
+}
+
+/* TOOL CARDS */
+.tool-card {
+  background: var(--dark2);
+  border: 1px solid rgba(201,168,76,0.1);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+
+.tool-card:hover { border-color: rgba(201,168,76,0.25); }
+.tool-card:hover::before { opacity: 1; }
+
+.tool-card.free { border-color: rgba(76,175,122,0.2); }
+.tool-card.free::before { background: linear-gradient(90deg, transparent, var(--green), transparent); opacity: 1; }
+
+.tool-header {
+  display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px;
+}
+
+.tool-icon {
+  width: 44px; height: 44px; border-radius: 11px;
+  background: var(--dark3); border: 1px solid rgba(201,168,76,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+
+.tool-card.free .tool-icon {
+  border-color: rgba(76,175,122,0.2);
+  background: rgba(76,175,122,0.05);
+}
+
+.tool-meta { flex: 1; }
+
+.tool-badge {
+  font-size: 9px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; padding: 3px 9px;
+  border-radius: 20px; display: inline-block; margin-bottom: 6px;
+}
+
+.badge-free { background: rgba(76,175,122,0.12); color: #7AE8A0; }
+.badge-pro { background: var(--gold-dim); color: var(--gold-light); }
+
+.tool-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700; color: var(--cream);
+  line-height: 1.2;
+}
+
+.tool-desc {
+  font-size: 12.5px; color: var(--muted);
+  line-height: 1.65; margin-bottom: 16px;
+}
+
+.tool-features {
+  display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px;
+}
+
+.feature-tag {
+  background: var(--dark3); border: 1px solid rgba(201,168,76,0.1);
+  border-radius: 20px; padding: 4px 10px;
+  font-size: 10.5px; color: var(--cream2);
+}
+
+.tool-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 13px;
+  border-radius: 11px; font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px; font-weight: 700;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: 0.2px;
+}
+
+.tool-btn:active { transform: scale(0.97); }
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--dark);
+  box-shadow: 0 4px 18px rgba(201,168,76,0.22);
+}
+
+.btn-green {
+  background: linear-gradient(135deg, #2A7A50, var(--green));
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(76,175,122,0.2);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid rgba(201,168,76,0.25);
+  color: var(--cream2);
+}
+
+.lock-icon { font-size: 13px; opacity: 0.7; }
+
+/* ── ABOUT ── */
+.about-section {
+  padding: 0 24px 80px;
+  max-width: 480px; margin: 0 auto;
+}
+
+.about-box {
+  background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03));
+  border: 1px solid rgba(201,168,76,0.18);
+  border-radius: 20px; padding: 28px 24px;
+  text-align: center;
+}
+
+.about-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--dark3); border: 2px solid rgba(201,168,76,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; margin: 0 auto 16px;
+}
+
+.about-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700; color: var(--cream);
+  margin-bottom: 4px;
+}
+
+.about-role {
+  font-size: 11px; color: var(--gold);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-bottom: 14px;
+}
+
+.about-text {
+  font-size: 13px; color: var(--muted);
+  line-height: 1.7; margin-bottom: 20px;
+}
+
+.wa-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 14px;
+  background: var(--wa); color: #fff;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+  border: none; border-radius: 12px; cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.25);
+  transition: transform 0.15s;
+}
+.wa-btn:active { transform: scale(0.97); }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center; padding: 24px;
+  border-top: 1px solid rgba(201,168,76,0.07);
+}
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px; color: var(--gold); font-style: italic;
+  margin-bottom: 6px;
+}
+.footer-copy { font-size: 11px; color: var(--muted); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="grain"></div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">
+      <span class="live-dot"></span>
+      Growth Partner · Peluquería
+    </div>
+
+    <div class="brand">NonDual<br><em>In Salons</em></div>
+    <div class="brand-sub">Growth Partner · Peluquería</div>
+
+    <div class="hero-divider"></div>
+
+    <p class="hero-desc">
+      Ayudamos a propietarios de salones a <strong>escalar su negocio</strong> con sistemas de gestión, estrategias de ventas y herramientas diseñadas para <strong>aumentar la rentabilidad real</strong>.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#herramientas" class="btn-primary">Ver herramientas →</a>
+      <a href="https://wa.me/34637516751?text=Hola%2C%20he%20visto%20NonDual%20In%20Salons%20y%20me%20gustar%C3%ADa%20saber%20m%C3%A1s." class="btn-ghost" target="_blank">💬 Contactar</a>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-n">+200</div><div class="stat-l">Salones</div></div>
+      <div class="stat"><div class="stat-n">23</div><div class="stat-l">Años sector</div></div>
+      <div class="stat"><div class="stat-n">3</div><div class="stat-l">Herramientas</div></div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="tools-section" id="herramientas">
+    <div class="section-label reveal">Herramientas</div>
+    <div class="section-title reveal">Todo lo que necesita<br>tu <em>salón</em> para crecer</div>
+    <p class="section-sub reveal">Herramientas construidas desde la experiencia real en salones. Sin teoría, solo resultados.</p>
+
+    <!-- DIAGNÓSTICO - FREE -->
+    <div class="tool-card free reveal">
+      <div class="tool-header">
+        <div class="tool-icon">✂️</div>
+        <div class="tool-meta">
+          <span class="tool-badge badge-free">Gratuito</span>
+          <div class="tool-name">Diagnóstico de Salón</div>
+        </div>
+      </div>
+      <p class="tool-desc">Descubre el estado real de tu negocio en 3 minutos. Analizamos 10 áreas clave y recibes un plan de acción personalizado al instante.</p>
+      <div class="tool-features">
+        <span class="feature-tag">10 áreas analizadas</span>
+        <span class="feature-tag">Puntuación 0–100</span>
+        <span class="feature-tag">Plan de acción</span>
+        <span class="feature-tag">3 minutos</span>
+      </div>
+      <a href="/diagnostico" class="tool-btn btn-green">Hacer mi diagnóstico gratis →</a>
+    </div>
+
+    <!-- NEWS - FREE -->
+    <div class="tool-card free reveal">
+      <div class="tool-header">
+        <div class="tool-icon">📰</div>
+        <div class="tool-meta">
+          <span class="tool-badge badge-free">Nuevo</span>
+          <div class="tool-name">NonDual News</div>
+        </div>
+      </div>
+      <p class="tool-desc">La newsletter del sector. Tendencias, casos reales, herramientas y reflexiones para propietarios y estilistas que quieren crecer desde la calma.</p>
+      <div class="tool-features">
+        <span class="feature-tag">Edición Nº 01</span>
+        <span class="feature-tag">Mayo 2026</span>
+        <span class="feature-tag">Lectura mensual</span>
+      </div>
+      <a href="/news" class="tool-btn btn-green">Leer la newsletter →</a>
+    </div>
+
+    <!-- CHECKLIST PRODUCTO - FREE -->
+    <div class="tool-card free reveal">
+      <div class="tool-header">
+        <div class="tool-icon">✅</div>
+        <div class="tool-meta">
+          <span class="tool-badge badge-free">Gratuito</span>
+          <div class="tool-name">4 Pilares de Venta de Producto</div>
+        </div>
+      </div>
+      <p class="tool-desc">Checklist interactivo para evaluar el estado de tu estrategia de retail. Formación, incentivos, recomendación honesta y estructura. ¿Cuántos tienes implementados?</p>
+      <div class="tool-features">
+        <span class="feature-tag">20 puntos de control</span>
+        <span class="feature-tag">4 pilares</span>
+        <span class="feature-tag">Progreso guardado</span>
+        <span class="feature-tag">Acción inmediata</span>
+      </div>
+      <a href="/checklist-producto" class="tool-btn btn-green">Hacer el checklist →</a>
+    </div>
+
+    <!-- AUDITORÍA - PRO -->
+    <div class="tool-card reveal">
+      <div class="tool-header">
+        <div class="tool-icon">📊</div>
+        <div class="tool-meta">
+          <span class="tool-badge badge-pro">Acceso privado</span>
+          <div class="tool-name">Auditoría de Explotación</div>
+        </div>
+      </div>
+      <p class="tool-desc">Analiza línea por línea cada gasto de tu salón y obtén un diagnóstico financiero preciso con márgenes reales y alertas de rentabilidad.</p>
+      <div class="tool-features">
+        <span class="feature-tag">Cuenta de explotación</span>
+        <span class="feature-tag">KPIs financieros</span>
+        <span class="feature-tag">Alertas de margen</span>
+        <span class="feature-tag">Exportable</span>
+      </div>
+      <a href="/auditoria" class="tool-btn btn-gold">Acceder 🔒</a>
+    </div>
+
+    <!-- CALCULADORA - PRO -->
+    <div class="tool-card reveal">
+      <div class="tool-header">
+        <div class="tool-icon">💶</div>
+        <div class="tool-meta">
+          <span class="tool-badge badge-pro">Acceso privado</span>
+          <div class="tool-name">Calculadora de Precios</div>
+        </div>
+      </div>
+      <p class="tool-desc">Calcula el precio correcto para cada servicio en base a tus costes reales. Deja de cobrar por intuición y empieza a cobrar con criterio.</p>
+      <div class="tool-features">
+        <span class="feature-tag">Precio por servicio</span>
+        <span class="feature-tag">Coste real</span>
+        <span class="feature-tag">Margen objetivo</span>
+        <span class="feature-tag">Comparativa</span>
+      </div>
+      <a href="/calculadora" class="tool-btn btn-gold">Acceder 🔒</a>
+    </div>
+
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about-section">
+    <div class="about-box reveal">
+      <div class="about-avatar">✂</div>
+      <div class="about-name">NonDual In Salons</div>
+      <div class="about-role">Growth Partner · Consultor de Salones</div>
+      <p class="about-text">23 años en la industria de la peluquería. Ex manager en Toni&Guy. Hoy ayudo a propietarios de salones a construir negocios más rentables, con equipos más motivados y sistemas que funcionan sin depender de ti.</p>
+      <a href="https://wa.me/34637516751?text=Hola%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20NonDual%20In%20Salons." class="wa-btn" target="_blank">
+        💬 Escribir por WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">NonDual In Salons</div>
+    <div class="footer-copy">© 2025 · NonDual In Salons</div>
+  </footer>
+
+</div>
+
+<script>
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

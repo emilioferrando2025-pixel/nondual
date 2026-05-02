@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Precios · Peluquería</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0f;
+  --surface: #181818;
+  --surface2: #222;
+  --border: #2e2e2e;
+  --gold: #d4a853;
+  --gold-dim: #8a6830;
+  --gold-bg: rgba(212,168,83,0.08);
+  --white: #f0ede8;
+  --muted: #777;
+  --green: #4caf7d;
+  --green-bg: rgba(76,175,125,0.1);
+  --orange: #e8924a;
+  --orange-bg: rgba(232,146,74,0.1);
+  --red: #e05555;
+  --red-bg: rgba(224,85,85,0.1);
+  --blue: #5b9bd5;
+  --blue-bg: rgba(91,155,213,0.1);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--white); min-height: 100vh; line-height: 1.5; }
+.app { max-width: 740px; margin: 0 auto; padding: 0 20px 100px; }
+
+/* PROGRESS */
+.progress-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(15,15,15,0.95); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+}
+.progress-inner { max-width: 740px; margin: 0 auto; }
+.steps { display: flex; gap: 4px; }
+.step {
+  flex: 1; height: 3px; border-radius: 3px;
+  background: var(--border); transition: background .4s;
+}
+.step.done { background: var(--gold); }
+.step.active { background: var(--white); }
+.step-label { font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 8px; }
+
+/* SLIDES */
+.slides { padding-top: 72px; }
+.slide { display: none; padding: 40px 0 20px; animation: up .35s ease; }
+.slide.active { display: block; }
+@keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+/* TYPO */
+.eyebrow {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; flex-shrink: 0; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+h1 { font-family:'Playfair Display',serif; font-size:clamp(24px,5vw,36px); line-height:1.15; margin-bottom:12px; }
+h1 em { font-style:italic; color:var(--gold); }
+h2 { font-family:'Playfair Display',serif; font-size:clamp(20px,4vw,28px); line-height:1.2; margin-bottom:8px; }
+.subtitle { font-size:14px; color:var(--muted); line-height:1.7; margin-bottom:28px; }
+.iva-note { display:inline-flex; align-items:center; gap:6px; background:var(--gold-bg); border:1px solid var(--gold-dim); color:var(--gold); font-size:12px; font-weight:600; padding:6px 14px; border-radius:50px; margin-bottom:28px; }
+
+/* CARDS */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:16px; }
+.card-title { font-size:13px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:.08em; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+
+/* FIELDS */
+.field { margin-bottom:16px; }
+label { display:block; font-size:12px; font-weight:600; letter-spacing:.04em; color:var(--muted); margin-bottom:7px; text-transform:uppercase; }
+.input-wrap { position:relative; }
+.inp {
+  width:100%; background:var(--surface2); border:1px solid var(--border);
+  border-radius:var(--radius-sm); color:var(--white);
+  font-family:'Outfit',sans-serif; font-size:16px; padding:12px 40px 12px 14px;
+  transition:border-color .2s; -moz-appearance:textfield;
+}
+.inp::-webkit-outer-spin-button,.inp::-webkit-inner-spin-button{-webkit-appearance:none;}
+.inp:focus { outline:none; border-color:var(--gold-dim); }
+.inp-suffix { position:absolute; right:13px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
+.inp-prefix { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--muted); pointer-events:none; }
+.inp.has-prefix { padding-left:26px; }
+.hint { font-size:11px; color:var(--muted); margin-top:6px; padding-left:2px; }
+
+/* LINEAS */
+.lineas-list { margin-bottom:10px; }
+.linea { display:flex; gap:8px; align-items:center; margin-bottom:8px; animation:up .2s ease; }
+.linea .inp-nombre { flex:1; font-size:14px; padding:10px 12px; }
+.linea .inp-importe { width:120px; flex-shrink:0; font-size:14px; padding:10px 34px 10px 12px; }
+.btn-remove { width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;line-height:1; }
+.btn-remove:hover { background:var(--red-bg);border-color:var(--red);color:var(--red); }
+.btn-add { display:flex;align-items:center;gap:8px;background:transparent;border:1px dashed var(--border);border-radius:var(--radius-sm);color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;padding:9px 14px;cursor:pointer;width:100%;transition:all .2s; }
+.btn-add:hover { border-color:var(--gold-dim);color:var(--gold); }
+.subtotal-row { display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border);margin-top:4px;font-size:13px; }
+.subtotal-row span { color:var(--muted); }
+.subtotal-val { font-family:'Playfair Display',serif;font-size:20px;color:var(--gold); }
+
+/* GRID 2 */
+.grid2 { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+
+/* HORAS */
+.horas-calc { background:var(--gold-bg);border:1px solid var(--gold-dim);border-radius:var(--radius-sm);padding:14px;margin-top:8px;font-size:13px;color:var(--gold); }
+
+/* RESUMEN STEP 3 */
+.resumen-pill {
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:50px;padding:6px 16px;font-size:13px;margin:4px 4px 0 0;
+}
+.resumen-pill strong { color:var(--gold); }
+
+/* SERVICIOS */
+.servicio-card {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;margin-bottom:14px;
+  transition:border-color .3s;
+}
+.servicio-card:focus-within { border-color:var(--gold-dim); }
+.servicio-head { display:flex;align-items:center;gap:12px;margin-bottom:16px; }
+.servicio-num { width:30px;height:30px;border-radius:8px;background:var(--gold-bg);border:1px solid var(--gold-dim);color:var(--gold);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.btn-remove-servicio { margin-left:auto;width:30px;height:30px;border-radius:50%;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1; }
+.btn-remove-servicio:hover { background:var(--red-bg);border-color:var(--red);color:var(--red); }
+.servicio-nombre-inp { flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--white);font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;padding:8px 12px;transition:border-color .2s; }
+.servicio-nombre-inp:focus { outline:none;border-color:var(--gold-dim); }
+.servicio-nombre-inp::placeholder { color:#444;font-weight:400; }
+
+.grid3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px; }
+.select-tipo {
+  width:100%;background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--white);font-family:'Outfit',sans-serif;
+  font-size:14px;padding:11px 12px;cursor:pointer;transition:border-color .2s;
+  -webkit-appearance:none;appearance:none;
+}
+.select-tipo:focus { outline:none;border-color:var(--gold-dim); }
+
+/* RESULTADO SERVICIO */
+.servicio-resultado {
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--border);
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+}
+.res-mini { background:var(--surface2);border-radius:var(--radius-sm);padding:12px;text-align:center; }
+.res-mini-label { font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px; }
+.res-mini-val { font-family:'Playfair Display',serif;font-size:18px; }
+.res-mini-val.gold { color:var(--gold); }
+.res-mini-val.green { color:var(--green); }
+.res-mini-val.muted { color:var(--muted); }
+
+.margen-tipo-tag { font-size:11px;text-align:center;color:var(--muted);margin-top:6px;grid-column:1/-1; }
+
+/* BOTONES NAV */
+.nav-btns { display:flex;flex-direction:column;gap:10px;margin-top:28px; }
+.btn-primary { width:100%;padding:16px;background:var(--gold);color:#0f0f0f;border:none;border-radius:var(--radius);font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.02em; }
+.btn-primary:hover { background:#e0b860;transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,168,83,.2); }
+.btn-secondary { width:100%;padding:13px;background:transparent;border:1px solid var(--border);border-radius:var(--radius);font-family:'Outfit',sans-serif;font-size:14px;color:var(--muted);cursor:pointer;transition:all .2s; }
+.btn-secondary:hover { border-color:var(--muted);color:var(--white); }
+
+/* RESULTADOS FINALES */
+.res-header-banner {
+  background:linear-gradient(135deg,#1a1a1a,#222);
+  border:1px solid var(--gold-dim);border-radius:var(--radius);
+  padding:28px;margin-bottom:24px;text-align:center;
+}
+.res-header-banner h2 { margin-bottom:6px; }
+.res-header-banner p { color:var(--muted);font-size:13px; }
+
+.coste-hora-big {
+  font-family:'Playfair Display',serif;font-size:clamp(36px,8vw,52px);
+  color:var(--gold);margin:8px 0;
+}
+
+.kpi-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px; }
+.kpi { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center; }
+.kpi-label { font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px; }
+.kpi-val { font-family:'Playfair Display',serif;font-size:22px; }
+
+.res-servicios-title { font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border); }
+
+.res-servicio {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:18px;margin-bottom:10px;
+}
+.res-servicio-top { display:flex;align-items:center;justify-content:space-between;margin-bottom:12px; }
+.res-servicio-nombre { font-size:15px;font-weight:700; }
+.precio-badge { font-family:'Playfair Display',serif;font-size:22px;color:var(--gold); }
+.res-servicio-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:8px; }
+.res-s-item { background:var(--surface2);border-radius:6px;padding:10px;text-align:center; }
+.res-s-label { font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px; }
+.res-s-val { font-size:14px;font-weight:600; }
+.margen-bar-wrap { height:4px;background:var(--border);border-radius:2px;margin-top:10px; }
+.margen-bar { height:4px;border-radius:2px;background:var(--green); }
+.margen-info { display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px; }
+
+.cta { background:linear-gradient(135deg,#1a1a1a,#222);border:1px solid var(--gold-dim);border-radius:var(--radius);padding:32px;text-align:center;margin-top:32px; }
+.cta h3 { font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);margin-bottom:10px; }
+.cta p { font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7; }
+.btn-cta { display:inline-block;padding:14px 36px;background:var(--gold);color:#0f0f0f;border-radius:50px;font-weight:700;font-size:14px;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:all .2s;text-decoration:none; }
+.btn-cta:hover { background:#e0b860;transform:translateY(-1px); }
+.btn-reiniciar { display:block;width:100%;margin-top:12px;background:none;border:1px solid var(--border);border-radius:50px;padding:12px;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;transition:all .2s; }
+.btn-reiniciar:hover { border-color:var(--muted);color:var(--white); }
+
+.divider { height:1px;background:var(--border);margin:28px 0; }
+
+@media(max-width:500px) {
+  .grid2,.grid3,.kpi-grid,.res-servicio-grid { grid-template-columns:1fr 1fr; }
+  .servicio-resultado { grid-template-columns:1fr 1fr; }
+  .linea { flex-wrap:wrap; }
+  .linea .inp-nombre { min-width:100%; }
+}
+
+
+
+
+/* ─── LOGIN ─── */
+#login-screen{position:fixed;inset:0;background:#0C0B09;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;}
+.lg-brand{font-size:10px;color:#C9A84C;letter-spacing:3px;text-transform:uppercase;margin-bottom:24px;font-weight:500;}
+.lg-icon{font-size:44px;margin-bottom:18px;}
+.lg-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#F5F0E8;margin-bottom:6px;}
+.lg-sub{font-size:12px;color:#6A6050;line-height:1.6;margin-bottom:28px;max-width:300px;}
+.lg-box{width:100%;max-width:340px;background:#161410;border:1px solid #2e2e2e;border-radius:16px;padding:22px;}
+.lg-label{font-size:10px;color:#6A6050;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:7px;text-align:left;}
+.lg-input{width:100%;background:#0C0B09;border:1.5px solid #2e2e2e;border-radius:10px;padding:13px 15px;color:#F5F0E8;font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;margin-bottom:12px;}
+.lg-input:focus{border-color:#C9A84C;}
+.lg-input.err{border-color:#C94C4C;animation:lgShake 0.3s ease;}
+@keyframes lgShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.lg-error{font-size:11px;color:#E87A7A;margin-bottom:10px;display:none;text-align:left;}
+.lg-error.show{display:block;}
+.lg-btn{width:100%;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#C9A84C,#E8C97A);color:#0C0B09;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:transform 0.15s;}
+.lg-btn:active{transform:scale(0.97);}
+.lg-back{margin-top:16px;font-size:12px;color:#6A6050;text-decoration:underline;cursor:pointer;}
+
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="lg-brand">NonDual In Salons</div>
+  <div class="lg-icon">💶</div>
+  <div class="lg-title">Acceso privado</div>
+  <div class="lg-sub">Esta herramienta es exclusiva para clientes de NonDual In Salons.</div>
+  <div class="lg-box">
+    <label class="lg-label">Tu contraseña de acceso</label>
+    <input type="password" class="lg-input" id="lgInput" placeholder="Introduce tu contraseña" onkeydown="if(event.key==='Enter')lgCheck()">
+    <div class="lg-error" id="lgErr">Contraseña incorrecta. Contacta con NonDual.</div>
+    <button class="lg-btn" onclick="lgCheck()">Acceder →</button>
+  </div>
+  <span class="lg-back" onclick="history.back()">← Volver</span>
+</div>
+<script>
+const LG_PWS = ["NDSalon-C1-Bm7q", "NDSalon-C2-Hn4x", "NDSalon-C3-Vp9z", "NDSalon-C4-Ek2t", "NDSalon-C5-Fw6y", "NDSalon-C6-Ga8d", "NDSalon-C7-Ls3u", "NDSalon-C8-Oc5i", "NDSalon-C9-Rj1b", "NDSalon-C10-Tn0k"];
+function lgCheck(){
+  const inp=document.getElementById('lgInput');
+  const err=document.getElementById('lgErr');
+  if(LG_PWS.includes(inp.value.trim())){
+    document.getElementById('login-screen').style.display='none';
+    document.body.style.overflow='';
+    sessionStorage.setItem('nd_calculadora','1');
+  }else{
+    inp.classList.add('err');
+    err.classList.add('show');
+    setTimeout(()=>inp.classList.remove('err'),400);
+  }
+}
+if(sessionStorage.getItem('nd_calculadora')==='1'){
+  document.addEventListener('DOMContentLoaded',()=>{const s=document.getElementById('login-screen');if(s)s.style.display='none';});
+}else{
+  document.body.style.overflow='hidden';
+}
+</script>
+
+
+
+
+<div class="progress-bar">
+  <div class="progress-inner">
+    <div class="steps" id="steps"></div>
+    <div class="step-label" id="step-label">Gastos fijos</div>
+  </div>
+</div>
+
+<div class="app">
+<div class="slides">
+
+<!-- ══ SLIDE 0: INTRO ══════════════════════════════════════ -->
+<div class="slide active" id="s0">
+  <div class="eyebrow"><span class="pulse"></span>Herramienta profesional</div>
+  <h1>Calcula el precio <em>real</em><br>de tus servicios</h1>
+  <p class="subtitle">Introduce tus gastos reales y te diremos exactamente cuánto debes cobrar por cada servicio para ser rentable — con los márgenes correctos del sector.</p>
+  <div class="iva-note">⚠ Todas las cantidades sin IVA</div>
+
+  <div class="card">
+    <div class="card-title">📋 Qué vamos a calcular</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:8px;background:var(--gold-bg);border:1px solid var(--gold-dim);color:var(--gold);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+        <div><div style="font-weight:600;font-size:14px">Tus gastos reales</div><div style="font-size:13px;color:var(--muted)">Fijos y variables, línea a línea</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:8px;background:var(--gold-bg);border:1px solid var(--gold-dim);color:var(--gold);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+        <div><div style="font-weight:600;font-size:14px">Tu coste por hora</div><div style="font-size:13px;color:var(--muted)">Lo que te cuesta tener el salón abierto cada hora</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:28px;height:28px;border-radius:8px;background:var(--gold-bg);border:1px solid var(--gold-dim);color:var(--gold);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+        <div><div style="font-weight:600;font-size:14px">El precio mínimo de cada servicio</div><div style="font-size:13px;color:var(--muted)">Escandallo real con margen según el tipo de servicio</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-primary" onclick="goTo(1)">Empezar →</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 1: GASTOS FIJOS ══════════════════════════════ -->
+<div class="slide" id="s1">
+  <div class="eyebrow"><span class="pulse"></span>Paso 1 de 3</div>
+  <h2>Gastos fijos mensuales</h2>
+  <p class="subtitle">No cambian aunque tengas más o menos clientes. Incluye aquí todos los que pagas sí o sí cada mes.</p>
+  <div class="iva-note">⚠ Sin IVA</div>
+
+  <div class="card">
+    <div class="card-title">💼 Personal</div>
+    <div class="lineas-list" id="lineas-personal"></div>
+    <button class="btn-add" onclick="addLinea('personal')">+ Añadir gasto de personal</button>
+    <div class="subtotal-row"><span>Subtotal personal</span><span class="subtotal-val" id="sub-personal">0,00 €</span></div>
+    <div class="hint" style="margin-top:8px">💡 Incluye nóminas + Seguridad Social + tu propio sueldo si eres autónomo. Para pagas extra, divídelas entre 12.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏠 Local y suministros</div>
+    <div class="lineas-list" id="lineas-local"></div>
+    <button class="btn-add" onclick="addLinea('local')">+ Añadir gasto de local</button>
+    <div class="subtotal-row"><span>Subtotal local</span><span class="subtotal-val" id="sub-local">0,00 €</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Administrativo y otros fijos</div>
+    <div class="lineas-list" id="lineas-admin"></div>
+    <button class="btn-add" onclick="addLinea('admin')">+ Añadir gasto administrativo</button>
+    <div class="subtotal-row"><span>Subtotal administrativo</span><span class="subtotal-val" id="sub-admin">0,00 €</span></div>
+    <div class="hint" style="margin-top:8px">💡 Gestoría, seguros, software, alarma, protección de datos, riesgos laborales anuales ÷ 12...</div>
+  </div>
+
+  <div class="card" style="border-color:var(--gold-dim)">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:14px;font-weight:700">TOTAL GASTOS FIJOS</span>
+      <span class="subtotal-val" id="total-fijos" style="font-size:24px">0,00 €</span>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-primary" onclick="goTo(2)">Continuar → Gastos variables</button>
+    <button class="btn-secondary" onclick="goTo(0)">← Volver</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2: GASTOS VARIABLES ══════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="eyebrow"><span class="pulse"></span>Paso 2 de 3</div>
+  <h2>Gastos variables y horas</h2>
+  <p class="subtitle">Varían según tu actividad. Incluye también cuántas horas trabajas para calcular tu coste por hora real.</p>
+  <div class="iva-note">⚠ Sin IVA</div>
+
+  <div class="card">
+    <div class="card-title">🧴 Producto y material</div>
+    <div class="lineas-list" id="lineas-producto"></div>
+    <button class="btn-add" onclick="addLinea('producto')">+ Añadir gasto de producto</button>
+    <div class="subtotal-row"><span>Subtotal producto</span><span class="subtotal-val" id="sub-producto">0,00 €</span></div>
+    <div class="hint" style="margin-top:8px">💡 Tintes, champús, mascarillas, guantes, papel, capas desechables...</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📣 Otros variables</div>
+    <div class="lineas-list" id="lineas-otros"></div>
+    <button class="btn-add" onclick="addLinea('otros')">+ Añadir gasto variable</button>
+    <div class="subtotal-row"><span>Subtotal otros</span><span class="subtotal-val" id="sub-otros">0,00 €</span></div>
+    <div class="hint" style="margin-top:8px">💡 Comisiones TPV, plataformas, marketing, limpieza, mantenimiento, imprevistos...</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⏱ Horas de trabajo mensuales</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Horas por día</label>
+        <div class="input-wrap">
+          <input class="inp" type="number" id="horas-dia" placeholder="8" min="1" max="16" oninput="calcHoras()">
+          <span class="inp-suffix">h</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Días por mes</label>
+        <div class="input-wrap">
+          <input class="inp" type="number" id="dias-mes" placeholder="22" min="1" max="31" oninput="calcHoras()">
+          <span class="inp-suffix">días</span>
+        </div>
+      </div>
+    </div>
+    <div class="horas-calc" id="horas-resultado">
+      Introduce las horas y días para ver el total mensual
+    </div>
+  </div>
+
+  <div class="card" style="border-color:var(--gold-dim)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:14px;font-weight:700">TOTAL GASTOS VARIABLES</span>
+      <span class="subtotal-val" id="total-variables" style="font-size:24px">0,00 €</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:14px;font-weight:700">COSTE TOTAL MENSUAL</span>
+      <span class="subtotal-val" id="coste-total-preview" style="font-size:24px">0,00 €</span>
+    </div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-primary" onclick="irAServicios()">Continuar → Escandallar servicios</button>
+    <button class="btn-secondary" onclick="goTo(1)">← Volver</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 3: SERVICIOS ══════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="eyebrow"><span class="pulse"></span>Paso 3 de 3</div>
+  <h2>Escandallo de servicios</h2>
+  <p class="subtitle">Para cada servicio indica su duración, el coste de producto y el tipo. La herramienta calcula el precio mínimo recomendado con el margen del sector.</p>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title">📊 Tu coste por hora</div>
+    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+      <div id="coste-hora-display" style="font-family:'Playfair Display',serif;font-size:36px;color:var(--gold)">— €/h</div>
+      <div id="resumen-pills" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"></div>
+    </div>
+  </div>
+
+  <div id="servicios-container"></div>
+
+  <button class="btn-add" style="margin-bottom:20px" onclick="addServicio()">+ Añadir servicio</button>
+
+  <div class="nav-btns">
+    <button class="btn-primary" onclick="calcularFinal()">Ver resultados completos →</button>
+    <button class="btn-secondary" onclick="goTo(2)">← Volver</button>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4: RESULTADOS ══════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="eyebrow"><span class="pulse"></span>Tu diagnóstico de precios</div>
+  <div id="resultados-contenido"></div>
+  <button class="btn-reiniciar" onclick="reiniciar()">Empezar de nuevo</button>
+</div>
+
+</div><!-- /slides -->
+</div><!-- /app -->
+
+<script>
+// ─── ESTADO ──────────────────────────────────────────────
+const GRUPOS = {
+  personal: { placeholders: ['Tu sueldo (autónomo)', 'Nómina estilista', 'Seguridad Social', 'Pagas extra (÷12)'] },
+  local:    { placeholders: ['Alquiler del local', 'Luz y electricidad', 'Agua', 'Gas', 'Internet y teléfono'] },
+  admin:    { placeholders: ['Gestoría / asesoría', 'Seguro del local', 'Software de gestión', 'Alarma', 'TPV / comisiones', 'Licencias e impuestos', 'Préstamos / leasing (÷12)'] },
+  producto: { placeholders: ['Tintes y coloración', 'Champús y tratamientos', 'Mascarillas', 'Guantes y material desechable', 'Capas y toallas'] },
+  otros:    { placeholders: ['Marketing y publicidad', 'Limpieza', 'Comisiones plataformas', 'Mantenimiento', 'Imprevistos'] },
+};
+const lineas = {};
+Object.keys(GRUPOS).forEach(g => lineas[g] = [{ n:'', v:'' }]);
+
+const TIPOS_SERVICIO = [
+  { id:'secado',  label:'Secado',  margen:0.15,  desc:'Margen sector: 15%' },
+  { id:'corte',   label:'Corte',   margen:0.225, desc:'Margen sector: 20–25%' },
+  { id:'color',   label:'Color',   margen:0.275, desc:'Margen sector: 25–30%' },
+  { id:'mechas',  label:'Mechas',  margen:0.50,  desc:'Margen sector: 50%' },
+  { id:'alisado', label:'Alisado', margen:1.00,  desc:'Margen sector: 100%' },
+  { id:'custom',  label:'Otro',    margen:0.30,  desc:'Margen personalizado: 30%' },
+];
+
+let servicios = [];
+let servicioCounter = 0;
+let currentSlide = 0;
+
+// ─── PROGRESS ─────────────────────────────────────────────
+const LABELS = ['Intro','Gastos fijos','Gastos variables','Servicios','Resultados'];
+function updateProgress(n) {
+  const s = document.getElementById('steps');
+  s.innerHTML = '';
+  for(let i=0;i<5;i++){
+    const d=document.createElement('div');
+    d.className='step'+(i<n?' done':i===n?' active':'');
+    s.appendChild(d);
+  }
+  document.getElementById('step-label').textContent = LABELS[n]||'';
+}
+
+function goTo(n) {
+  document.getElementById('s'+currentSlide).classList.remove('active');
+  currentSlide=n;
+  document.getElementById('s'+n).classList.add('active');
+  updateProgress(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── FORMATO ──────────────────────────────────────────────
+function fmt(n,dec=2){ return n.toLocaleString('es-ES',{minimumFractionDigits:dec,maximumFractionDigits:dec})+' €'; }
+function fmtN(n,dec=2){ return n.toLocaleString('es-ES',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+
+// ─── LÍNEAS ───────────────────────────────────────────────
+function renderLineas(gid) {
+  const cont = document.getElementById('lineas-'+gid);
+  const phs = GRUPOS[gid].placeholders;
+  cont.innerHTML='';
+  lineas[gid].forEach((l,i) => {
+    const row=document.createElement('div');
+    row.className='linea';
+    row.innerHTML=`
+      <input class="inp inp-nombre" type="text" placeholder="${phs[i%phs.length]||'Concepto'}"
+        value="${l.n}" oninput="updLinea('${gid}',${i},'n',this.value)">
+      <div class="input-wrap" style="width:120px;flex-shrink:0">
+        <input class="inp inp-importe" type="number" placeholder="0,00" min="0" step="0.01"
+          value="${l.v}" oninput="updLinea('${gid}',${i},'v',this.value)">
+        <span class="inp-suffix">€</span>
+      </div>
+      <button class="btn-remove" onclick="removeLinea('${gid}',${i})">×</button>`;
+    cont.appendChild(row);
+  });
+  recalcTotals();
+}
+
+function addLinea(gid){ lineas[gid].push({n:'',v:''}); renderLineas(gid); const inputs=document.querySelectorAll('#lineas-'+gid+' .inp-nombre'); if(inputs.length) inputs[inputs.length-1].focus(); }
+function removeLinea(gid,i){ if(lineas[gid].length===1){lineas[gid][0]={n:'',v:''};}else{lineas[gid].splice(i,1);} renderLineas(gid); }
+function updLinea(gid,i,field,val){ lineas[gid][i][field]=val; recalcTotals(); }
+function totalGrupo(gid){ return lineas[gid].reduce((s,l)=>s+(parseFloat(l.v)||0),0); }
+
+function recalcTotals(){
+  const personal=totalGrupo('personal'), local=totalGrupo('local'), admin=totalGrupo('admin');
+  const producto=totalGrupo('producto'), otros=totalGrupo('otros');
+  const fijos=personal+local+admin;
+  const variables=producto+otros;
+  const total=fijos+variables;
+  ['personal','local','admin','producto','otros'].forEach(g=>{
+    const el=document.getElementById('sub-'+g); if(el) el.textContent=fmt(totalGrupo(g));
+  });
+  const tf=document.getElementById('total-fijos'); if(tf) tf.textContent=fmt(fijos);
+  const tv=document.getElementById('total-variables'); if(tv) tv.textContent=fmt(variables);
+  const ct=document.getElementById('coste-total-preview'); if(ct) ct.textContent=fmt(total);
+  calcHoras();
+}
+
+function calcHoras(){
+  const h=parseFloat(document.getElementById('horas-dia')?.value)||0;
+  const d=parseFloat(document.getElementById('dias-mes')?.value)||0;
+  const total=h*d;
+  const el=document.getElementById('horas-resultado');
+  if(!el) return;
+  if(h>0 && d>0){
+    el.textContent=`⏱ Total: ${total} horas/mes (${h}h × ${d} días)`;
+  } else {
+    el.textContent='Introduce las horas y días para ver el total mensual';
+  }
+  recalcCosteHora();
+}
+
+function getTotalGastos(){
+  return ['personal','local','admin','producto','otros'].reduce((s,g)=>s+totalGrupo(g),0);
+}
+function getHorasMes(){
+  const h=parseFloat(document.getElementById('horas-dia')?.value)||0;
+  const d=parseFloat(document.getElementById('dias-mes')?.value)||0;
+  return h*d;
+}
+function getCosteHora(){
+  const t=getTotalGastos(), hm=getHorasMes();
+  return hm>0 ? t/hm : 0;
+}
+
+function recalcCosteHora(){
+  const ch=getCosteHora();
+  const el=document.getElementById('coste-hora-display');
+  if(el) el.textContent=ch>0 ? fmtN(ch)+' €/h' : '— €/h';
+  // actualizar servicios
+  document.querySelectorAll('.servicio-card').forEach(card=>{
+    const sid=card.dataset.sid;
+    if(sid) calcServicio(sid);
+  });
+}
+
+// ─── IR A SERVICIOS ───────────────────────────────────────
+function irAServicios(){
+  const hm=getHorasMes();
+  if(hm<=0){
+    alert('Introduce las horas y días de trabajo para continuar.');
+    return;
+  }
+  const ch=getCosteHora();
+  const t=getTotalGastos();
+
+  // Pills resumen
+  const pills=document.getElementById('resumen-pills');
+  if(pills) pills.innerHTML=`
+    <span class="resumen-pill">Total gastos: <strong>${fmt(t)}</strong></span>
+    <span class="resumen-pill">${getHorasMes()}h/mes</span>`;
+
+  goTo(3);
+
+  // Añadir primer servicio si no hay ninguno
+  if(servicios.length===0) addServicio();
+}
+
+// ─── SERVICIOS ────────────────────────────────────────────
+function addServicio(){
+  const sid='sv'+(++servicioCounter);
+  servicios.push({ id:sid, nombre:'', tipo:'color', duracion:'', producto:'', material:'' });
+  renderServicio(sid);
+}
+
+function renderServicio(sid){
+  const cont=document.getElementById('servicios-container');
+  // Si ya existe el card, lo actualizamos; si no, lo creamos
+  let card=document.getElementById('card-'+sid);
+  if(!card){
+    card=document.createElement('div');
+    card.className='servicio-card';
+    card.id='card-'+sid;
+    card.dataset.sid=sid;
+    cont.appendChild(card);
+  }
+  const idx=servicios.findIndex(s=>s.id===sid)+1;
+  const sv=servicios.find(s=>s.id===sid);
+  const tiposOpts=TIPOS_SERVICIO.map(t=>`<option value="${t.id}" ${sv.tipo===t.id?'selected':''}>${t.label} · ${t.desc}</option>`).join('');
+
+  card.innerHTML=`
+    <div class="servicio-head">
+      <div class="servicio-num">${idx}</div>
+      <input class="servicio-nombre-inp" type="text" placeholder="Nombre del servicio (ej: Tinte raíz + peinado)"
+        value="${sv.nombre}" oninput="updServicio('${sid}','nombre',this.value)">
+      <button class="btn-remove-servicio" onclick="removeServicio('${sid}')">×</button>
+    </div>
+    <div class="grid3">
+      <div class="field">
+        <label>Duración</label>
+        <div class="input-wrap">
+          <input class="inp" type="number" placeholder="1.5" min="0.25" step="0.25"
+            value="${sv.duracion}" oninput="updServicio('${sid}','duracion',this.value)">
+          <span class="inp-suffix">h</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Coste producto</label>
+        <div class="input-wrap">
+          <input class="inp" type="number" placeholder="5" min="0" step="0.5"
+            value="${sv.producto}" oninput="updServicio('${sid}','producto',this.value)">
+          <span class="inp-suffix">€</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Material fungible</label>
+        <div class="input-wrap">
+          <input class="inp" type="number" placeholder="1" min="0" step="0.5"
+            value="${sv.material}" oninput="updServicio('${sid}','material',this.value)">
+          <span class="inp-suffix">€</span>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Tipo de servicio · Margen del sector</label>
+      <select class="select-tipo inp" onchange="updServicio('${sid}','tipo',this.value)">${tiposOpts}</select>
+    </div>
+    <div id="resultado-${sid}" class="servicio-resultado" style="display:none"></div>`;
+
+  calcServicio(sid);
+}
+
+function updServicio(sid,field,val){
+  const sv=servicios.find(s=>s.id===sid);
+  if(!sv) return;
+  sv[field]=val;
+  calcServicio(sid);
+}
+
+function removeServicio(sid){
+  servicios=servicios.filter(s=>s.id!==sid);
+  const card=document.getElementById('card-'+sid);
+  if(card) card.remove();
+  // Renumerar
+  document.querySelectorAll('.servicio-card').forEach((card,i)=>{
+    const num=card.querySelector('.servicio-num');
+    if(num) num.textContent=i+1;
+  });
+}
+
+function calcServicio(sid){
+  const sv=servicios.find(s=>s.id===sid);
+  if(!sv) return;
+  const el=document.getElementById('resultado-'+sid);
+  if(!el) return;
+
+  const ch=getCosteHora();
+  const dur=parseFloat(sv.duracion)||0;
+  const prod=parseFloat(sv.producto)||0;
+  const mat=parseFloat(sv.material)||0;
+  const tipo=TIPOS_SERVICIO.find(t=>t.id===sv.tipo)||TIPOS_SERVICIO[2];
+
+  if(ch<=0 || dur<=0){ el.style.display='none'; return; }
+
+  const manoObra=dur*ch;
+  const costeTotal=manoObra+prod+mat;
+  const precio=costeTotal*(1+tipo.margen);
+  const margenEuros=precio-costeTotal;
+  const margenPct=tipo.margen*100;
+
+  el.style.display='grid';
+  el.innerHTML=`
+    <div class="res-mini"><div class="res-mini-label">Coste real</div><div class="res-mini-val muted">${fmt(costeTotal)}</div></div>
+    <div class="res-mini"><div class="res-mini-label">Margen (${margenPct}%)</div><div class="res-mini-val gold">${fmt(margenEuros)}</div></div>
+    <div class="res-mini"><div class="res-mini-label">Precio mínimo</div><div class="res-mini-val green">${fmt(precio)}</div></div>
+    <div class="margen-tipo-tag">Tipo: ${tipo.label} · ${tipo.desc}</div>`;
+}
+
+// ─── CALCULAR FINAL ───────────────────────────────────────
+function calcularFinal(){
+  if(servicios.length===0){ alert('Añade al menos un servicio para ver los resultados.'); return; }
+
+  const ch=getCosteHora();
+  const t=getTotalGastos();
+  const hm=getHorasMes();
+  const h=parseFloat(document.getElementById('horas-dia').value)||0;
+  const d=parseFloat(document.getElementById('dias-mes').value)||0;
+
+  let html='';
+
+  // Banner coste/hora
+  html+=`
+    <div class="res-header-banner">
+      <div style="font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px">Tu coste por hora de trabajo</div>
+      <div class="coste-hora-big">${fmtN(ch)} €/h</div>
+      <p>Cada hora que tu salón está abierto te cuesta <strong style="color:var(--gold)">${fmtN(ch)} €</strong> en gastos</p>
+    </div>`;
+
+  // KPIs
+  html+=`<div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Gastos totales</div><div class="kpi-val">${fmt(t)}</div></div>
+    <div class="kpi"><div class="kpi-label">Horas/mes</div><div class="kpi-val">${hm}h</div></div>
+    <div class="kpi"><div class="kpi-label">${h}h × ${d} días</div><div class="kpi-val" style="font-size:16px;padding-top:4px">mes tipo</div></div>
+  </div>`;
+
+  html+=`<div class="res-servicios-title">Precios recomendados por servicio</div>`;
+
+  servicios.forEach(sv=>{
+    const dur=parseFloat(sv.duracion)||0;
+    const prod=parseFloat(sv.producto)||0;
+    const mat=parseFloat(sv.material)||0;
+    const tipo=TIPOS_SERVICIO.find(t=>t.id===sv.tipo)||TIPOS_SERVICIO[2];
+    if(dur<=0) return;
+    const manoObra=dur*ch;
+    const costeTotal=manoObra+prod+mat;
+    const precio=costeTotal*(1+tipo.margen);
+    const margenEuros=precio-costeTotal;
+    const margenPct=tipo.margen*100;
+    const barW=Math.min(margenPct/120*100,100);
+
+    html+=`
+      <div class="res-servicio">
+        <div class="res-servicio-top">
+          <div class="res-servicio-nombre">${sv.nombre||'Servicio sin nombre'}</div>
+          <div class="precio-badge">${fmtN(precio,2)} €</div>
+        </div>
+        <div class="res-servicio-grid">
+          <div class="res-s-item"><div class="res-s-label">Mano de obra</div><div class="res-s-val">${fmt(manoObra)}</div></div>
+          <div class="res-s-item"><div class="res-s-label">Producto</div><div class="res-s-val">${fmt(prod)}</div></div>
+          <div class="res-s-item"><div class="res-s-label">Material</div><div class="res-s-val">${fmt(mat)}</div></div>
+          <div class="res-s-item"><div class="res-s-label">Coste total</div><div class="res-s-val">${fmt(costeTotal)}</div></div>
+        </div>
+        <div class="margen-bar-wrap"><div class="margen-bar" style="width:${barW}%"></div></div>
+        <div class="margen-info">
+          <span>Margen aplicado: <strong style="color:var(--green)">${margenPct}% (${tipo.label})</strong> = +${fmt(margenEuros)}</span>
+          <span>Precio mín.: <strong style="color:var(--gold)">${fmtN(precio,2)} €</strong></span>
+        </div>
+      </div>`;
+  });
+
+  html+=`
+    <div class="cta">
+      <h3>¿Quieres afinar aún más tus precios?</h3>
+      <p>Agenda una sesión gratuita de 30 minutos con <strong style="color:var(--gold)">Nondual in Salon</strong> y analizamos juntos tu tarifa completa y tu estrategia de precios.</p>
+      <a href="https://wa.me/34637516751?text=Hola%2C%20acabo%20de%20usar%20la%20calculadora%20de%20precios%20y%20me%20gustar%C3%ADa%20hablar%20contigo." target="_blank" style="text-decoration:none">
+        <button class="btn-cta">💬 Hablar con Nondual in Salon →</button>
+      </a>
+    </div>`;
+
+  document.getElementById('resultados-contenido').innerHTML=html;
+  goTo(4);
+}
+
+// ─── REINICIAR ────────────────────────────────────────────
+function reiniciar(){
+  Object.keys(GRUPOS).forEach(g=>{ lineas[g]=[{n:'',v:''}]; });
+  servicios=[]; servicioCounter=0;
+  document.getElementById('horas-dia').value='';
+  document.getElementById('dias-mes').value='';
+  document.getElementById('servicios-container').innerHTML='';
+  renderAll();
+  goTo(0);
+}
+
+function renderAll(){
+  Object.keys(GRUPOS).forEach(g=>renderLineas(g));
+}
+
+// ─── INIT ─────────────────────────────────────────────────
+updateProgress(0);
+renderAll();
+</script>
+</body>
+</html>

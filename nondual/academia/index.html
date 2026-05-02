@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Academia NonDual · Formación para Salones</title>
+<link rel="manifest" href="/academia/manifest.json">
+<meta name="theme-color" content="#C4973A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Academia NonDual">
+<link rel="apple-touch-icon" href="/academia/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #12100E;
+  --ink2: #1E1B18;
+  --ink3: #2C2820;
+  --parchment: #F9F5EE;
+  --parchment2: #F0E9DC;
+  --parchment3: #E5DDD0;
+  --gold: #C4973A;
+  --gold-light: #DDB96A;
+  --gold-dim: rgba(196,151,58,0.12);
+  --rouge: #9E3A3A;
+  --rouge-dim: rgba(158,58,58,0.1);
+  --sage: #3A7A5A;
+  --sage-dim: rgba(58,122,90,0.1);
+  --cobalt: #2A4A8A;
+  --cobalt-dim: rgba(42,74,138,0.1);
+  --muted: #7A6E60;
+  --shadow: 0 2px 20px rgba(18,16,14,0.08);
+  --shadow-lg: 0 8px 40px rgba(18,16,14,0.14);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--parchment);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ─── SCREENS ─── */
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* ─── LOGIN ─── */
+#screen-login{
+  background:var(--ink);
+  align-items:center;justify-content:center;
+  padding:40px 24px;position:relative;overflow:hidden;
+}
+#screen-login::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%,rgba(196,151,58,0.1) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 90%,rgba(196,151,58,0.07) 0%,transparent 50%);
+  pointer-events:none;
+}
+/* Decorative lines */
+#screen-login::after{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+
+.login-wrap{position:relative;z-index:1;width:100%;max-width:360px;text-align:center;}
+.login-ornament{font-size:11px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:28px;opacity:0.8;}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--parchment);line-height:1.1;margin-bottom:6px;}
+.login-title em{color:var(--gold-light);font-style:italic;}
+.login-subtitle{font-size:12px;color:rgba(249,245,238,0.45);letter-spacing:2px;text-transform:uppercase;margin-bottom:36px;}
+.login-divider{display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+.login-divider-line{flex:1;height:1px;background:rgba(196,151,58,0.2);}
+.login-divider-text{font-size:10px;color:rgba(196,151,58,0.5);letter-spacing:2px;}
+.login-field{margin-bottom:14px;text-align:left;}
+.login-label{font-size:10px;color:rgba(249,245,238,0.4);text-transform:uppercase;letter-spacing:1.5px;display:block;margin-bottom:7px;}
+.login-input{
+  width:100%;background:rgba(249,245,238,0.05);
+  border:1px solid rgba(196,151,58,0.2);border-radius:10px;
+  padding:13px 16px;color:var(--parchment);
+  font-family:'DM Sans',sans-serif;font-size:15px;outline:none;
+  transition:border-color 0.2s;
+}
+.login-input:focus{border-color:rgba(196,151,58,0.5);}
+.login-input.error{border-color:var(--rouge);}
+.login-input::placeholder{color:rgba(249,245,238,0.2);}
+.login-err{font-size:11px;color:#E87A7A;margin-top:5px;display:none;}
+.login-err.show{display:block;}
+.login-btn{
+  width:100%;padding:15px;border:none;border-radius:11px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:var(--ink);font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;
+  box-shadow:0 6px 24px rgba(196,151,58,0.3);
+  transition:transform 0.15s;margin-top:4px;letter-spacing:0.3px;
+}
+.login-btn:active{transform:scale(0.97);}
+.login-by{margin-top:24px;font-size:11px;color:rgba(249,245,238,0.25);}
+.login-by strong{color:rgba(196,151,58,0.6);}
+
+/* ─── HOME ─── */
+#screen-home{background:var(--parchment);}
+
+.home-header{
+  background:var(--ink);
+  padding:32px 20px 28px;position:relative;overflow:hidden;
+}
+.home-header::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.home-brand{font-size:10px;color:var(--gold-light);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;opacity:0.8;}
+.home-greeting{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--parchment);line-height:1.2;margin-bottom:4px;}
+.home-greeting em{color:var(--gold-light);font-style:italic;}
+.home-sub{font-size:12px;color:rgba(249,245,238,0.45);line-height:1.6;}
+
+.progress-strip{background:rgba(249,245,238,0.05);padding:16px 20px;border-bottom:1px solid rgba(196,151,58,0.1);}
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.prog-label{font-size:10px;color:var(--gold-light);text-transform:uppercase;letter-spacing:1px;opacity:0.7;}
+.prog-val{font-size:12px;color:var(--gold-light);font-weight:600;}
+.prog-bar{height:3px;background:rgba(249,245,238,0.1);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:3px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1);}
+
+.home-body{padding:20px;flex:1;}
+.section-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:14px;}
+
+/* MODULE CARDS */
+.module-card{
+  background:#fff;border-radius:16px;padding:20px;
+  margin-bottom:14px;box-shadow:var(--shadow);
+  border:1px solid var(--parchment3);
+  position:relative;overflow:hidden;cursor:pointer;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.module-card:active{transform:scale(0.99);}
+.module-card::before{
+  content:'';position:absolute;top:0;left:0;bottom:0;width:4px;
+}
+.mod-color-0::before{background:var(--rouge);}
+.mod-color-1::before{background:var(--sage);}
+.mod-color-2::before{background:var(--cobalt);}
+.mod-color-3::before{background:#7A5A9E;}
+
+.mod-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px;}
+.mod-icon{
+  width:46px;height:46px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.mod-icon-0{background:var(--rouge-dim);}
+.mod-icon-1{background:var(--sage-dim);}
+.mod-icon-2{background:var(--cobalt-dim);}
+.mod-icon-3{background:rgba(122,90,158,0.1);}
+
+.mod-info{flex:1;}
+.mod-num{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.mod-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:var(--ink);line-height:1.2;}
+.mod-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:12px;}
+
+.mod-footer{display:flex;align-items:center;justify-content:space-between;}
+.mod-stats{display:flex;gap:14px;}
+.mod-stat{font-size:11px;color:var(--muted);}
+.mod-stat strong{color:var(--ink);font-weight:600;}
+
+.mod-status{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;}
+.status-lock{color:var(--muted);}
+.status-progress{color:var(--gold);}
+.status-done{color:var(--sage);}
+
+.mod-progress-bar{height:4px;background:var(--parchment2);border-radius:4px;overflow:hidden;margin-top:10px;}
+.mod-prog-fill{height:100%;border-radius:4px;transition:width 0.6s ease;}
+.mpf-0{background:var(--rouge);}
+.mpf-1{background:var(--sage);}
+.mpf-2{background:var(--cobalt);}
+.mpf-3{background:#7A5A9E;}
+
+/* BADGES */
+.badges-row{display:flex;gap:10px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;}
+.badge-item{
+  background:#fff;border-radius:14px;padding:12px 14px;
+  min-width:90px;text-align:center;box-shadow:var(--shadow);
+  border:1px solid var(--parchment3);flex-shrink:0;
+}
+.badge-item.earned{border-color:rgba(196,151,58,0.3);background:var(--gold-dim);}
+.badge-icon{font-size:26px;margin-bottom:4px;}
+.badge-name{font-size:10px;color:var(--muted);line-height:1.3;}
+.badge-item.earned .badge-name{color:var(--gold);}
+
+/* ─── QUIZ ─── */
+#screen-quiz{background:var(--parchment);}
+
+.quiz-header{padding:20px 20px 0;}
+.quiz-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.btn-back{
+  width:38px;height:38px;border-radius:10px;
+  background:var(--parchment2);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:var(--ink3);transition:background 0.15s;flex-shrink:0;
+}
+.btn-back:active{background:var(--parchment3);}
+.quiz-mod-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--ink);flex:1;}
+.quiz-counter{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;}
+
+.quiz-progress{height:3px;background:var(--parchment3);border-radius:3px;overflow:hidden;margin-bottom:0;}
+.quiz-prog-fill{height:100%;border-radius:3px;transition:width 0.4s ease;}
+.qpf-0{background:var(--rouge);}
+.qpf-1{background:var(--sage);}
+.qpf-2{background:var(--cobalt);}
+.qpf-3{background:#7A5A9E;}
+
+.quiz-body{padding:24px 20px;flex:1;}
+
+.question-num{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;font-weight:600;}
+.question-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:600;color:var(--ink);
+  line-height:1.35;margin-bottom:24px;
+}
+
+.options-list{display:flex;flex-direction:column;gap:10px;}
+.opt-btn{
+  background:#fff;border:1.5px solid var(--parchment3);
+  border-radius:13px;padding:14px 16px;
+  cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;gap:12px;
+  text-align:left;width:100%;
+}
+.opt-btn:active{transform:scale(0.99);}
+.opt-btn.selected-correct{border-color:var(--sage);background:var(--sage-dim);}
+.opt-btn.selected-wrong{border-color:var(--rouge);background:var(--rouge-dim);}
+.opt-btn.reveal-correct{border-color:var(--sage);background:var(--sage-dim);}
+.opt-btn.disabled{pointer-events:none;}
+
+.opt-letter{
+  width:30px;height:30px;border-radius:8px;
+  background:var(--parchment2);border:1px solid var(--parchment3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0;
+  transition:all 0.2s;
+}
+.selected-correct .opt-letter{background:var(--sage);border-color:var(--sage);color:#fff;}
+.selected-wrong .opt-letter{background:var(--rouge);border-color:var(--rouge);color:#fff;}
+.reveal-correct .opt-letter{background:var(--sage);border-color:var(--sage);color:#fff;}
+
+.opt-text{font-size:13.5px;color:var(--ink3);line-height:1.4;font-weight:400;}
+
+/* Feedback */
+.feedback-box{
+  border-radius:13px;padding:14px 16px;margin-top:16px;
+  display:none;animation:fadeUp 0.3s ease;
+}
+.feedback-box.show{display:block;}
+.feedback-correct{background:var(--sage-dim);border:1px solid rgba(58,122,90,0.2);}
+.feedback-wrong{background:var(--rouge-dim);border:1px solid rgba(158,58,58,0.15);}
+.feedback-icon{font-size:18px;margin-bottom:4px;}
+.feedback-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.feedback-text{font-size:12px;color:var(--muted);line-height:1.55;}
+
+.btn-next-q{
+  width:100%;padding:14px;border:none;border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:transform 0.15s;margin-top:14px;
+  display:none;
+}
+.btn-next-q.show{display:block;}
+.btn-next-q:active{transform:scale(0.97);}
+.bnq-0{background:var(--rouge);color:#fff;}
+.bnq-1{background:var(--sage);color:#fff;}
+.bnq-2{background:var(--cobalt);color:#fff;}
+.bnq-3{background:#7A5A9E;color:#fff;}
+
+/* ─── RESULT ─── */
+#screen-result{
+  background:var(--ink);
+  align-items:center;justify-content:center;
+  padding:40px 24px;position:relative;overflow:hidden;
+  text-align:center;
+}
+#screen-result::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(196,151,58,0.12) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+.result-wrap{position:relative;z-index:1;width:100%;max-width:360px;}
+.result-badge-big{font-size:72px;margin-bottom:16px;animation:popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;}
+@keyframes popIn{from{transform:scale(0.3);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+.result-score-wrap{margin:0 auto 20px;}
+.result-score{
+  font-family:'Cormorant Garamond',serif;
+  font-size:64px;font-weight:700;color:var(--parchment);
+  line-height:1;margin-bottom:4px;
+}
+.result-score em{color:var(--gold-light);}
+.result-score-label{font-size:11px;color:rgba(249,245,238,0.4);text-transform:uppercase;letter-spacing:2px;}
+
+.result-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:700;color:var(--parchment);
+  margin-bottom:8px;line-height:1.2;
+}
+.result-sub{font-size:13px;color:rgba(249,245,238,0.5);line-height:1.65;margin-bottom:28px;max-width:300px;margin-left:auto;margin-right:auto;}
+
+.result-badge-earned{
+  background:rgba(196,151,58,0.1);border:1px solid rgba(196,151,58,0.25);
+  border-radius:14px;padding:16px;margin-bottom:24px;
+  display:none;
+}
+.result-badge-earned.show{display:block;}
+.rbe-title{font-size:10px;color:var(--gold-light);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;opacity:0.7;}
+.rbe-content{display:flex;align-items:center;gap:10px;}
+.rbe-icon{font-size:32px;}
+.rbe-text{text-align:left;}
+.rbe-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--parchment);}
+.rbe-desc{font-size:11px;color:rgba(249,245,238,0.45);margin-top:2px;}
+
+.result-btns{display:flex;flex-direction:column;gap:10px;}
+.btn-result-home{
+  width:100%;padding:14px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  color:var(--ink);font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:transform 0.15s;
+}
+.btn-result-home:active{transform:scale(0.97);}
+.btn-result-retry{
+  width:100%;padding:13px;border-radius:12px;
+  border:1px solid rgba(249,245,238,0.15);background:transparent;
+  color:rgba(249,245,238,0.6);font-family:'DM Sans',sans-serif;
+  font-size:13px;cursor:pointer;transition:all 0.2s;
+}
+
+/* Stats bar in result */
+.result-stats{display:flex;justify-content:center;gap:24px;margin-bottom:24px;}
+.rs-item{text-align:center;}
+.rs-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--parchment);}
+.rs-lbl{font-size:10px;color:rgba(249,245,238,0.35);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ─── PWA INSTALL ─── */
+.install-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+  background: var(--ink2); border-top: 1px solid rgba(196,151,58,0.2);
+  padding: 12px 20px 20px;
+  display: none; align-items: center; gap: 12px;
+  animation: slideUpBar 0.4s cubic-bezier(0.34,1.2,0.64,1);
+}
+@keyframes slideUpBar { from{transform:translateY(100%);} to{transform:translateY(0);} }
+.install-bar.show { display: flex; }
+.install-bar-icon { font-size: 28px; flex-shrink: 0; }
+.install-bar-text { flex: 1; }
+.install-bar-title { font-size: 13px; font-weight: 600; color: var(--parchment); }
+.install-bar-sub { font-size: 11px; color: rgba(249,245,238,0.4); margin-top: 2px; }
+.install-bar-btn {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--ink); font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 700; border: none;
+  border-radius: 9px; padding: 9px 14px; cursor: pointer;
+  white-space: nowrap; flex-shrink: 0;
+}
+.install-bar-close {
+  background: transparent; border: none; color: rgba(249,245,238,0.3);
+  font-size: 18px; cursor: pointer; padding: 4px; flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HOME ─── -->
+<div class="screen" id="screen-home">
+  <div class="home-header">
+    <div class="home-brand">NonDual In Salons · Academia</div>
+    <div class="home-greeting">Bienvenida a tu<br><em>formación</em></div>
+    <div class="home-sub">4 módulos · 60 preguntas · Insignias de logro</div>
+  </div>
+  <div class="progress-strip" id="progressStrip" style="background:var(--ink2);">
+    <div class="progress-row">
+      <span class="prog-label">Progreso total</span>
+      <span class="prog-val" id="totalProgVal">0 / 30</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="totalProgFill" style="width:0%"></div></div>
+  </div>
+  <div class="home-body">
+    <div class="section-label" style="margin-bottom:10px;">Insignias obtenidas</div>
+    <div class="badges-row" id="badgesRow"></div>
+    <div class="section-label">Módulos de formación</div>
+    <div id="moduleList"></div>
+  </div>
+</div>
+
+<!-- ─── QUIZ ─── -->
+<div class="screen" id="screen-quiz">
+  <div class="quiz-header">
+    <div class="quiz-top">
+      <button class="btn-back" onclick="goHome()">←</button>
+      <div class="quiz-mod-name" id="quizModName">—</div>
+      <div class="quiz-counter" id="quizCounter">1/10</div>
+    </div>
+    <div class="quiz-progress"><div class="quiz-prog-fill" id="quizProgFill" style="width:0%"></div></div>
+  </div>
+  <div class="quiz-body">
+    <div class="question-num" id="qNum">Pregunta 1 de 10</div>
+    <div class="question-text" id="qText">—</div>
+    <div class="options-list" id="optionsList"></div>
+    <div class="feedback-box" id="feedbackBox">
+      <div class="feedback-icon" id="feedbackIcon"></div>
+      <div class="feedback-title" id="feedbackTitle"></div>
+      <div class="feedback-text" id="feedbackText"></div>
+    </div>
+    <button class="btn-next-q" id="btnNextQ" onclick="nextQuestion()">Siguiente pregunta →</button>
+  </div>
+</div>
+
+<!-- ─── RESULT ─── -->
+<div class="screen" id="screen-result">
+  <div class="result-wrap">
+    <div class="result-badge-big" id="resultEmoji">🎓</div>
+    <div class="result-score-wrap">
+      <div class="result-score"><em id="resultScore">0</em>/10</div>
+      <div class="result-score-label">respuestas correctas</div>
+    </div>
+    <div class="result-stats">
+      <div class="rs-item"><div class="rs-num" id="resPct">0%</div><div class="rs-lbl">Aciertos</div></div>
+      <div class="rs-item"><div class="rs-num" id="resTime">—</div><div class="rs-lbl">Minutos</div></div>
+      <div class="rs-item"><div class="rs-num" id="resRank">—</div><div class="rs-lbl">Nivel</div></div>
+    </div>
+    <div class="result-title" id="resultTitle">—</div>
+    <div class="result-sub" id="resultSub">—</div>
+    <div class="result-badge-earned" id="badgeEarned">
+      <div class="rbe-title">✦ Insignia desbloqueada</div>
+      <div class="rbe-content">
+        <div class="rbe-icon" id="badgeIcon">🏅</div>
+        <div class="rbe-text">
+          <div class="rbe-name" id="badgeName">—</div>
+          <div class="rbe-desc" id="badgeDesc">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="result-btns">
+      <button class="btn-result-home" onclick="goHome()">Volver a los módulos</button>
+      <button class="btn-result-retry" onclick="retryModule()">↺ Repetir este módulo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════
+const PASSWORDS = [
+  'NDSalon-AC1-Rp7k',
+  'NDSalon-AC2-Mx3n',
+  'NDSalon-AC3-Jv9w',
+  'NDSalon-AC4-Tz5q',
+  'NDSalon-AC5-Lb2f',
+  'NDSalon-AC6-Wh8d',
+  'NDSalon-AC7-Ys4c',
+  'NDSalon-AC8-Ek6t',
+  'NDSalon-AC9-Gu1s',
+  'NDSalon-AC10-Fp0m',
+];
+
+// ══════════════════════════════════════
+// MODULES DATA
+// ══════════════════════════════════════
+const MODULES = [
+  {
+    id: 0,
+    name: 'Coloración y Técnicas',
+    desc: 'Domina el balayage, la colorimetría y las técnicas de coloración más demandadas hoy.',
+    icon: '🎨',
+    color: 0,
+    badge: { icon: '🏆', name: 'Maestra del Color', desc: 'Dominio de técnicas de coloración' },
+    questions: [
+      { q: '¿Cuál es la diferencia principal entre el balayage y el ombré?', opts: ['Son técnicas idénticas', 'El balayage es a mano alzada y el ombré es degradado desde la raíz', 'El ombré no usa decolorante', 'El balayage siempre cubre toda la longitud'], correct: 1, exp: 'El balayage se aplica a mano alzada de forma artística, mientras que el ombré crea un degradado uniforme de oscuro a claro desde la raíz.' },
+      { q: '¿Qué círculo cromático describe mejor la neutralización de tonos?', opts: ['Los colores fríos neutralizan los cálidos', 'Los colores complementarios se neutralizan entre sí', 'El amarillo neutraliza todos los tonos', 'Los tonos análogos se neutralizan'], correct: 1, exp: 'Los colores opuestos en el círculo cromático (complementarios) se neutralizan mutuamente. Por ejemplo, el violeta neutraliza el amarillo.' },
+      { q: 'Para neutralizar un tono amarillado en el cabello, ¿qué color de tónico se usa?', opts: ['Verde', 'Naranja', 'Violeta o azul', 'Rojo'], correct: 2, exp: 'El violeta es el complementario del amarillo en el círculo cromático, por eso los tónicos violetas o azulados neutralizan los tonos amarillos no deseados.' },
+      { q: '¿Qué significa el número de la izquierda en la codificación de un tinte (ej: 6.3)?', opts: ['La intensidad del color', 'El tono predominante', 'El nivel de luminosidad o profundidad', 'El porcentaje de cobertura de canas'], correct: 2, exp: 'El primer número indica el nivel de luminosidad del 1 (negro) al 10 (rubio muy claro). El segundo número indica el reflejo o tono.' },
+      { q: '¿Cuál es el volumen de oxidante más habitual para aclarar 2-3 tonos?', opts: ['10 vol (3%)', '20 vol (6%)', '30 vol (9%)', '40 vol (12%)'], correct: 2, exp: '30 vol (9%) es el estándar para aclarar 2-3 tonos. El 40 vol se reserva para aclaraciones más agresivas y puede dañar el cabello.' },
+      { q: '¿Qué técnica consiste en aplicar color solo en puntas para crear efecto luminoso?', opts: ['Highlights', 'Color melting', 'Money piece', 'Tipping'], correct: 3, exp: 'El tipping o puntas de color es una técnica en la que se aplica color o decolorante únicamente en las puntas del cabello para un efecto luminoso y natural.' },
+      { q: 'El "color melting" es una técnica que se caracteriza por:', opts: ['Transiciones muy marcadas entre colores', 'Fusión suave y sin líneas entre colores', 'Usar solo colores naturales', 'Aplicarse solo en raíces'], correct: 1, exp: 'El color melting crea transiciones suaves y naturales entre diferentes tonos, sin líneas de demarcación, creando un efecto de fusión fluida.' },
+      { q: '¿Qué es el "money piece" en coloración?', opts: ['Una técnica de coloración completa', 'Mechones aclarados que enmarcan el rostro', 'Un tratamiento de brillo', 'La raíz pintada de otro color'], correct: 1, exp: 'El money piece son mechones estratégicamente iluminados que enmarcan el rostro, especialmente en la zona de la frente, creando un efecto muy favorecedor.' },
+      { q: 'Antes de realizar una decoloración, ¿qué es imprescindible hacer?', opts: ['Lavar el cabello con champú', 'Realizar una prueba de hebra y valorar el estado del cabello', 'Aplicar un acondicionador', 'Nada, se puede aplicar directamente'], correct: 1, exp: 'La prueba de hebra y la valoración del estado capilar son imprescindibles para prever el resultado y evitar roturas o daños en el cabello.' },
+      { q: '¿Qué ingrediente activo buscarías en un champú para cabellos con balayage?', opts: ['Sulfatos agresivos', 'Aceite de coco puro', 'Agentes protectores del color y filtros UV', 'Keratina pura'], correct: 2, exp: 'Los cabellos con técnicas de coloración necesitan protectores del color y filtros UV para mantener la viveza del tono y proteger frente al desgaste solar.' },
+    ]
+  },
+  {
+    id: 1,
+    name: 'Ventas y Atención al Cliente',
+    desc: 'Domina las ventas en el salón con las técnicas de Brian Tracy, Cialdini, Gitomer, Pink y Ziglar — adaptadas a peluquería.',
+    icon: '💬',
+    color: 1,
+    badge: { icon: '💎', name: 'Experta en Ventas', desc: 'Dominio de ventas y fidelización' },
+    questions: [
+      { q: 'Según Brian Tracy, ¿cuál es el factor más determinante en una venta?', opts: ['El precio del producto o servicio', 'La confianza que el cliente tiene en ti antes de comprar', 'La calidad técnica del servicio', 'La ubicación del salón'], correct: 1, exp: 'Brian Tracy afirma que el 80% de una venta ocurre antes de que el cliente entre por la puerta — se basa en la confianza y la reputación que has construido. En un salón, eso es tu presencia, tu trato y tus resultados visibles.' },
+      { q: 'Robert Cialdini identifica 6 principios de influencia. ¿Cuál es el más poderoso en un salón de peluquería?', opts: ['Escasez — "solo quedan 2 huecos esta semana"', 'Prueba social — ver que otros clientes confían en ti', 'Autoridad — demostrar que eres experta en lo que haces', 'Reciprocidad — dar valor antes de pedir algo a cambio'], correct: 1, exp: 'Cialdini demuestra que la prueba social es el principio más poderoso en servicios personales. Ver que otras personas confían en ti reduce el riesgo percibido del cliente. Las reseñas, los antes/después y los testimonios son prueba social en acción.' },
+      { q: 'Daniel Pink, en "To Sell is Human", dice que vender hoy se basa en:', opts: ['Persistencia y seguimiento constante', 'Detectar el problema del cliente antes de que él mismo lo identifique', 'Ofrecer el mejor precio del mercado', 'Tener el mayor catálogo de servicios'], correct: 1, exp: 'Pink demuestra que el vendedor moderno no convence — identifica problemas que el cliente no había articulado. En un salón: "noto que tu cabello tiene porosidad en las puntas — eso te está apagando el color" es detectar antes de ofrecer.' },
+      { q: 'Jeffrey Gitomer dice que "la gente no quiere que le vendan, quiere..." ¿cómo completa la frase?', opts: ['...recibir descuentos', '...comprar', '...ser asesorada', '...que le den tiempo para decidir'], correct: 1, exp: 'Gitomer es rotundo: nadie quiere que le vendan, pero todo el mundo quiere comprar. La diferencia está en si tú empujas o si el cliente siente que la decisión es suya. En el salón: ofrece, explica el beneficio, y deja que el cliente decida.' },
+      { q: 'Zig Ziglar decía: "Puedes tener todo en la vida si ayudas a suficientes personas a..." ¿cómo termina?', opts: ['...conocerte', '...conseguir lo que ellas quieren', '...hablar bien de ti', '...pagar lo que vales'], correct: 1, exp: 'La filosofía de Ziglar es el fundamento de la venta desde el servicio: cuando tu objetivo es genuinamente ayudar al cliente a conseguir lo que quiere — mejor cabello, más confianza, más bienestar — la venta es una consecuencia natural.' },
+      { q: 'Según Cialdini, el principio de RECIPROCIDAD aplicado a un salón significa:', opts: ['Dar un descuento a cambio de una reseña', 'Ofrecer valor antes de pedir algo — un consejo, una muestra, un diagnóstico gratuito', 'Hacer un regalo de cumpleaños a las clientas', 'Ofrecer la primera visita gratis'], correct: 1, exp: 'La reciprocidad activa en el cliente un deseo natural de devolver el valor recibido. Un diagnóstico capilar gratuito y bien hecho predispone al cliente a escuchar tu recomendación de producto con mucha más apertura.' },
+      { q: 'Brian Tracy identifica los "4 factores del éxito en ventas". ¿Cuál es el primero y más importante?', opts: ['La prospección constante de clientes nuevos', 'La construcción de relaciones de confianza a largo plazo', 'El conocimiento profundo del producto', 'El cierre de la venta'], correct: 1, exp: 'Para Tracy, las relaciones son la base de todo. En un salón, una clienta que confía en ti no necesita que le vendas — te pregunta qué necesita. Esa relación se construye con presencia, coherencia y cuidado genuino en cada visita.' },
+      { q: '¿Cuál es la mejor forma de manejar la objeción "es muy caro" según los principios de Gitomer?', opts: ['Ofrecer un descuento inmediatamente', 'Ignorar la objeción y hablar de otra cosa', 'Hacer una pregunta: ¿caro comparado con qué?', 'Explicar todos los ingredientes del producto'], correct: 2, exp: 'Gitomer enseña que "caro" nunca es el problema real — es una señal de que el cliente no percibe suficiente valor todavía. La pregunta "¿caro comparado con qué?" abre la conversación real y te permite conectar el precio con el beneficio concreto.' },
+      { q: 'Daniel Pink habla de "attunement" como habilidad clave del vendedor moderno. ¿Qué significa?', opts: ['Adaptar el precio al cliente', 'Sintonizar con la perspectiva del cliente — ver las cosas desde su lugar', 'Ajustar el lenguaje técnico al nivel del cliente', 'Ofrecer exactamente lo que el cliente pide sin más'], correct: 1, exp: 'El attunement de Pink es la capacidad de salir de tu propia perspectiva y ver la situación desde los ojos del cliente. En el salón: antes de recomendar, pregúntate qué le preocupa realmente a esa persona hoy.' },
+      { q: 'Según Cialdini, el principio de AUTORIDAD en un salón se construye principalmente con:', opts: ['Tener muchos años de experiencia', 'Mostrar certificaciones, formaciones y resultados reales de forma visible', 'Hablar con seguridad y tono firme', 'Tener el salón más moderno de la zona'], correct: 1, exp: 'La autoridad percibida viene de señales visibles: diplomas, formaciones con marcas reconocidas, antes/después documentados, testimonios específicos. No basta con ser experta — tienes que hacerlo visible.' },
+      { q: 'Brian Tracy habla de la "venta consultiva". ¿En qué se diferencia de la venta tradicional?', opts: ['En que el precio es siempre negociable', 'En que el vendedor actúa como experto que diagnostica antes de recomendar', 'En que se enfoca en cerrar la venta lo más rápido posible', 'En que solo se ofrece lo que el cliente pide explícitamente'], correct: 1, exp: 'La venta consultiva de Tracy convierte al vendedor en consultor. En un salón: diagnosticas el cabello, identificas el problema real, recomiendas la solución. No vendes productos — resuelves problemas. Eso es exactamente lo que hace una experta.' },
+      { q: 'Zig Ziglar decía que el miedo al rechazo es el mayor obstáculo en ventas. ¿Cómo lo superaba?', opts: ['Practicando el desapego al resultado — no es un rechazo personal, es una decisión del cliente', 'Insistiendo más cuando el cliente decía no', 'Evitando recomendar si no estaba seguro del resultado', 'Dando siempre un descuento para evitar el no'], correct: 0, exp: 'Ziglar enseñaba que el "no" de un cliente no es un rechazo a ti como persona — es una decisión sobre ese producto en ese momento. El desapego al resultado permite seguir recomendando con naturalidad sin que el ego esté en juego.' },
+      { q: 'Según Cialdini, el principio de COMPROMISO Y COHERENCIA aplicado a un salón funciona así:', opts: ['Si el cliente dice que le importa su cabello, es coherente aceptar el tratamiento que lo cuida', 'Si el cliente paga mucho, es coherente volver más a menudo', 'Si el cliente pide descuento, es coherente dárselo para fidelizarlo', 'Si el cliente lleva años viniendo, es coherente no cambiar nada'], correct: 0, exp: 'Cialdini demuestra que las personas actúan de forma coherente con sus declaraciones previas. Si la clienta ha dicho "quiero que mi cabello esté más sano", recomendar un tratamiento de keratina es coherente con lo que ella misma ha expresado que quiere.' },
+      { q: 'Daniel Pink identifica tres cualidades del "nuevo vendedor". ¿Cuáles son?', opts: ['Persistencia, precio competitivo y volumen de contactos', 'Attunement, flotabilidad y claridad', 'Simpatía, descuentos y rapidez', 'Técnica, experiencia y red de contactos'], correct: 1, exp: 'Pink define las tres cualidades del vendedor moderno: attunement (sintonizar con el cliente), flotabilidad (mantenerse positivo ante los rechazos) y claridad (ayudar al cliente a ver su situación de forma nueva). Las tres son aplicables en cada servicio de un salón.' },
+      { q: 'Gitomer afirma que "los clientes no compran por tus razones, compran por..."', opts: ['...el precio más bajo', '...sus razones', '...la recomendación de otros', '...la urgencia que sienten'], correct: 1, exp: 'Esta es una de las verdades más importantes de Gitomer: tus argumentos no venden — las razones del cliente sí. Por eso en un salón, antes de recomendar, hay que preguntar y escuchar. ¿Qué le preocupa a esta clienta hoy? ¿Qué resultado quiere ver?' },
+      { q: 'Según Brian Tracy, ¿cuánto tiempo tiene un vendedor para crear una primera impresión positiva?', opts: ['Los primeros 30 segundos', 'Los primeros 4 minutos', 'El tiempo que dura el saludo inicial', 'Depende del tipo de cliente'], correct: 1, exp: 'Tracy identifica los primeros 4 minutos como el período crítico en el que el cliente forma su impresión. En un salón: la recepción, el diagnóstico inicial y los primeros minutos de contacto son los que determinan si el cliente confía en ti o se cierra.' },
+      { q: 'El principio de ESCASEZ de Cialdini en un salón se aplica de forma ética cuando:', opts: ['Dices que queda poco stock aunque haya suficiente', 'Comunicas disponibilidad real limitada — huecos, ediciones limitadas de productos, plazas en formación', 'Subes el precio temporalmente para crear sensación de exclusividad', 'Reservas productos para clientes que paguen más'], correct: 1, exp: 'La escasez funciona éticamente cuando es real. "Solo tengo 3 huecos esta semana", "este producto es de edición limitada" o "las plazas para la sesión grupal se llenan rápido" son escaseces reales que generan decisión sin manipulación.' },
+      { q: 'Zig Ziglar decía que vender es una transferencia de...' , opts: ['...información', '...entusiasmo', '...confianza', '...autoridad'], correct: 1, exp: 'Para Ziglar, vender es transferir el entusiasmo que tú sientes por tu producto o servicio al cliente. Si tú crees de verdad en lo que recomiendas — porque lo conoces, lo usas o has visto los resultados — ese entusiasmo es genuino y el cliente lo percibe.' },
+      { q: '¿Cuál es la diferencia entre "características" y "beneficios" según la venta consultiva de Tracy?', opts: ['Las características son el precio, los beneficios son los descuentos', 'Las características describen el producto, los beneficios describen lo que hace por el cliente', 'Son lo mismo expresado de forma diferente', 'Las características son para expertos, los beneficios para clientes sin conocimiento'], correct: 1, exp: 'Tracy es muy claro: los clientes no compran características, compran beneficios. "Este sérum tiene aceite de argán" es una característica. "Este sérum va a hacer que tu cabello brille y se maneje mucho mejor" es un beneficio. Habla siempre en beneficios.' },
+      { q: 'Daniel Pink habla de "problem finding" como habilidad superior a "problem solving". ¿Qué significa en un salón?', opts: ['Buscar problemas en el cabello que el cliente no mencionó para vender más', 'Ayudar al cliente a identificar una necesidad que todavía no había articulado', 'Diagnosticar problemas técnicos de coloración', 'Encontrar la raíz del problema antes de aplicar ningún tratamiento'], correct: 1, exp: 'Pink argumenta que el vendedor más valioso no es el que resuelve problemas — es el que ayuda al cliente a ver un problema que no sabía que tenía. "¿Ves cómo el color se va tan rápido? Es porque tu cabello está poroso y no retiene el pigmento." Eso es encontrar el problema antes de ofrecer la solución.' },
+      { q: 'Según Gitomer, ¿qué es más importante que hacer una venta?', opts: ['Conseguir una reseña positiva', 'Construir una relación que genere ventas para toda la vida', 'Captar a los amigos del cliente', 'Que el cliente recomiende el salón en redes sociales'], correct: 1, exp: 'Gitomer es contundente: una venta te da dinero una vez; una relación te da dinero para siempre. En un salón, una clienta fiel que viene cada 6 semanas y compra producto vale 10 veces más que captar una clienta nueva cada mes.' },
+      { q: 'El principio de SIMPATÍA de Cialdini dice que compramos más a personas que:', opts: ['Tienen más experiencia que nosotros', 'Nos gustan, son similares a nosotros o nos han hecho un favor', 'Tienen más clientes que otros en el sector', 'Cobran precios más accesibles'], correct: 1, exp: 'Cialdini demuestra que la simpatía — el genuino agrado que sentimos por alguien — es un motor de compra poderoso. No se trata de ser falso — se trata de conectar de verdad: recordar detalles de la clienta, interesarte por su vida, crear una relación real.' },
+      { q: 'Brian Tracy habla del "cierre por elección". ¿Cómo funciona en un salón?', opts: ['Preguntar si el cliente quiere comprar o no', 'Dar a elegir entre dos opciones positivas: "¿te llevas el sérum pequeño o el grande?"', 'Cerrar la venta antes de que el cliente piense demasiado', 'Ofrecer un descuento de última hora para cerrar'], correct: 1, exp: 'El cierre por elección de Tracy elimina el "sí o no" y lo convierte en "¿cuál de los dos?". Ambas opciones son positivas para ti. El cliente siente que elige libremente. En un salón: "¿te llevas el champú solo o también el acondicionador que lo complementa?"' },
+      { q: 'Zig Ziglar identificó que los clientes tienen 5 objeciones básicas. ¿Cuál es la más común en un salón?', opts: ['No tengo tiempo', 'No tengo dinero / es muy caro', 'No lo necesito ahora mismo', 'No confío en el producto'], correct: 1, exp: 'El precio es la objeción más frecuente pero raramente es el problema real — es una señal de que el valor percibido no supera todavía el precio. La respuesta de Ziglar: nunca bajes el precio, sube el valor percibido. Explica mejor el beneficio.' },
+      { q: '¿Qué dice Daniel Pink sobre el poder de las preguntas en la venta?', opts: ['Hacer muchas preguntas confunde al cliente', 'Las preguntas abiertas son más potentes que cualquier argumento de venta', 'Las preguntas técnicas demuestran autoridad', 'Preguntar demasiado puede parecer intrusivo'], correct: 1, exp: 'Pink demuestra con investigación que hacer las preguntas correctas es más efectivo que cualquier argumento. Una pregunta abierta hace que el cliente articule su propio problema — y cuando lo hace en voz alta, él mismo se convence de que necesita la solución.' },
+      { q: 'Gitomer dice que la mejor publicidad que existe es:', opts: ['Instagram y TikTok bien gestionados', 'Un cliente satisfecho que habla de ti a sus amigos', 'Los descuentos en momentos estratégicos', 'El posicionamiento en Google Maps'], correct: 1, exp: 'Para Gitomer, el boca a boca de un cliente genuinamente satisfecho supera cualquier inversión en publicidad. En un salón: la clienta que lleva a su madre, su hermana y sus amigas vale más que mil seguidores en Instagram.' },
+      { q: 'Según los principios de Cialdini, ¿por qué funcionan tan bien los "packs" de servicios en un salón?', opts: ['Porque son más baratos unitariamente', 'Porque activan el principio de coherencia — si ya compraste el pack, lo usas todo', 'Porque el cliente percibe mayor valor que comprando por separado', 'Por las dos últimas razones a la vez'], correct: 3, exp: 'Los packs activan dos principios de Cialdini simultáneamente: coherencia (el cliente que compró el pack tiene un compromiso que tiende a cumplir) y valor percibido (el pack parece más completo y ventajoso que los servicios sueltos). Doble palanca.' },
+      { q: 'Brian Tracy habla de "preparación total" antes de cualquier interacción de venta. En un salón, eso significa:', opts: ['Tener el precio de todos los productos memorizado', 'Conocer en profundidad cada producto, para qué tipo de cabello funciona y qué resultado produce', 'Tener preparado un argumento para cada objeción posible', 'Conocer el historial completo del cliente antes de que llegue'], correct: 1, exp: 'Para Tracy, la preparación es el 90% de la venta. En un salón: si no conoces en profundidad lo que recomiendas — sus ingredientes, sus resultados, para qué tipo de cabello funciona mejor — no puedes recomendarlo con convicción. Y sin convicción no hay venta.' },
+      { q: 'Zig Ziglar decía: "No es lo que dices, es cómo lo..." ¿cómo completa la frase?', opts: ['...argumentas', '...dices', '...demuestras', '...preguntas'], correct: 1, exp: 'Ziglar insistía en que el tono, la energía y la autenticidad de cómo dices algo importan más que las palabras exactas. Una recomendación dicha con entusiasmo genuino y convicción real vende más que el argumento técnico perfecto dicho sin emoción.' },
+      { q: 'Según los 5 referentes, ¿cuál es el elemento más importante para vender en un salón de forma sostenible?', opts: ['Un sistema de incentivos bien diseñado para el equipo', 'La confianza construida a lo largo del tiempo con cada cliente', 'El dominio técnico del servicio', 'La presencia activa en redes sociales'], correct: 1, exp: 'Los cinco — Tracy, Cialdini, Pink, Gitomer y Ziglar — coinciden en lo mismo: la confianza es el activo más valioso en la venta. Todo lo demás — técnica, argumentos, cierres — son herramientas. Sin confianza, no funcionan. Con confianza, a veces ni hacen falta.' },
+    ]
+  },
+  {
+    id: 2,
+    name: 'Gestión y Liderazgo',
+    desc: 'Construye un equipo motivado, optimiza tu negocio y lidera con visión estratégica.',
+    icon: '📊',
+    color: 2,
+    badge: { icon: '👑', name: 'Líder de Salón', desc: 'Excelencia en gestión y liderazgo' },
+    questions: [
+      { q: '¿Con qué frecuencia recomienda Emilio Ferrando realizar reuniones de equipo para maximizar el rendimiento?', opts: ['Mensual', 'Semestral', 'Semanal', 'Solo cuando hay problemas'], correct: 2, exp: 'Las reuniones semanales breves (15-30 min) son la palanca más efectiva de gestión. Los equipos que las implementan facturan hasta un 25% más según datos del sector.' },
+      { q: 'Un estilista lleva 3 meses con el ticket medio más bajo del equipo. ¿Cuál es el primer paso?', opts: ['Avisarle de que debe mejorar o habrá consecuencias', 'Tener una conversación privada para entender qué está pasando antes de actuar', 'Cambiarle el horario', 'Publicar los rankings del equipo para que se motive'], correct: 1, exp: 'Antes de cualquier medida, hay que entender la causa. Puede ser formación, motivación, problemas personales o falta de herramientas. Diagnosticar antes de prescribir.' },
+      { q: '¿Qué es la cuenta de explotación de un salón?', opts: ['El saldo de la cuenta bancaria', 'Un resumen de ingresos y gastos que muestra la rentabilidad real del negocio', 'El presupuesto del próximo mes', 'Los precios de los servicios'], correct: 1, exp: 'La cuenta de explotación muestra ingresos, gastos y el resultado (beneficio o pérdida). Es el documento más importante para conocer la salud financiera real del salón.' },
+      { q: '¿Qué porcentaje del personal sobre la facturación se considera saludable en un salón?', opts: ['Menos del 20%', 'Entre el 35% y el 45%', 'Entre el 50% y el 60%', 'Más del 65%'], correct: 1, exp: 'El coste de personal entre el 35-45% de la facturación es el rango saludable para salones. Por encima del 50% compromete seriamente la rentabilidad.' },
+      { q: 'Un sistema de incentivos efectivo para estilistas debe basarse en:', opts: ['Solo en el número de clientes atendidos', 'En el ticket medio individual y los objetivos de venta de producto', 'En la antigüedad en el salón', 'En la valoración de los clientes en Google'], correct: 1, exp: 'Los incentivos más efectivos vinculan el ticket medio individual con objetivos de producto. Esto alinea los intereses del estilista con los del negocio de forma medible.' },
+      { q: '¿Qué significa el ratio de "ocupación de agenda"?', opts: ['El número de clientes que tienen cita', 'El porcentaje de horas disponibles que están reservadas', 'La cantidad de horas que trabaja el equipo', 'El tiempo medio por servicio'], correct: 1, exp: 'La ocupación de agenda es el porcentaje de horas disponibles que están reservadas. Una ocupación del 75-85% es el rango óptimo: deja margen para urgencias sin perder ingresos.' },
+      { q: 'La cultura de equipo en un salón se construye principalmente a través de:', opts: ['Dar aumentos de sueldo frecuentes', 'Comunicación constante, reconocimiento y objetivos compartidos', 'Contratar al mejor talento disponible', 'Decorar bien el espacio de trabajo'], correct: 1, exp: 'La cultura se construye con comunicación honesta, reconocimiento de logros y objetivos que todos comparten. El sueldo retiene, pero la cultura motiva.' },
+      { q: '¿Cuál es la diferencia entre gestionar y liderar?', opts: ['No hay diferencia real', 'Gestionar controla procesos; liderar inspira personas hacia una visión', 'Liderar es para grandes empresas', 'Gestionar es más importante en un salón pequeño'], correct: 1, exp: 'Gestionar es optimizar lo que ya existe. Liderar es crear algo que todavía no existe. Los mejores propietarios de salón hacen ambas cosas: gestionan el día a día y lideran hacia el futuro.' },
+      { q: '¿Qué es el "margen bruto" en un salón de peluquería?', opts: ['La facturación total del mes', 'La diferencia entre ingresos y el coste directo de productos utilizados', 'El beneficio después de pagar nóminas', 'El precio medio de los servicios'], correct: 1, exp: 'El margen bruto es la facturación menos el coste de productos utilizados en los servicios. En salones bien gestionados suele estar entre el 80-90% al ser un servicio de mano de obra.' },
+      { q: 'Cuando un empleado rinde por debajo de sus capacidades, la primera acción de un buen líder es:', opts: ['Amenazarle con el despido para que reaccione', 'Ignorarlo y esperar que mejore solo', 'Identificar si es un problema de habilidad (formación) o de voluntad (motivación)', 'Asignarle menos responsabilidades'], correct: 2, exp: 'Distinguir entre "no puede" (necesita formación) y "no quiere" (necesita motivación o consecuencias) es la clave del liderazgo efectivo. Cada causa requiere una solución diferente.' },
+    ]
+  },
+  {
+    id: 3,
+    name: 'Venta de Producto en Salón',
+    desc: 'Los 4 pilares para vender producto sin presión: formación, incentivos, recomendación honesta y tiempo entre clientes.',
+    icon: '🛍️',
+    color: 3,
+    badge: { icon: '⭐', name: 'Vendedora Natural', desc: 'Dominio de la venta de producto' },
+    questions: [
+      { q: '¿Cuál es el momento más efectivo para recomendar un producto a una clienta?', opts: ['Al cobrar en caja', 'Mientras lo usas en su cabello y explicas por qué lo estás usando', 'Al enviarle un mensaje después de la visita', 'Cuando ella lo pregunta'], correct: 1, exp: 'La recomendación más efectiva ocurre durante el servicio, cuando la clienta ve el producto en acción y puede sentir el resultado. La caja es demasiado tarde.' },
+      { q: '¿Con qué frecuencia mínima recomienda el sector realizar formación de producto con el equipo?', opts: ['Una vez al año', 'Solo cuando entra producto nuevo', 'Al menos una vez por trimestre', 'Cada semana'], correct: 2, exp: 'Al menos una vez por trimestre es el mínimo recomendado. Cuanto más conoce el equipo los productos, más naturalmente los recomiendan y más confianza transmiten.' },
+      { q: 'Una clienta acaba de comprar champú la semana pasada. ¿Qué haces?', opts: ['Le ofreces otro producto diferente que necesite', 'Le insistes en que compre más champú porque es muy bueno', 'No mencionas ningún producto para no presionarla', 'Le preguntas cómo le está yendo con el champú y refuerzas la decisión que tomó'], correct: 3, exp: 'Respetar el ciclo de vida del producto es clave. La clienta que acaba de comprar necesita refuerzo positivo, no más ventas. Esto construye confianza a largo plazo.' },
+      { q: '¿Qué efecto tienen las tácticas de venta con alta presión a largo plazo?', opts: ['Aumentan la fidelidad del cliente', 'Generan más ventas de forma sostenida', 'Reducen la confianza y la satisfacción del cliente', 'No tienen ningún efecto negativo'], correct: 2, exp: 'Los estudios demuestran que la alta presión puede cerrar una venta puntual pero destruye la confianza y la experiencia del cliente, reduciendo la retención a largo plazo.' },
+      { q: 'El front desk (recepcionista) en la venta de producto tiene el papel de:', opts: ['No intervenir, es responsabilidad del estilista', 'Reforzar la recomendación del estilista cuando la clienta está en caja', 'Decidir qué producto vender independientemente del estilista', 'Hacer descuentos si la clienta duda'], correct: 1, exp: 'El front desk actúa como refuerzo social. Cuando el estilista recomienda y la recepcionista lo confirma, se crea una prueba social poderosa que impulsa la decisión de compra.' },
+      { q: '¿Qué debe incluir una estructura de comisiones efectiva para estilistas?', opts: ['Un porcentaje tan bajo que no afecte al margen del salón', 'Un incentivo que realmente motive, equilibrado con el margen del producto', 'Solo reconocimiento verbal, no económico', 'El mismo porcentaje para todos los productos independientemente del precio'], correct: 1, exp: 'Si la comisión no motiva económicamente al estilista, simplemente no venderá. El equilibrio entre margen del salón e incentivo real para el equipo es la clave.' },
+      { q: '¿Qué ocurre cuando los estilistas tienen tiempo suficiente entre clientes?', opts: ['Se relajan demasiado y bajan la productividad', 'Tienen espacio para concluir bien el servicio y hacer recomendaciones sin prisa', 'No cambia nada en las ventas', 'Prefieren no hablar de productos y descansar'], correct: 1, exp: 'Según McKinsey, las organizaciones que liberan tiempo para actividades de cara al cliente mejoran la productividad hasta un 30%. En salones, ese tiempo se traduce en recomendaciones naturales.' },
+      { q: 'La venta en equipo (estilista + front desk) comparado con la venta individual:', opts: ['Genera menos confianza porque parece coordinado', 'Aumenta tanto la probabilidad de compra como el importe medio', 'Solo funciona en salones grandes', 'Es lo mismo que vender individualmente'], correct: 1, exp: 'Según Gong, la venta en equipo es el único factor que aumenta simultáneamente la tasa de cierre Y el importe de la venta. El cliente percibe más autoridad y confianza.' },
+      { q: '¿Por qué el conocimiento profundo del producto mejora las ventas?', opts: ['Porque permite usar términos técnicos que impresionan', 'Porque reduce el esfuerzo del cliente para decidir y genera confianza', 'Porque demuestra que el estilista estudió mucho', 'No tiene impacto directo en las ventas'], correct: 1, exp: 'Los estudios muestran que el conocimiento del producto reduce el "coste de búsqueda de información" del cliente, facilitando su decisión. Además, la expertise genera confianza que mejora la experiencia.' },
+      { q: '¿Cuál de estas frases refleja mejor una recomendación honesta y efectiva?', opts: ['"Este producto es el más vendido del salón"', '"Te lo recomiendo porque noté que tu cabello está poroso y este sérum lo sella desde dentro"', '"Está en oferta esta semana, aprovecha"', '"Todas mis clientas lo compran"'], correct: 1, exp: 'La recomendación más efectiva es específica, personalizada y parte de una observación real del cabello de esa clienta. Cuando la clienta siente que es para ella, la conversión es natural.' },
+    ]
+  }
+];
+
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+let progress = loadProgress();
+let currentMod = null;
+let currentQ = 0;
+let correctCount = 0;
+let startTime = null;
+let answered = false;
+
+function loadProgress() {
+  try {
+    const s = localStorage.getItem('nd_academia');
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return { completed: {}, badges: {} };
+}
+
+function saveProgress() {
+  localStorage.setItem('nd_academia', JSON.stringify(progress));
+}
+
+// ══════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════
+function doLogin() {
+  const val = document.getElementById('loginInput').value.trim();
+  const err = document.getElementById('loginErr');
+  const input = document.getElementById('loginInput');
+  if (PASSWORDS.includes(val)) {
+    input.classList.remove('error');
+    err.classList.remove('show');
+    sessionStorage.setItem('nd_ac_auth', '1');
+    showScreen('screen-home');
+    renderHome();
+  } else {
+    input.classList.add('error');
+    err.classList.add('show');
+    setTimeout(() => input.classList.remove('error'), 400);
+  }
+}
+
+if (sessionStorage.getItem('nd_ac_auth') === '1') {
+  document.addEventListener('DOMContentLoaded', () => {
+    showScreen('screen-home');
+    renderHome();
+  });
+}
+
+// ══════════════════════════════════════
+// SCREEN NAV
+// ══════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ══════════════════════════════════════
+// HOME
+// ══════════════════════════════════════
+function renderHome() {
+  // Total progress
+  let totalCorrect = 0;
+  MODULES.forEach(m => {
+    if (progress.completed[m.id]) totalCorrect += progress.completed[m.id].score;
+  });
+  const totalPct = Math.round((totalCorrect / 60) * 100);
+  document.getElementById('totalProgVal').textContent = totalCorrect + ' / 60';
+  document.getElementById('totalProgFill').style.width = totalPct + '%';
+
+  // Badges
+  const br = document.getElementById('badgesRow');
+  br.innerHTML = MODULES.map(m => {
+    const earned = progress.badges[m.id];
+    return `<div class="badge-item ${earned ? 'earned' : ''}">
+      <div class="badge-icon">${earned ? m.badge.icon : '🔒'}</div>
+      <div class="badge-name">${earned ? m.badge.name : 'Bloqueada'}</div>
+    </div>`;
+  }).join('');
+
+  // Modules
+  const ml = document.getElementById('moduleList');
+  ml.innerHTML = MODULES.map(m => {
+    const comp = progress.completed[m.id];
+    const score = comp ? comp.score : 0;
+    const pct = comp ? Math.round((score / 10) * 100) : 0;
+    const status = !comp ? '🔓 Sin empezar' : score >= 8 ? '✅ Completado' : '📖 Mejorar';
+    const statusCls = !comp ? 'status-lock' : score >= 8 ? 'status-done' : 'status-progress';
+    return `<div class="module-card mod-color-${m.color}" onclick="startModule(${m.id})">
+      <div class="mod-top">
+        <div class="mod-icon mod-icon-${m.color}">${m.icon}</div>
+        <div class="mod-info">
+          <div class="mod-num">Módulo ${m.id + 1}</div>
+          <div class="mod-name">${m.name}</div>
+        </div>
+      </div>
+      <div class="mod-desc">${m.desc}</div>
+      <div class="mod-footer">
+        <div class="mod-stats">
+          <div class="mod-stat"><strong>10</strong> preguntas</div>
+          ${comp ? `<div class="mod-stat"><strong>${score}/10</strong> correctas</div>` : ''}
+        </div>
+        <div class="mod-status ${statusCls}">${status}</div>
+      </div>
+      ${comp ? `<div class="mod-progress-bar"><div class="mod-prog-fill mpf-${m.color}" style="width:${pct}%"></div></div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════
+function startModule(modId) {
+  currentMod = MODULES.find(m => m.id === modId);
+  currentQ = 0;
+  correctCount = 0;
+  answered = false;
+  startTime = Date.now();
+  document.getElementById('quizModName').textContent = currentMod.name;
+  document.getElementById('quizProgFill').className = `quiz-prog-fill qpf-${currentMod.color}`;
+  document.getElementById('btnNextQ').className = `btn-next-q bnq-${currentMod.color}`;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = currentMod.questions[currentQ];
+  const total = currentMod.questions.length;
+  const pct = Math.round((currentQ / total) * 100);
+
+  document.getElementById('qNum').textContent = `Pregunta ${currentQ + 1} de ${total}`;
+  document.getElementById('quizCounter').textContent = `${currentQ + 1}/${total}`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('quizProgFill').style.width = pct + '%';
+
+  const letters = ['A', 'B', 'C', 'D'];
+  document.getElementById('optionsList').innerHTML = q.opts.map((opt, i) => `
+    <button class="opt-btn" onclick="selectAnswer(${i})" id="opt${i}">
+      <div class="opt-letter">${letters[i]}</div>
+      <div class="opt-text">${opt}</div>
+    </button>`).join('');
+
+  // Reset feedback
+  const fb = document.getElementById('feedbackBox');
+  fb.className = 'feedback-box';
+  document.getElementById('btnNextQ').className = `btn-next-q bnq-${currentMod.color}`;
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = currentMod.questions[currentQ];
+  const isCorrect = idx === q.correct;
+  if (isCorrect) correctCount++;
+
+  // Style options
+  document.querySelectorAll('.opt-btn').forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === idx && isCorrect) btn.classList.add('selected-correct');
+    else if (i === idx && !isCorrect) btn.classList.add('selected-wrong');
+    else if (i === q.correct) btn.classList.add('reveal-correct');
+  });
+
+  // Feedback
+  const fb = document.getElementById('feedbackBox');
+  fb.className = `feedback-box show ${isCorrect ? 'feedback-correct' : 'feedback-wrong'}`;
+  document.getElementById('feedbackIcon').textContent = isCorrect ? '✅' : '❌';
+  document.getElementById('feedbackTitle').textContent = isCorrect ? '¡Correcto!' : 'No exactamente';
+  document.getElementById('feedbackText').textContent = q.exp;
+
+  // Next btn
+  const btn = document.getElementById('btnNextQ');
+  btn.classList.add('show');
+  btn.textContent = currentQ < currentMod.questions.length - 1 ? 'Siguiente pregunta →' : 'Ver resultado →';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ < currentMod.questions.length) {
+    renderQuestion();
+    window.scrollTo(0, 0);
+  } else {
+    showResult();
+  }
+}
+
+function goHome() {
+  showScreen('screen-home');
+  renderHome();
+}
+
+function retryModule() { startModule(currentMod.id); }
+
+// ══════════════════════════════════════
+// RESULT
+// ══════════════════════════════════════
+function showResult() {
+  const score = correctCount;
+  const pct = Math.round((score / 10) * 100);
+  const elapsed = Math.round((Date.now() - startTime) / 60000);
+  const passed = score >= 6;
+  const perfect = score === 10;
+
+  // Save progress
+  const prev = progress.completed[currentMod.id];
+  if (!prev || score > prev.score) {
+    progress.completed[currentMod.id] = { score, pct, date: new Date().toISOString() };
+  }
+
+  // Badge
+  let badgeEarned = false;
+  if (score >= 8 && !progress.badges[currentMod.id]) {
+    progress.badges[currentMod.id] = true;
+    badgeEarned = true;
+  }
+  saveProgress();
+
+  // UI
+  const emoji = perfect ? '🥇' : score >= 8 ? '🏆' : score >= 6 ? '🎯' : '📚';
+  const rank = perfect ? 'Maestra' : score >= 8 ? 'Experta' : score >= 6 ? 'Avanzada' : 'Aprendiz';
+  const title = perfect ? '¡Puntuación perfecta!' : score >= 8 ? '¡Excelente resultado!' : score >= 6 ? '¡Aprobado!' : 'Sigue practicando';
+  const sub = perfect ? `Has demostrado un dominio excepcional en "${currentMod.name}". ¡Eres una referente!` :
+              score >= 8 ? `Muy buen resultado en "${currentMod.name}". Has ganado tu insignia.` :
+              score >= 6 ? `Has superado el módulo "${currentMod.name}". Repítelo para ganar la insignia (mínimo 8/10).` :
+              `Necesitas practicar más "${currentMod.name}". Repite el módulo para mejorar tu puntuación.`;
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultScore').textContent = score;
+  document.getElementById('resPct').textContent = pct + '%';
+  document.getElementById('resTime').textContent = elapsed < 1 ? '<1' : elapsed;
+  document.getElementById('resRank').textContent = rank;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultSub').textContent = sub;
+
+  const be = document.getElementById('badgeEarned');
+  if (badgeEarned) {
+    be.classList.add('show');
+    document.getElementById('badgeIcon').textContent = currentMod.badge.icon;
+    document.getElementById('badgeName').textContent = currentMod.badge.name;
+    document.getElementById('badgeDesc').textContent = currentMod.badge.desc;
+  } else {
+    be.classList.remove('show');
+  }
+
+  showScreen('screen-result');
+}
+</script>
+
+<!-- PWA INSTALL BAR -->
+<div class="install-bar" id="installBar">
+  <div class="install-bar-icon">📱</div>
+  <div class="install-bar-text">
+    <div class="install-bar-title">Instalar como app</div>
+    <div class="install-bar-sub">Accede sin navegador desde tu móvil</div>
+  </div>
+  <button class="install-bar-btn" id="installBtn">Instalar</button>
+  <button class="install-bar-close" onclick="closeInstallBar()">✕</button>
+</div>
+
+<script>
+// PWA Install
+let deferredPrompt = null;
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/academia/sw.js').catch(() => {});
+}
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const bar = document.getElementById('installBar');
+  if (bar && !localStorage.getItem('nd_install_dismissed')) {
+    setTimeout(() => bar.classList.add('show'), 2000);
+  }
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) {
+    alert('Para instalar en iPhone: pulsa el botón compartir ↑ y luego "Añadir a pantalla de inicio"');
+    return;
+  }
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    document.getElementById('installBar').classList.remove('show');
+  }
+  deferredPrompt = null;
+});
+
+function closeInstallBar() {
+  document.getElementById('installBar').classList.remove('show');
+  localStorage.setItem('nd_install_dismissed', '1');
+}
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBar').classList.remove('show');
+});
+</script>
+
+</body>
+</html>

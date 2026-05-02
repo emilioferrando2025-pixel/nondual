@@ -1,0 +1,37 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/diagnostico"
+  to = "/diagnostico/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/auditoria"
+  to = "/auditoria/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/calculadora"
+  to = "/calculadora/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/checklist-producto"
+  to = "/checklist-producto/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/news"
+  to = "/news/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/academia"
+  to = "/academia/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/fichaje"
+  to = "/fichaje/index.html"
+  status = 200
