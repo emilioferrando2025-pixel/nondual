@@ -3,160 +3,174 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Genera tu reseña · NonDual In Salons</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <title>Deja tu reseña</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
-      background: linear-gradient(145deg, #fdf8f3 0%, #f5ede2 100%);
-      display: flex; align-items: center; justify-content: center;
-      padding: 24px 16px;
+      background: #f7f3ef;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 20px 16px 40px;
     }
     .card {
-      background: #fff; border-radius: 24px; padding: 40px 36px;
-      max-width: 520px; width: 100%;
-      box-shadow: 0 8px 48px rgba(160,100,60,.12), 0 2px 8px rgba(0,0,0,.04);
-      position: relative; overflow: hidden;
+      background: #fff; border-radius: 20px; padding: 32px 28px;
+      max-width: 480px; width: 100%;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
     }
-    .card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-      background: linear-gradient(90deg, #c9956a, #e8b89a, #c9956a);
-    }
-    .marca {
-      font-family: 'Playfair Display', serif; font-size: 13px;
-      letter-spacing: .15em; text-transform: uppercase;
-      color: #c9956a; margin-bottom: 28px; font-style: italic;
-    }
+
     .pantalla { display: none; }
     .pantalla.activa { display: block; }
 
-    .intro-titulo { font-family: 'Playfair Display', serif; font-size: 26px; color: #2d1f14; line-height: 1.35; margin-bottom: 14px; }
-    .intro-sub { font-size: 15px; color: #7a6558; line-height: 1.65; margin-bottom: 32px; }
+    /* PROGRESO */
+    .progreso-wrap { margin-bottom: 24px; }
+    .progreso-info { display: flex; justify-content: space-between; font-size: 12px; color: #999; margin-bottom: 6px; }
+    .barra-bg { height: 3px; background: #ede8e3; border-radius: 3px; overflow: hidden; }
+    .barra-fill { height: 100%; background: #c9956a; border-radius: 3px; transition: width .3s ease; width: 0%; }
 
-    .progreso-wrap { margin-bottom: 28px; }
-    .progreso-info { display: flex; justify-content: space-between; font-size: 12px; color: #a88e80; margin-bottom: 8px; font-weight: 500; }
-    .barra-bg { height: 4px; background: #f0e8e0; border-radius: 4px; overflow: hidden; }
-    .barra-fill { height: 100%; background: linear-gradient(90deg, #c9956a, #e8b89a); border-radius: 4px; transition: width .4s ease; width: 0%; }
-
-    .pregunta-emoji { font-size: 36px; margin-bottom: 12px; display: block; }
-    .pregunta-texto { font-family: 'Playfair Display', serif; font-size: 20px; color: #2d1f14; line-height: 1.4; margin-bottom: 20px; }
+    /* PREGUNTA */
+    .q-numero { font-size: 12px; color: #bbb; margin-bottom: 8px; letter-spacing: .05em; }
+    .q-texto { font-size: 18px; font-weight: 600; color: #1a1a1a; line-height: 1.4; margin-bottom: 20px; }
 
     textarea {
-      width: 100%; border: 2px solid #f0e8e0; border-radius: 12px;
-      padding: 14px 16px; font-family: 'DM Sans', sans-serif; font-size: 15px;
-      color: #2d1f14; resize: none; min-height: 110px;
-      transition: border-color .2s; background: #fdfaf7; line-height: 1.6;
+      width: 100%; border: 1.5px solid #e0d8d0; border-radius: 10px;
+      padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 15px;
+      color: #1a1a1a; resize: none; min-height: 100px;
+      transition: border-color .2s; background: #faf8f5; line-height: 1.55;
     }
     textarea:focus { outline: none; border-color: #c9956a; background: #fff; }
-    textarea::placeholder { color: #c5b0a4; }
+    textarea::placeholder { color: #bbb; }
 
-    .opciones-grid { display: flex; flex-direction: column; gap: 10px; }
+    .opciones-grid { display: flex; flex-direction: column; gap: 8px; }
     .opcion-btn {
-      background: #fdfaf7; border: 2px solid #f0e8e0; border-radius: 12px;
-      padding: 13px 16px; text-align: left; font-family: 'DM Sans', sans-serif;
-      font-size: 14px; color: #4a3428; cursor: pointer; transition: all .18s; line-height: 1.4;
+      background: #faf8f5; border: 1.5px solid #e0d8d0; border-radius: 10px;
+      padding: 12px 14px; text-align: left; font-family: 'DM Sans', sans-serif;
+      font-size: 14px; color: #333; cursor: pointer; transition: all .15s; line-height: 1.4;
     }
-    .opcion-btn:hover { border-color: #c9956a; background: #fef6ef; }
-    .opcion-btn.seleccionada { border-color: #c9956a; background: linear-gradient(135deg,#fef6ef,#fdeee0); color: #8b5e3c; font-weight: 500; }
+    .opcion-btn:active { transform: scale(.98); }
+    .opcion-btn.sel { border-color: #c9956a; background: #fef6ef; color: #8b5e3c; font-weight: 500; }
 
-    .nav-botones { display: flex; gap: 12px; margin-top: 24px; }
-
-    .btn-primario {
-      flex: 1; background: linear-gradient(135deg, #c9956a, #b8814f); color: #fff;
-      border: none; border-radius: 14px; padding: 15px 24px;
-      font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500;
-      cursor: pointer; transition: all .2s;
+    /* ESCALA */
+    .escala-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+    .escala-btn {
+      flex: 1; min-width: 36px; background: #faf8f5; border: 1.5px solid #e0d8d0;
+      border-radius: 8px; padding: 10px 4px; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 500; color: #555; cursor: pointer; transition: all .15s;
+      text-align: center;
     }
-    .btn-primario:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,149,106,.4); }
-    .btn-primario:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+    .escala-btn.sel { border-color: #c9956a; background: #c9956a; color: #fff; }
 
-    .btn-secundario {
-      background: transparent; border: 2px solid #f0e8e0; border-radius: 12px;
-      padding: 13px 16px; font-family: 'DM Sans', sans-serif; font-size: 15px;
-      color: #a88e80; cursor: pointer; transition: all .18s; white-space: nowrap;
+    /* NAV */
+    .nav-botones { display: flex; gap: 10px; margin-top: 20px; }
+    .btn-sig {
+      flex: 1; background: #c9956a; color: #fff; border: none;
+      border-radius: 12px; padding: 14px 20px; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600; cursor: pointer; transition: all .2s;
     }
-    .btn-secundario:hover { border-color: #c9956a; color: #c9956a; }
-
-    .btn-full {
-      width: 100%; background: linear-gradient(135deg, #c9956a, #b8814f); color: #fff;
-      border: none; border-radius: 14px; padding: 16px 24px;
-      font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500;
-      cursor: pointer; transition: all .2s; margin-bottom: 10px; display: block;
+    .btn-sig:disabled { opacity: .35; cursor: not-allowed; }
+    .btn-sig:not(:disabled):active { transform: scale(.97); }
+    .btn-volver {
+      background: transparent; border: 1.5px solid #e0d8d0; border-radius: 12px;
+      padding: 14px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+      color: #aaa; cursor: pointer;
     }
-    .btn-full:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,149,106,.4); }
 
-    .btn-ghost {
-      width: 100%; background: transparent; border: 2px solid #f0e8e0;
-      border-radius: 12px; padding: 12px; font-family: 'DM Sans', sans-serif;
-      font-size: 14px; color: #a88e80; cursor: pointer; margin-top: 10px; transition: all .18s;
+    /* INTRO */
+    .intro-titulo { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; line-height: 1.3; }
+    .intro-sub { font-size: 14px; color: #777; line-height: 1.6; margin-bottom: 28px; }
+    .btn-empezar {
+      width: 100%; background: #c9956a; color: #fff; border: none;
+      border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif;
+      font-size: 16px; font-weight: 600; cursor: pointer;
     }
-    .btn-ghost:hover { border-color: #c9956a; color: #c9956a; }
 
-    .generando-wrap { text-align: center; padding: 20px 0; }
+    /* GENERANDO */
+    .generando-wrap { text-align: center; padding: 30px 0; }
     .spinner {
-      width: 48px; height: 48px; border: 3px solid #f0e8e0; border-top-color: #c9956a;
-      border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 20px;
+      width: 40px; height: 40px; border: 3px solid #ede8e3; border-top-color: #c9956a;
+      border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 16px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .generando-titulo { font-family: 'Playfair Display', serif; font-size: 20px; color: #2d1f14; margin-bottom: 8px; }
-    .generando-sub { font-size: 14px; color: #a88e80; }
+    .generando-titulo { font-size: 17px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+    .generando-sub { font-size: 13px; color: #aaa; }
 
-    .estrellas { color: #c9956a; font-size: 20px; letter-spacing: 3px; margin-bottom: 12px; }
-    .resultado-titulo { font-family: 'Playfair Display', serif; font-size: 22px; color: #2d1f14; margin-bottom: 6px; }
-    .resultado-sub { font-size: 14px; color: #a88e80; margin-bottom: 20px; }
+    /* RESULTADO */
+    .res-titulo { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+    .res-sub { font-size: 13px; color: #999; margin-bottom: 16px; }
     .resena-box {
-      background: #fdfaf7; border: 2px solid #f0e8e0; border-radius: 14px;
-      padding: 20px; font-size: 15px; color: #2d1f14; line-height: 1.7;
-      margin-bottom: 16px; white-space: pre-wrap; user-select: all;
+      background: #faf8f5; border: 1.5px solid #e0d8d0; border-radius: 12px;
+      padding: 16px; font-size: 14px; color: #222; line-height: 1.7;
+      margin-bottom: 14px; white-space: pre-wrap;
     }
-    .msg-error { color: #c0392b; font-size: 13px; margin-top: 10px; }
+    .btn-copiar {
+      width: 100%; background: #c9956a; color: #fff; border: none;
+      border-radius: 12px; padding: 15px; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600; cursor: pointer; transition: all .2s;
+      margin-bottom: 12px;
+    }
+    .btn-copiar.copiado { background: #4caf7d; }
 
-    /* PANTALLA PEGAR */
-    .pegar-emoji { font-size: 64px; text-align: center; margin-bottom: 20px; }
-    .pegar-titulo { font-family: 'Playfair Display', serif; font-size: 24px; color: #2d1f14; text-align: center; margin-bottom: 12px; line-height: 1.3; }
-    .pegar-instruccion { font-size: 15px; color: #7a6558; text-align: center; line-height: 1.7; margin-bottom: 32px; }
-    .pegar-instruccion strong { color: #2d1f14; }
-    .btn-google {
-      display: block; width: 100%; text-decoration: none;
-      background: linear-gradient(135deg, #1a73e8, #1558b0);
-      color: #fff; border-radius: 16px; padding: 20px 24px;
-      font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 500;
-      text-align: center; margin-bottom: 14px;
-      box-shadow: 0 6px 24px rgba(26,115,232,.35);
-      transition: all .2s;
+    /* BLOQUE GOOGLE — oculto hasta copiar */
+    .bloque-google {
+      display: none;
+      border: 2px dashed #c9956a;
+      border-radius: 14px;
+      padding: 18px 16px;
+      text-align: center;
+      margin-bottom: 10px;
+      animation: parpadeo 1.2s ease-in-out infinite;
     }
-    .btn-google:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(26,115,232,.4); }
+    .bloque-google.visible { display: block; }
+    @keyframes parpadeo {
+      0%, 100% { border-color: #c9956a; background: #fff; }
+      50% { border-color: #e8b89a; background: #fef6ef; }
+    }
+    .bloque-google p {
+      font-size: 14px; color: #555; margin-bottom: 12px; line-height: 1.5; font-weight: 500;
+    }
+    .btn-google {
+      display: block; text-decoration: none;
+      background: #1a73e8; color: #fff; border-radius: 10px;
+      padding: 14px 20px; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600; text-align: center;
+    }
+
+    .btn-nuevo {
+      width: 100%; background: transparent; border: 1.5px solid #e0d8d0;
+      border-radius: 10px; padding: 11px; font-family: 'DM Sans', sans-serif;
+      font-size: 13px; color: #bbb; cursor: pointer; margin-top: 4px;
+    }
+
+    .msg-error { color: #c0392b; font-size: 13px; margin-top: 8px; }
   </style>
 </head>
 <body>
 <div class="card">
-  <div class="marca">NonDual In Salons</div>
 
   <!-- INTRO -->
   <div id="pantalla-intro" class="pantalla activa">
-    <div class="intro-titulo">Tu opinión nos ayuda a seguir creciendo 🌿</div>
-    <p class="intro-sub">Solo te llevará 2 minutos. Te haremos unas preguntas sencillas sobre tu visita y generaremos una reseña lista para compartir. ¡Sin tener que escribir nada tú!</p>
-    <button class="btn-full" onclick="iniciar()">Empezar →</button>
+    <div class="intro-titulo">¿Qué tal te ha ido hoy? 💬</div>
+    <p class="intro-sub">Solo unas preguntas rápidas sobre tu visita. Con tus respuestas generamos una reseña que tú misma podrás revisar y publicar en Google. No te llevará más de 2 minutos.</p>
+    <button class="btn-empezar" onclick="iniciar()">Empezar →</button>
   </div>
 
   <!-- FORMULARIO -->
   <div id="pantalla-formulario" class="pantalla">
     <div class="progreso-wrap">
       <div class="progreso-info">
-        <span id="prog-texto">Pregunta 1 de 7</span>
+        <span id="prog-texto">1 / 7</span>
         <span id="prog-pct">0%</span>
       </div>
       <div class="barra-bg"><div class="barra-fill" id="barra-fill"></div></div>
     </div>
-    <span class="pregunta-emoji" id="q-emoji"></span>
-    <div class="pregunta-texto" id="q-texto"></div>
+    <div class="q-numero" id="q-numero"></div>
+    <div class="q-texto" id="q-texto"></div>
     <div id="q-input"></div>
     <div id="msg-error" class="msg-error" style="display:none"></div>
     <div class="nav-botones">
-      <button class="btn-secundario" id="btn-volver" onclick="anterior()" style="display:none">← Volver</button>
-      <button class="btn-primario" id="btn-siguiente" onclick="siguiente()" disabled>Siguiente →</button>
+      <button class="btn-volver" id="btn-volver" onclick="anterior()" style="display:none">← Atrás</button>
+      <button class="btn-sig" id="btn-siguiente" onclick="siguiente()" disabled>Siguiente →</button>
     </div>
   </div>
 
@@ -164,152 +178,269 @@
   <div id="pantalla-generando" class="pantalla">
     <div class="generando-wrap">
       <div class="spinner"></div>
-      <div class="generando-titulo">Creando tu reseña…</div>
-      <p class="generando-sub">Estamos escribiendo algo especial con tus respuestas.</p>
+      <div class="generando-titulo">Preparando tu reseña…</div>
+      <p class="generando-sub">Un momento.</p>
     </div>
   </div>
 
   <!-- RESULTADO -->
   <div id="pantalla-resultado" class="pantalla">
-    <div class="estrellas">★★★★★</div>
-    <div class="resultado-titulo">¡Tu reseña está lista!</div>
-    <p class="resultado-sub">Léela y pulsa el botón para copiarla.</p>
+    <div class="res-titulo">Tu reseña ✍️</div>
+    <p class="res-sub">Léela, y si te parece bien, cópiala y publícala en Google.</p>
     <div class="resena-box" id="resena-texto"></div>
-    <button class="btn-full" onclick="copiarYSaltar()">📋 Copiar reseña</button>
-    <button class="btn-ghost" onclick="reiniciar()">Empezar de nuevo</button>
-  </div>
+    <button class="btn-copiar" id="btn-copiar" onclick="copiar()">📋 Copiar texto</button>
 
-  <!-- PEGAR EN GOOGLE -->
-  <div id="pantalla-pegar" class="pantalla">
-    <div class="pegar-emoji">✅</div>
-    <div class="pegar-titulo">¡Reseña copiada!</div>
-    <p class="pegar-instruccion">
-      Ahora pulsa el botón de abajo.<br>
-      Se abrirá Google. <strong>Mantén pulsado el campo de texto</strong> y elige <strong>"Pegar"</strong>.
-    </p>
-    <a id="link-google" href="https://g.page/r/Cfqu7r_6QoP5EBE/review" target="_blank" class="btn-google">
-      ⭐ Pulsa aquí para ir a Google y pegar tu reseña
-    </a>
-    <button class="btn-ghost" onclick="reiniciar()">Volver al inicio</button>
+    <div class="bloque-google" id="bloque-google">
+      <p>👆 Texto copiado. Ahora pulsa aquí, abre Google y <strong>mantén pulsado</strong> el campo de texto para <strong>pegar</strong>.</p>
+      <a href="https://g.page/r/Cfqu7r_6QoP5EBE/review" target="_blank" class="btn-google">
+        ⭐ Ir a Google y pegar mi reseña
+      </a>
+    </div>
+
+    <button class="btn-nuevo" onclick="reiniciar()">Empezar de nuevo</button>
   </div>
 
 </div>
 
 <script>
-  const preguntas = [
-    { id:1, emoji:"💆", pregunta:"¿Con qué problema llegaste hoy al salón?", placeholder:"Ej: pelo muy dañado, sin vida, no sabía qué hacerme...", tipo:"textarea" },
-    { id:2, emoji:"⏳", pregunta:"¿Cuánto tiempo llevabas con ese problema?", opciones:["Hace unas semanas","Varios meses","Más de un año","Mucho tiempo, ya me había resignado"], tipo:"opciones" },
-    { id:3, emoji:"✨", pregunta:"¿Qué querías conseguir hoy?", placeholder:"Ej: cambiar el look, sentirme yo de nuevo, recuperar el brillo...", tipo:"textarea" },
-    { id:4, emoji:"🙌", pregunta:"¿Cómo te han tratado en el salón?", opciones:["Me han escuchado y entendido desde el primer momento","Me han explicado todo con calma y claridad","Me han hecho sentir cómoda y en buenas manos","Han superado mis expectativas"], tipo:"opciones" },
-    { id:5, emoji:"🪄", pregunta:"¿Qué es lo que más te ha gustado del resultado?", placeholder:"Ej: el color, el corte, cómo me ha quedado el pelo, la textura...", tipo:"textarea" },
-    { id:6, emoji:"💛", pregunta:"¿Cómo te sientes ahora que has salido?", opciones:["Increíble, como nueva","Muy segura de mí misma","Feliz, me han devuelto la confianza","No puedo parar de mirarme al espejo 😄"], tipo:"opciones" },
-    { id:7, emoji:"🌟", pregunta:"¿Recomendarías este salón? ¿A quién?", placeholder:"Ej: a amigas, a mi madre, a cualquiera que quiera un cambio de verdad...", tipo:"textarea" }
-  ];
+const preguntas = [
+  {
+    id: 1,
+    texto: "¿Con qué problema o situación venías hoy al salón?",
+    tipo: "opciones",
+    opciones: [
+      "Llevaba tiempo sin cortarme y necesitaba un cambio",
+      "El pelo estaba muy dañado, seco o sin vida",
+      "Quería cambiar el color pero no sabía bien qué hacerme",
+      "Tenía el pelo muy crecido y ya no lo aguantaba más",
+      "Venía a un tratamiento, no tanto a un cambio de look"
+    ]
+  },
+  {
+    id: 2,
+    texto: "¿Cuánto tiempo llevabas con eso?",
+    tipo: "opciones",
+    opciones: [
+      "Poco, era algo reciente",
+      "Unos cuantos meses",
+      "Bastante tiempo, más de un año",
+      "Llevaba tiempo dejándolo pasar y ya tocaba"
+    ]
+  },
+  {
+    id: 3,
+    texto: "¿Qué querías conseguir hoy?",
+    tipo: "opciones",
+    opciones: [
+      "Que el pelo tuviera más vida y más brillo",
+      "Un cambio de look, algo diferente",
+      "Sentirme bien conmigo misma otra vez",
+      "Arreglarlo sin que se note demasiado el cambio",
+      "Recuperar el color o corregir lo que tenía antes"
+    ]
+  },
+  {
+    id: 4,
+    texto: "¿Cómo ha sido el trato en el salón?",
+    tipo: "opciones",
+    opciones: [
+      "Muy bien, me han escuchado desde el principio",
+      "Han sido amables y se han tomado su tiempo",
+      "Me han explicado bien lo que iban a hacer",
+      "Me he sentido cómoda, sin prisas ni presiones",
+      "Bien en general, sin más"
+    ]
+  },
+  {
+    id: 5,
+    texto: "¿Qué es lo que más te ha gustado del resultado?",
+    tipo: "textarea",
+    placeholder: "Ej: cómo ha quedado el color, el corte, la textura... lo que sea que más hayas notado"
+  },
+  {
+    id: 6,
+    texto: "Del 1 al 10, ¿cómo puntuarías la visita de hoy?",
+    tipo: "escala"
+  },
+  {
+    id: 7,
+    texto: "¿Lo recomendarías? ¿A quién le dirías que venga aquí?",
+    tipo: "opciones",
+    opciones: [
+      "Sí, se lo diría a amigas o conocidas",
+      "Sí, a cualquiera que quiera hacerse algo con el pelo",
+      "Sí, sobre todo a alguien que lleve tiempo sin animarse a cambiar",
+      "Sí, aunque no suelo recomendar sitios, este lo recomendaría"
+    ]
+  }
+];
 
-  let pasoActual = 0;
-  const respuestas = {};
+let pasoActual = 0;
+const respuestas = {};
 
-  function mostrar(id) {
-    document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
-    document.getElementById('pantalla-' + id).classList.add('activa');
-    window.scrollTo(0,0);
-    if (id === 'pegar') {
-      // Forzar que el navegador trate el enlace como nuevo cada vez
-      const link = document.getElementById('link-google');
-      if (link) link.href = 'https://g.page/r/Cfqu7r_6QoP5EBE/review?t=' + Date.now();
+function mostrar(id) {
+  document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+  document.getElementById('pantalla-' + id).classList.add('activa');
+  window.scrollTo(0, 0);
+}
+
+function iniciar() {
+  pasoActual = 0;
+  mostrar('formulario');
+  renderPregunta();
+}
+
+function renderPregunta() {
+  const q = preguntas[pasoActual];
+  const total = preguntas.length;
+  const pct = Math.round((pasoActual / total) * 100);
+
+  document.getElementById('q-numero').textContent = `Pregunta ${pasoActual + 1} de ${total}`;
+  document.getElementById('q-texto').textContent = q.texto;
+  document.getElementById('prog-texto').textContent = `${pasoActual + 1} / ${total}`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('barra-fill').style.width = pct + '%';
+  document.getElementById('btn-volver').style.display = pasoActual > 0 ? 'inline-block' : 'none';
+  document.getElementById('msg-error').style.display = 'none';
+
+  const btnSig = document.getElementById('btn-siguiente');
+  btnSig.textContent = pasoActual === total - 1 ? 'Generar reseña ✨' : 'Siguiente →';
+  btnSig.disabled = !respuestas[q.id];
+
+  const container = document.getElementById('q-input');
+  container.innerHTML = '';
+
+  if (q.tipo === 'textarea') {
+    const ta = document.createElement('textarea');
+    ta.placeholder = q.placeholder;
+    ta.value = respuestas[q.id] || '';
+    ta.addEventListener('input', () => {
+      respuestas[q.id] = ta.value;
+      btnSig.disabled = ta.value.trim().length === 0;
+    });
+    container.appendChild(ta);
+    btnSig.disabled = !(respuestas[q.id] && respuestas[q.id].trim().length > 0);
+    setTimeout(() => ta.focus(), 50);
+
+  } else if (q.tipo === 'opciones') {
+    const grid = document.createElement('div');
+    grid.className = 'opciones-grid';
+    q.opciones.forEach(op => {
+      const btn = document.createElement('button');
+      btn.className = 'opcion-btn' + (respuestas[q.id] === op ? ' sel' : '');
+      btn.textContent = op;
+      btn.onclick = () => {
+        respuestas[q.id] = op;
+        grid.querySelectorAll('.opcion-btn').forEach(b => b.classList.remove('sel'));
+        btn.classList.add('sel');
+        btnSig.disabled = false;
+      };
+      grid.appendChild(btn);
+    });
+    container.appendChild(grid);
+
+  } else if (q.tipo === 'escala') {
+    const wrap = document.createElement('div');
+    wrap.className = 'escala-wrap';
+    for (let i = 1; i <= 10; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'escala-btn' + (respuestas[q.id] == i ? ' sel' : '');
+      btn.textContent = i;
+      btn.onclick = () => {
+        respuestas[q.id] = i;
+        wrap.querySelectorAll('.escala-btn').forEach(b => b.classList.remove('sel'));
+        btn.classList.add('sel');
+        btnSig.disabled = false;
+      };
+      wrap.appendChild(btn);
     }
+    container.appendChild(wrap);
+  }
+}
+
+function siguiente() {
+  if (pasoActual < preguntas.length - 1) {
+    pasoActual++;
+    renderPregunta();
+  } else {
+    generarResena();
+  }
+}
+
+function anterior() {
+  if (pasoActual > 0) { pasoActual--; renderPregunta(); }
+}
+
+async function generarResena() {
+  mostrar('generando');
+
+  const resumen = preguntas.map(p => `${p.texto}\nRespuesta: ${respuestas[p.id] || ''}`).join('\n\n');
+
+  const prompt = `Eres una persona normal que acaba de salir de la peluquería y va a dejar una reseña en Google. Escríbela en primera persona, con un tono natural y cercano, como hablaría alguien corriente en España. Sin florituras, sin palabras rebuscadas, sin que suene a publicidad. Que parezca real porque lo es.
+
+La reseña debe tener entre 60 y 90 palabras. Nada de asteriscos ni emojis raros. Puede tener alguna frase corta, directa. Que refleje lo que vivió esta persona sin exagerar.
+
+RESPUESTAS DEL CLIENTE:
+${resumen}
+
+Escribe solo la reseña, sin introducción ni explicación.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const texto = (data.content || []).map(i => i.text || '').join('').trim();
+    document.getElementById('resena-texto').textContent = texto;
+    document.getElementById('bloque-google').classList.remove('visible');
+    document.getElementById('btn-copiar').textContent = '📋 Copiar texto';
+    document.getElementById('btn-copiar').classList.remove('copiado');
+    mostrar('resultado');
+  } catch(e) {
+    mostrar('formulario');
+    const err = document.getElementById('msg-error');
+    err.textContent = 'Ha habido un error. Inténtalo otra vez.';
+    err.style.display = 'block';
+  }
+}
+
+async function copiar() {
+  const texto = document.getElementById('resena-texto').textContent;
+  const btn = document.getElementById('btn-copiar');
+  const bloque = document.getElementById('bloque-google');
+
+  try {
+    await navigator.clipboard.writeText(texto);
+  } catch {
+    // fallback selección manual
+    const range = document.createRange();
+    range.selectNodeContents(document.getElementById('resena-texto'));
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
   }
 
-  function iniciar() { pasoActual = 0; mostrar('formulario'); renderPregunta(); }
+  btn.textContent = '✓ Copiado';
+  btn.classList.add('copiado');
+  bloque.classList.add('visible');
+  setTimeout(() => bloque.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
 
-  function renderPregunta() {
-    const q = preguntas[pasoActual];
-    const total = preguntas.length;
-    const pct = Math.round((pasoActual / total) * 100);
-    document.getElementById('q-emoji').textContent = q.emoji;
-    document.getElementById('q-texto').textContent = q.pregunta;
-    document.getElementById('prog-texto').textContent = `Pregunta ${pasoActual+1} de ${total}`;
-    document.getElementById('prog-pct').textContent = pct + '%';
-    document.getElementById('barra-fill').style.width = pct + '%';
-    document.getElementById('btn-volver').style.display = pasoActual > 0 ? 'inline-block' : 'none';
-    document.getElementById('msg-error').style.display = 'none';
-    const btnSig = document.getElementById('btn-siguiente');
-    btnSig.textContent = pasoActual === total-1 ? 'Generar mi reseña ✨' : 'Siguiente →';
-    const container = document.getElementById('q-input');
-    container.innerHTML = '';
-    if (q.tipo === 'textarea') {
-      const ta = document.createElement('textarea');
-      ta.placeholder = q.placeholder;
-      ta.value = respuestas[q.id] || '';
-      ta.addEventListener('input', () => { respuestas[q.id] = ta.value; btnSig.disabled = ta.value.trim().length === 0; });
-      container.appendChild(ta);
-      btnSig.disabled = !(respuestas[q.id] && respuestas[q.id].trim().length > 0);
-      setTimeout(() => ta.focus(), 50);
-    } else {
-      const grid = document.createElement('div');
-      grid.className = 'opciones-grid';
-      q.opciones.forEach(op => {
-        const btn = document.createElement('button');
-        btn.className = 'opcion-btn' + (respuestas[q.id] === op ? ' seleccionada' : '');
-        btn.textContent = op;
-        btn.onclick = () => { respuestas[q.id] = op; grid.querySelectorAll('.opcion-btn').forEach(b => b.classList.remove('seleccionada')); btn.classList.add('seleccionada'); btnSig.disabled = false; };
-        grid.appendChild(btn);
-      });
-      container.appendChild(grid);
-      btnSig.disabled = !respuestas[q.id];
-    }
-  }
-
-  function siguiente() {
-    if (pasoActual < preguntas.length-1) { pasoActual++; renderPregunta(); }
-    else { generarResena(); }
-  }
-
-  function anterior() { if (pasoActual > 0) { pasoActual--; renderPregunta(); } }
-
-  async function generarResena() {
-    mostrar('generando');
-    const resumenRespuestas = preguntas.map(p => `${p.pregunta}\nRespuesta: ${respuestas[p.id] || ''}`).join('\n\n');
-    const prompt = `Eres experto en redactar reseñas auténticas para salones de peluquería.\nA partir de las respuestas de esta clienta, redacta una reseña genuina, emotiva y específica de entre 80 y 120 palabras.\nLa reseña debe sonar real, personal, no corporativa. En primera persona. Sin asteriscos ni emojis excesivos.\nQue transmita la transformación que ha vivido y anime a otras personas a reservar.\n\nRESPUESTAS DE LA CLIENTA:\n${resumenRespuestas}\n\nResponde SOLO con la reseña, sin introducción ni explicación.`;
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
-      });
-      const data = await res.json();
-      const texto = (data.content || []).map(i => i.text || '').join('').trim();
-      document.getElementById('resena-texto').textContent = texto;
-      mostrar('resultado');
-    } catch(e) {
-      mostrar('formulario');
-      const err = document.getElementById('msg-error');
-      err.textContent = 'No se pudo generar la reseña. Inténtalo de nuevo.';
-      err.style.display = 'block';
-    }
-  }
-
-  async function copiarYSaltar() {
-    const texto = document.getElementById('resena-texto').textContent;
-    try {
-      await navigator.clipboard.writeText(texto);
-    } catch {
-      const range = document.createRange();
-      range.selectNodeContents(document.getElementById('resena-texto'));
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-    }
-    // Siempre salta a la pantalla pegar, sin condiciones
-    mostrar('pegar');
-  }
-
-  function reiniciar() {
-    Object.keys(respuestas).forEach(k => delete respuestas[k]);
-    pasoActual = 0;
-    document.getElementById('resena-texto').textContent = '';
-    mostrar('intro');
-  }
+function reiniciar() {
+  Object.keys(respuestas).forEach(k => delete respuestas[k]);
+  pasoActual = 0;
+  document.getElementById('resena-texto').textContent = '';
+  document.getElementById('bloque-google').classList.remove('visible');
+  document.getElementById('btn-copiar').textContent = '📋 Copiar texto';
+  document.getElementById('btn-copiar').classList.remove('copiado');
+  mostrar('intro');
+}
 </script>
 </body>
 </html>
