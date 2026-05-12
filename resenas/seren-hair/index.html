@@ -23,21 +23,35 @@
       font-size: 13px; font-weight: 600; color: #c9956a;
       letter-spacing: .05em; text-transform: uppercase; margin-bottom: 20px;
     }
+
+    /* FASE BADGE */
+    .fase-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fef6ef; border: 1px solid #e8c9a8;
+      border-radius: 20px; padding: 4px 10px;
+      font-size: 10px; font-weight: 600; color: #c9956a;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .fase-dot { width: 5px; height: 5px; border-radius: 50%; background: #c9956a; }
+
     .pantalla { display: none; }
-    .pantalla.activa { display: block; }
+    .pantalla.activa { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
 
     .progreso-wrap { margin-bottom: 24px; }
     .progreso-info { display: flex; justify-content: space-between; font-size: 12px; color: #999; margin-bottom: 6px; }
     .barra-bg { height: 3px; background: #ede8e3; border-radius: 3px; overflow: hidden; }
-    .barra-fill { height: 100%; background: #c9956a; border-radius: 3px; transition: width .3s ease; width: 0%; }
+    .barra-fill { height: 100%; background: #c9956a; border-radius: 3px; transition: width .4s ease; width: 0%; }
 
     .q-numero { font-size: 12px; color: #bbb; margin-bottom: 8px; }
-    .q-texto { font-size: 18px; font-weight: 600; color: #1a1a1a; line-height: 1.4; margin-bottom: 20px; }
+    .q-texto { font-size: 18px; font-weight: 600; color: #1a1a1a; line-height: 1.4; margin-bottom: 6px; }
+    .q-hint { font-size: 12.5px; color: #aaa; line-height: 1.5; margin-bottom: 18px; font-weight: 300; }
 
     textarea {
       width: 100%; border: 1.5px solid #e0d8d0; border-radius: 10px;
       padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 15px;
-      color: #1a1a1a; resize: none; min-height: 100px;
+      color: #1a1a1a; resize: none; min-height: 110px;
       transition: border-color .2s; background: #faf8f5; line-height: 1.55;
     }
     textarea:focus { outline: none; border-color: #c9956a; background: #fff; }
@@ -46,10 +60,17 @@
     .opciones-grid { display: flex; flex-direction: column; gap: 8px; }
     .opcion-btn {
       background: #faf8f5; border: 1.5px solid #e0d8d0; border-radius: 10px;
-      padding: 12px 14px; text-align: left; font-family: 'DM Sans', sans-serif;
+      padding: 13px 14px; text-align: left; font-family: 'DM Sans', sans-serif;
       font-size: 14px; color: #333; cursor: pointer; transition: all .15s; line-height: 1.4;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .opcion-btn::before {
+      content: ''; width: 16px; height: 16px; border-radius: 50%;
+      border: 1.5px solid #d0c8c0; flex-shrink: 0; margin-top: 1px;
+      transition: all .15s;
     }
     .opcion-btn.sel { border-color: #c9956a; background: #fef6ef; color: #8b5e3c; font-weight: 500; }
+    .opcion-btn.sel::before { background: #c9956a; border-color: #c9956a; }
 
     .escala-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
     .escala-btn {
@@ -59,7 +80,7 @@
     }
     .escala-btn.sel { border-color: #c9956a; background: #c9956a; color: #fff; }
 
-    .nav-botones { display: flex; gap: 10px; margin-top: 20px; }
+    .nav-botones { display: flex; gap: 10px; margin-top: 22px; }
     .btn-sig {
       flex: 1; background: #c9956a; color: #fff; border: none;
       border-radius: 12px; padding: 14px 20px; font-family: 'DM Sans', sans-serif;
@@ -72,19 +93,30 @@
       color: #aaa; cursor: pointer;
     }
 
+    /* INTRO */
+    .intro-emoji { font-size: 36px; margin-bottom: 16px; }
     .intro-titulo { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; line-height: 1.3; }
-    .intro-sub { font-size: 14px; color: #777; line-height: 1.6; margin-bottom: 28px; }
+    .intro-sub { font-size: 14px; color: #777; line-height: 1.65; margin-bottom: 20px; }
+    .intro-fases { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .intro-fase {
+      display: flex; align-items: center; gap: 10px;
+      background: #faf8f5; border-radius: 10px; padding: 10px 12px;
+    }
+    .if-icon { font-size: 16px; }
+    .if-text { font-size: 13px; color: #555; font-weight: 400; }
     .btn-empezar {
       width: 100%; background: #c9956a; color: #fff; border: none;
       border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif;
-      font-size: 16px; font-weight: 600; cursor: pointer;
+      font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.15s;
     }
+    .btn-empezar:active { transform: scale(0.98); }
 
+    /* RESULTADO */
     .res-titulo { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
     .res-sub { font-size: 13px; color: #999; margin-bottom: 16px; }
     .resena-box {
       background: #faf8f5; border: 1.5px solid #e0d8d0; border-radius: 12px;
-      padding: 16px; font-size: 14px; color: #222; line-height: 1.7;
+      padding: 16px; font-size: 14px; color: #222; line-height: 1.75;
       margin-bottom: 14px; white-space: pre-wrap;
     }
     .btn-copiar {
@@ -94,7 +126,6 @@
       transition: background .3s;
     }
     .btn-copiar.copiado { background: #4caf7d; }
-
     .bloque-google {
       display: none; border: 2px dashed #c9956a; border-radius: 14px;
       padding: 18px 16px; text-align: center; margin-bottom: 10px;
@@ -121,12 +152,18 @@
 </head>
 <body>
 <div class="card">
-  <div class="salon-nombre">Seren Hair by Ana Llamas</div>
+  <div class="salon-nombre">✦ Seren Hair by Ana Llamas</div>
 
   <!-- INTRO -->
   <div id="pantalla-intro" class="pantalla activa">
-    <div class="intro-titulo">¿Qué tal te ha ido hoy? 💬</div>
-    <p class="intro-sub">Unas preguntas rápidas sobre tu visita. Con tus respuestas generamos una reseña que tú misma podrás publicar en Google. No te lleva ni 2 minutos.</p>
+    <div class="intro-emoji">💬</div>
+    <div class="intro-titulo">Cuéntanos cómo ha sido tu experiencia</div>
+    <p class="intro-sub">Con unas pocas preguntas generamos una reseña real y honesta que podrás publicar en Google. Solo te llevará 2 minutos.</p>
+    <div class="intro-fases">
+      <div class="intro-fase"><div class="if-icon">🌱</div><div class="if-text"><strong>Antes</strong> — cómo estabas cuando llegaste</div></div>
+      <div class="intro-fase"><div class="if-icon">✨</div><div class="if-text"><strong>Durante</strong> — cómo fue la experiencia</div></div>
+      <div class="intro-fase"><div class="if-icon">🌟</div><div class="if-text"><strong>Ahora</strong> — cómo te sientes al verte</div></div>
+    </div>
     <button class="btn-empezar" onclick="iniciar()">Empezar →</button>
   </div>
 
@@ -134,13 +171,15 @@
   <div id="pantalla-formulario" class="pantalla">
     <div class="progreso-wrap">
       <div class="progreso-info">
-        <span id="prog-texto">1 / 7</span>
+        <span id="prog-texto">1 / 9</span>
         <span id="prog-pct">0%</span>
       </div>
       <div class="barra-bg"><div class="barra-fill" id="barra-fill"></div></div>
     </div>
+    <div class="fase-badge" id="fase-badge"><div class="fase-dot"></div><span id="fase-texto">El antes</span></div>
     <div class="q-numero" id="q-numero"></div>
     <div class="q-texto" id="q-texto"></div>
+    <div class="q-hint" id="q-hint"></div>
     <div id="q-input"></div>
     <div class="nav-botones">
       <button class="btn-volver" id="btn-volver" onclick="anterior()" style="display:none">← Atrás</button>
@@ -150,13 +189,13 @@
 
   <!-- RESULTADO -->
   <div id="pantalla-resultado" class="pantalla">
-    <div class="res-titulo">Tu reseña ✍️</div>
+    <div class="res-titulo">Tu reseña está lista ✍️</div>
     <p class="res-sub">Léela, y si te parece bien, cópiala y publícala en Google.</p>
     <div class="resena-box" id="resena-texto"></div>
     <button class="btn-copiar" id="btn-copiar" onclick="copiar()">📋 Copiar texto</button>
     <div class="bloque-google" id="bloque-google">
-      <p>👆 Texto copiado.<br>Pulsa el botón, se abre Google. <strong>Mantén pulsado</strong> el campo de texto y elige <strong>Pegar</strong>.<br>Una vez pegada, también puedes añadir fotos antes de publicar.</p>
-      <a href="https://g.page/r/Cfqu7r_6QoP5EBE/review" target="_blank" class="btn-google">⭐ Ir a Google y pegar mi reseña</a>
+      <p>👆 Texto copiado.<br>Pulsa el botón, se abre Google. <strong>Mantén pulsado</strong> el campo de texto y elige <strong>Pegar</strong>.</p>
+      <a href="https://g.page/r/Cfqu7r_6QoP5EBE/review" target="_blank" class="btn-google">⭐ Ir a Google y publicar mi reseña</a>
       <div class="nota-fotos">💡 Una vez en Google puedes añadir fotos antes de publicar</div>
     </div>
     <button class="btn-nuevo" onclick="reiniciar()">Empezar de nuevo</button>
@@ -164,148 +203,208 @@
 
 </div>
 <script>
-// ─── CONFIGURACIÓN DEL SALÓN ───────────────────────────────────────────────
 const SALON = "Seren Hair by Ana Llamas";
 const GOOGLE_URL = "https://g.page/r/Cfqu7r_6QoP5EBE/review";
-// ──────────────────────────────────────────────────────────────────────────
 
 const preguntas = [
+  // ── FASE 1: EL ANTES ──
   {
-    id: 1,
-    texto: "¿Con qué problema o situación venías hoy al salón?",
+    id: 1, fase: "El antes",
+    texto: "¿Cómo estaba tu cabello o cómo te sentías antes de venir hoy?",
+    hint: "No hay respuesta correcta — solo tu situación real.",
     tipo: "opciones",
     opciones: [
-      "Llevaba tiempo sin cortarme y necesitaba un cambio",
-      "El pelo estaba muy dañado, seco o sin vida",
-      "Quería cambiar el color pero no sabía bien qué hacerme",
-      "Tenía el pelo muy crecido y ya no lo aguantaba",
-      "Venía a un tratamiento, no tanto a un cambio de look"
+      "Llevaba mucho tiempo sin hacerme nada y ya lo necesitaba",
+      "El pelo estaba muy dañado, seco y sin vida",
+      "Quería un cambio pero no sabía bien qué hacerme",
+      "No me sentía bien con mi aspecto y necesitaba algo diferente",
+      "Venía a tratarme el pelo, lo tenía muy castigado"
     ]
   },
   {
-    id: 2,
-    texto: "¿Cuánto tiempo llevabas con eso?",
+    id: 2, fase: "El antes",
+    texto: "¿Habías tenido alguna experiencia anterior que no te convenciera?",
+    hint: "Puede ser en otro salón o simplemente llevar tiempo sin encontrar lo que buscabas.",
     tipo: "opciones",
     opciones: [
-      "Poco, era algo reciente",
-      "Unos cuantos meses",
-      "Bastante tiempo, más de un año",
-      "Llevaba tiempo dejándolo pasar y ya tocaba"
+      "Sí, en otros sitios no me escucharon bien",
+      "Sí, el resultado nunca era lo que yo quería",
+      "No especialmente, pero tenía dudas de si me entenderían",
+      "No, era mi primera vez buscando algo así",
+      "Llevaba tiempo sin ir a ningún sitio por eso mismo"
+    ]
+  },
+  // ── FASE 2: EL RECORRIDO ──
+  {
+    id: 3, fase: "La experiencia",
+    texto: "¿Qué notaste diferente desde el primer momento en Seren Hair?",
+    hint: "Puede ser la forma en que te recibieron, cómo te escucharon, el ambiente...",
+    tipo: "opciones",
+    opciones: [
+      "Me escucharon de verdad, sin ir con prisas",
+      "Desde el principio sentí que entendían lo que quería",
+      "El ambiente era tranquilo y me sentí a gusto enseguida",
+      "Me explicaron todo antes de hacer nada, eso me dio confianza",
+      "Me trataron con mucha amabilidad y sin ninguna presión"
     ]
   },
   {
-    id: 3,
-    texto: "¿Qué querías conseguir hoy?",
-    tipo: "opciones",
-    opciones: [
-      "Que el pelo tuviera más vida y más brillo",
-      "Un cambio de look, algo diferente",
-      "Sentirme bien conmigo misma otra vez",
-      "Arreglarlo sin que se note demasiado el cambio",
-      "Recuperar el color o corregir lo que tenía antes"
-    ]
-  },
-  {
-    id: 4,
-    texto: "¿Cómo ha sido el trato en el salón?",
-    tipo: "opciones",
-    opciones: [
-      "Muy bien, me han escuchado desde el principio",
-      "Han sido amables y se han tomado su tiempo",
-      "Me han explicado bien lo que iban a hacer",
-      "Me he sentido cómoda, sin prisas ni presiones",
-      "Bien en general, sin más"
-    ]
-  },
-  {
-    id: 5,
-    texto: "¿Qué es lo que más te ha gustado del resultado?",
+    id: 4, fase: "La experiencia",
+    texto: "¿Hubo algún momento en que pensaste: «estoy en el lugar correcto»?",
+    hint: "Un detalle, una frase, algo que notaste durante el servicio.",
     tipo: "textarea",
-    placeholder: "Ej: cómo ha quedado el color, el corte, la textura... lo que más hayas notado"
+    placeholder: "Ej: cuando Ana me explicó exactamente qué iba a hacer y por qué, supe que estaba en buenas manos..."
   },
   {
-    id: 6,
-    texto: "Del 1 al 10, ¿cómo puntuarías la visita de hoy?",
+    id: 5, fase: "La experiencia",
+    texto: "¿Cuál es el momento que más te ha gustado de la visita de hoy?",
+    hint: "",
+    tipo: "opciones",
+    opciones: [
+      "El diagnóstico inicial, que se tomaron su tiempo conmigo",
+      "El momento en que vi cómo iba quedando el resultado",
+      "El trato durante todo el servicio, sin prisa y con detalle",
+      "La explicación de los productos y cómo cuidar el pelo en casa",
+      "El resultado final al verme en el espejo"
+    ]
+  },
+  // ── FASE 3: LA TRANSFORMACIÓN ──
+  {
+    id: 6, fase: "La transformación",
+    texto: "¿Cómo te sientes ahora al verte en el espejo?",
+    hint: "Esta es la parte más importante — la emoción del resultado.",
+    tipo: "opciones",
+    opciones: [
+      "Muy bien, es exactamente lo que quería",
+      "Me he sentido renovada, como cuando te cuidas de verdad",
+      "Contenta y con más confianza en mí misma",
+      "Aliviada, porque el pelo estaba necesitando esto",
+      "Sorprendida para bien, ha superado mis expectativas"
+    ]
+  },
+  {
+    id: 7, fase: "La transformación",
+    texto: "¿Qué es lo que más te gusta del resultado?",
+    hint: "El color, el corte, la textura, el brillo... lo que más notes.",
+    tipo: "textarea",
+    placeholder: "Ej: el color ha quedado súper natural y el pelo tiene un brillo que no tenía desde hace años..."
+  },
+  {
+    id: 8, fase: "La transformación",
+    texto: "Del 1 al 10, ¿cómo puntuarías la experiencia de hoy?",
+    hint: "",
     tipo: "escala"
   },
   {
-    id: 7,
-    texto: "¿Se lo recomendarías a alguien?",
+    id: 9, fase: "La transformación",
+    texto: "¿Qué le dirías a alguien que lleva tiempo pensando en venir pero no se ha animado?",
+    hint: "Como si le hablaras a una amiga que está dudando.",
     tipo: "opciones",
     opciones: [
-      "Sí, se lo diría a amigas o conocidas",
-      "Sí, a cualquiera que quiera hacerse algo con el pelo",
-      "Sí, sobre todo a alguien que lleve tiempo sin animarse",
-      "Sí, aunque no suelo recomendar sitios, este lo recomendaría"
+      "Que no lo piense más y que venga, no se va a arrepentir",
+      "Que aquí te escuchan de verdad y eso marca la diferencia",
+      "Que merece la pena tratarse el pelo bien y este es el sitio",
+      "Que si llevas tiempo sin sentirte bien con tu pelo, esto es lo que necesitas",
+      "Que el resultado habla solo, solo hay que animarse a venir"
     ]
   }
 ];
 
+// FRASES para construir la reseña
 const frases = {
-  problema: {
-    "Llevaba tiempo sin cortarme y necesitaba un cambio": "Llevaba tiempo sin pasarme por la peluquería y ya tocaba hacer algo.",
-    "El pelo estaba muy dañado, seco o sin vida": "Tenía el pelo bastante dañado, seco y sin vida.",
-    "Quería cambiar el color pero no sabía bien qué hacerme": "Quería cambiar el color pero no tenía muy claro qué hacerme.",
-    "Tenía el pelo muy crecido y ya no lo aguantaba": "El pelo se me había ido de las manos y ya no lo aguantaba más.",
-    "Venía a un tratamiento, no tanto a un cambio de look": "Venía a hacerme un tratamiento, el pelo lo tenía bastante castigado."
+  // Pregunta 1 — el antes
+  1: {
+    "Llevaba mucho tiempo sin hacerme nada y ya lo necesitaba": "Llevaba mucho tiempo sin pasarme por la peluquería y ya era hora.",
+    "El pelo estaba muy dañado, seco y sin vida": "Tenía el pelo bastante dañado, seco y sin vida.",
+    "Quería un cambio pero no sabía bien qué hacerme": "Quería un cambio pero no tenía muy claro qué hacerme exactamente.",
+    "No me sentía bien con mi aspecto y necesitaba algo diferente": "Llevaba tiempo sin sentirme bien con mi pelo y necesitaba hacer algo al respecto.",
+    "Venía a tratarme el pelo, lo tenía muy castigado": "Venía a tratarme el pelo, lo tenía muy castigado y lo notaba."
   },
-  tiempo: {
-    "Poco, era algo reciente": "",
-    "Unos cuantos meses": "Llevaba unos meses así.",
-    "Bastante tiempo, más de un año": "Llevaba más de un año con lo mismo.",
-    "Llevaba tiempo dejándolo pasar y ya tocaba": "Llevaba tiempo dándole largas y al final me animé."
+  // Pregunta 2 — experiencias previas
+  2: {
+    "Sí, en otros sitios no me escucharon bien": "En otros salones nunca me sentí del todo escuchada.",
+    "Sí, el resultado nunca era lo que yo quería": "Otras veces el resultado no era lo que yo buscaba.",
+    "No especialmente, pero tenía dudas de si me entenderían": "Tenía mis dudas de si me iban a entender bien.",
+    "No, era mi primera vez buscando algo así": "",
+    "Llevaba tiempo sin ir a ningún sitio por eso mismo": "Llevaba tiempo sin ir a ningún sitio precisamente por eso."
   },
-  deseo: {
-    "Que el pelo tuviera más vida y más brillo": "Quería que tuviera más vida y más brillo.",
-    "Un cambio de look, algo diferente": "Quería un cambio, algo diferente a lo de siempre.",
-    "Sentirme bien conmigo misma otra vez": "Sobre todo quería sentirme bien conmigo misma.",
-    "Arreglarlo sin que se note demasiado el cambio": "Quería arreglarlo pero sin un cambio muy drástico.",
-    "Recuperar el color o corregir lo que tenía antes": "Quería recuperar el color y dejarlo como antes."
+  // Pregunta 3 — qué notó diferente
+  3: {
+    "Me escucharon de verdad, sin ir con prisas": "Desde el primer momento me escucharon de verdad, sin prisas.",
+    "Desde el principio sentí que entendían lo que quería": "Desde el principio tuve la sensación de que entendían exactamente lo que quería.",
+    "El ambiente era tranquilo y me sentí a gusto enseguida": "El ambiente era muy tranquilo y me sentí a gusto desde que entré.",
+    "Me explicaron todo antes de hacer nada, eso me dio confianza": "Me explicaron lo que iban a hacer antes de empezar, y eso me dio mucha confianza.",
+    "Me trataron con mucha amabilidad y sin ninguna presión": "El trato fue muy amable y en ningún momento sentí presión."
   },
-  trato: {
-    "Muy bien, me han escuchado desde el principio": "Me han atendido muy bien, escucharon lo que quería desde el principio.",
-    "Han sido amables y se han tomado su tiempo": "Han sido amables y no han ido con prisas.",
-    "Me han explicado bien lo que iban a hacer": "Me explicaron lo que iban a hacer antes de empezar, eso se agradece.",
-    "Me he sentido cómoda, sin prisas ni presiones": "Me he sentido cómoda en todo momento, sin ninguna presión.",
-    "Bien en general, sin más": "El trato ha sido correcto."
+  // Pregunta 5 — momento favorito
+  5: {
+    "El diagnóstico inicial, que se tomaron su tiempo conmigo": "Lo que más me gustó fue el diagnóstico inicial, que se tomaron su tiempo conmigo.",
+    "El momento en que vi cómo iba quedando el resultado": "Ver cómo iba quedando el resultado durante el proceso fue muy especial.",
+    "El trato durante todo el servicio, sin prisa y con detalle": "El trato durante todo el servicio, sin prisa y cuidando cada detalle.",
+    "La explicación de los productos y cómo cuidar el pelo en casa": "Me explicaron qué productos usar en casa, eso lo valoro mucho.",
+    "El resultado final al verme en el espejo": "El momento de verme al espejo al final."
   },
-  recomendacion: {
-    "Sí, se lo diría a amigas o conocidas": "Se lo recomendaría a amigas sin dudarlo.",
-    "Sí, a cualquiera que quiera hacerse algo con el pelo": "Se lo diría a cualquiera que quiera hacerse algo con el pelo.",
-    "Sí, sobre todo a alguien que lleve tiempo sin animarse": "Especialmente a alguien que lleve tiempo sin animarse a ir.",
-    "Sí, aunque no suelo recomendar sitios, este lo recomendaría": "No suelo recomendar sitios así como así, pero este sí."
+  // Pregunta 6 — cómo se siente
+  6: {
+    "Muy bien, es exactamente lo que quería": "El resultado es exactamente lo que quería.",
+    "Me he sentido renovada, como cuando te cuidas de verdad": "Salí sintiéndome renovada, como cuando te cuidas de verdad.",
+    "Contenta y con más confianza en mí misma": "Salí contenta y con más confianza en mí misma.",
+    "Aliviada, porque el pelo estaba necesitando esto": "Me sentí aliviada, el pelo lo necesitaba y se nota.",
+    "Sorprendida para bien, ha superado mis expectativas": "Ha superado mis expectativas, la verdad."
+  },
+  // Pregunta 9 — recomendación
+  9: {
+    "Que no lo piense más y que venga, no se va a arrepentir": "A quien esté pensando en venir le digo que no lo piense más, no se va a arrepentir.",
+    "Que aquí te escuchan de verdad y eso marca la diferencia": "Aquí te escuchan de verdad, y eso marca la diferencia.",
+    "Que merece la pena tratarse el pelo bien y este es el sitio": "Merece la pena tratarse el pelo bien, y este es el sitio para hacerlo.",
+    "Que si llevas tiempo sin sentirte bien con tu pelo, esto es lo que necesitas": "Si llevas tiempo sin sentirte bien con tu pelo, esto es lo que necesitas.",
+    "Que el resultado habla solo, solo hay que animarse a venir": "El resultado habla solo. Solo hay que animarse a venir."
   }
 };
 
 function construirResena(r) {
-  const nota = r[6];
-  const resultado = r[5] || "";
   let partes = [];
 
-  let p1 = frases.problema[r[1]] || "";
-  let p2 = frases.tiempo[r[2]] || "";
+  // ANTES
+  let p1 = frases[1][r[1]] || "";
+  let p2 = frases[2][r[2]] || "";
   if (p1 && p2) partes.push(p1 + " " + p2);
   else if (p1) partes.push(p1);
 
-  let p3 = frases.deseo[r[3]] || "";
+  // EXPERIENCIA
+  let p3 = frases[3][r[3]] || "";
   if (p3) partes.push(p3);
 
-  let p4 = frases.trato[r[4]] || "";
-  if (p4) partes.push(p4);
+  // Momento clave (textarea libre)
+  if (r[4] && r[4].trim()) {
+    let txt = r[4].trim();
+    if (!txt.endsWith('.')) txt += '.';
+    partes.push(txt.charAt(0).toUpperCase() + txt.slice(1));
+  }
 
-  if (resultado.trim()) {
-    let res = resultado.trim();
+  let p5 = frases[5][r[5]] || "";
+  if (p5) partes.push(p5);
+
+  // TRANSFORMACIÓN
+  let p6 = frases[6][r[6]] || "";
+  if (p6) partes.push(p6);
+
+  // Resultado (textarea libre)
+  if (r[7] && r[7].trim()) {
+    let res = r[7].trim();
     if (!res.endsWith('.')) res += '.';
     partes.push("Lo que más me ha gustado: " + res.charAt(0).toLowerCase() + res.slice(1));
   }
 
-  if (nota) {
-    if (nota >= 9) partes.push("Le doy un " + nota + " sobre 10.");
-    else partes.push("Le pondría un " + nota + " sobre 10.");
+  // Puntuación
+  if (r[8]) {
+    if (r[8] >= 9) partes.push("Le doy un " + r[8] + " sobre 10, sin dudarlo.");
+    else partes.push("Le pondría un " + r[8] + " sobre 10.");
   }
 
-  let p6 = frases.recomendacion[r[7]] || "";
-  if (p6) partes.push(p6);
+  // Recomendación
+  let p9 = frases[9][r[9]] || "";
+  if (p9) partes.push(p9);
 
   return partes.join(" ");
 }
@@ -313,16 +412,15 @@ function construirResena(r) {
 let pasoActual = 0;
 const respuestas = {};
 
-function mostrar(id) {
-  document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
-  document.getElementById('pantalla-' + id).classList.add('activa');
-  window.scrollTo(0, 0);
+function iniciar() {
+  mostrar('pantalla-formulario');
+  renderPregunta();
 }
 
-function iniciar() {
-  pasoActual = 0;
-  mostrar('formulario');
-  renderPregunta();
+function mostrar(id) {
+  document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+  document.getElementById(id).classList.add('activa');
+  window.scrollTo(0, 0);
 }
 
 function renderPregunta() {
@@ -330,32 +428,22 @@ function renderPregunta() {
   const total = preguntas.length;
   const pct = Math.round((pasoActual / total) * 100);
 
-  document.getElementById('q-numero').textContent = `Pregunta ${pasoActual + 1} de ${total}`;
-  document.getElementById('q-texto').textContent = q.texto;
-  document.getElementById('prog-texto').textContent = `${pasoActual + 1} / ${total}`;
+  document.getElementById('prog-texto').textContent = (pasoActual + 1) + ' / ' + total;
   document.getElementById('prog-pct').textContent = pct + '%';
   document.getElementById('barra-fill').style.width = pct + '%';
-  document.getElementById('btn-volver').style.display = pasoActual > 0 ? 'inline-block' : 'none';
+  document.getElementById('fase-texto').textContent = q.fase;
+  document.getElementById('q-numero').textContent = 'Pregunta ' + (pasoActual + 1) + ' de ' + total;
+  document.getElementById('q-texto').textContent = q.texto;
+  document.getElementById('q-hint').textContent = q.hint || '';
 
-  const btnSig = document.getElementById('btn-siguiente');
-  btnSig.textContent = pasoActual === total - 1 ? 'Generar reseña ✨' : 'Siguiente →';
-  btnSig.disabled = !respuestas[q.id];
+  document.getElementById('btn-volver').style.display = pasoActual > 0 ? '' : 'none';
+  document.getElementById('btn-siguiente').textContent = pasoActual < total - 1 ? 'Siguiente →' : 'Ver mi reseña →';
 
-  const container = document.getElementById('q-input');
-  container.innerHTML = '';
+  const input = document.getElementById('q-input');
+  input.innerHTML = '';
+  document.getElementById('btn-siguiente').disabled = true;
 
-  if (q.tipo === 'textarea') {
-    const ta = document.createElement('textarea');
-    ta.placeholder = q.placeholder;
-    ta.value = respuestas[q.id] || '';
-    ta.addEventListener('input', () => {
-      respuestas[q.id] = ta.value;
-      btnSig.disabled = ta.value.trim().length === 0;
-    });
-    container.appendChild(ta);
-    btnSig.disabled = !(respuestas[q.id] && respuestas[q.id].trim().length > 0);
-    setTimeout(() => ta.focus(), 50);
-  } else if (q.tipo === 'opciones') {
+  if (q.tipo === 'opciones') {
     const grid = document.createElement('div');
     grid.className = 'opciones-grid';
     q.opciones.forEach(op => {
@@ -363,30 +451,44 @@ function renderPregunta() {
       btn.className = 'opcion-btn' + (respuestas[q.id] === op ? ' sel' : '');
       btn.textContent = op;
       btn.onclick = () => {
-        respuestas[q.id] = op;
         grid.querySelectorAll('.opcion-btn').forEach(b => b.classList.remove('sel'));
         btn.classList.add('sel');
-        btnSig.disabled = false;
+        respuestas[q.id] = op;
+        document.getElementById('btn-siguiente').disabled = false;
       };
       grid.appendChild(btn);
     });
-    container.appendChild(grid);
+    input.appendChild(grid);
+    if (respuestas[q.id]) document.getElementById('btn-siguiente').disabled = false;
+
+  } else if (q.tipo === 'textarea') {
+    const ta = document.createElement('textarea');
+    ta.placeholder = q.placeholder || '';
+    ta.value = respuestas[q.id] || '';
+    ta.oninput = () => {
+      respuestas[q.id] = ta.value;
+      document.getElementById('btn-siguiente').disabled = ta.value.trim().length < 5;
+    };
+    input.appendChild(ta);
+    if (respuestas[q.id] && respuestas[q.id].trim().length >= 5) document.getElementById('btn-siguiente').disabled = false;
+
   } else if (q.tipo === 'escala') {
     const wrap = document.createElement('div');
     wrap.className = 'escala-wrap';
     for (let i = 1; i <= 10; i++) {
       const btn = document.createElement('button');
-      btn.className = 'escala-btn' + (respuestas[q.id] == i ? ' sel' : '');
+      btn.className = 'escala-btn' + (respuestas[q.id] === i ? ' sel' : '');
       btn.textContent = i;
       btn.onclick = () => {
-        respuestas[q.id] = i;
         wrap.querySelectorAll('.escala-btn').forEach(b => b.classList.remove('sel'));
         btn.classList.add('sel');
-        btnSig.disabled = false;
+        respuestas[q.id] = i;
+        document.getElementById('btn-siguiente').disabled = false;
       };
       wrap.appendChild(btn);
     }
-    container.appendChild(wrap);
+    input.appendChild(wrap);
+    if (respuestas[q.id]) document.getElementById('btn-siguiente').disabled = false;
   }
 }
 
@@ -395,12 +497,7 @@ function siguiente() {
     pasoActual++;
     renderPregunta();
   } else {
-    const texto = construirResena(respuestas);
-    document.getElementById('resena-texto').textContent = texto;
-    document.getElementById('bloque-google').classList.remove('visible');
-    document.getElementById('btn-copiar').textContent = '📋 Copiar texto';
-    document.getElementById('btn-copiar').classList.remove('copiado');
-    mostrar('resultado');
+    mostrarResultado();
   }
 }
 
@@ -408,35 +505,30 @@ function anterior() {
   if (pasoActual > 0) { pasoActual--; renderPregunta(); }
 }
 
-async function copiar() {
+function mostrarResultado() {
+  const texto = construirResena(respuestas);
+  document.getElementById('resena-texto').textContent = texto;
+  mostrar('pantalla-resultado');
+}
+
+function copiar() {
   const texto = document.getElementById('resena-texto').textContent;
-  const btn = document.getElementById('btn-copiar');
-  const bloque = document.getElementById('bloque-google');
-
-  try {
-    await navigator.clipboard.writeText(texto);
-  } catch {
-    const range = document.createRange();
-    range.selectNodeContents(document.getElementById('resena-texto'));
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-  }
-
-  btn.textContent = '✓ Copiado';
-  btn.classList.add('copiado');
-  bloque.classList.add('visible');
-  setTimeout(() => bloque.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  navigator.clipboard.writeText(texto).then(() => {
+    const btn = document.getElementById('btn-copiar');
+    btn.textContent = '✅ ¡Copiado!';
+    btn.classList.add('copiado');
+    document.getElementById('bloque-google').classList.add('visible');
+    setTimeout(() => {
+      btn.textContent = '📋 Copiar texto';
+      btn.classList.remove('copiado');
+    }, 3000);
+  });
 }
 
 function reiniciar() {
-  Object.keys(respuestas).forEach(k => delete respuestas[k]);
   pasoActual = 0;
-  document.getElementById('resena-texto').textContent = '';
-  document.getElementById('bloque-google').classList.remove('visible');
-  document.getElementById('btn-copiar').textContent = '📋 Copiar texto';
-  document.getElementById('btn-copiar').classList.remove('copiado');
-  mostrar('intro');
+  Object.keys(respuestas).forEach(k => delete respuestas[k]);
+  mostrar('pantalla-intro');
 }
 </script>
 </body>
