@@ -1,446 +1,519 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deja tu reseña</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      background: #f7f3ef;
-      display: flex; align-items: flex-start; justify-content: center;
-      padding: 20px 16px 40px;
-    }
-    .card {
-      background: #fff; border-radius: 20px; padding: 32px 28px;
-      max-width: 480px; width: 100%;
-      box-shadow: 0 4px 24px rgba(0,0,0,.08);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Reseñas · NonDual In Salons</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0F0D0B;
+  --ink2: #1A1714;
+  --gold: #C9956A;
+  --gold2: #E8B89A;
+  --gold3: rgba(201,149,106,0.1);
+  --cream: #FAF6F1;
+  --cream2: #F0E9DF;
+  --cream3: #E5DAD0;
+  --muted: #8A7A6A;
+  --green: #4A8A5A;
+  --green2: rgba(74,138,90,0.1);
+  --wa: #25D366;
+}
 
-    .pantalla { display: none; }
-    .pantalla.activa { display: block; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { scroll-behavior:smooth; }
+body { background:var(--cream); color:var(--ink); font-family:'DM Sans',sans-serif; overflow-x:hidden; }
 
-    /* PROGRESO */
-    .progreso-wrap { margin-bottom: 24px; }
-    .progreso-info { display: flex; justify-content: space-between; font-size: 12px; color: #999; margin-bottom: 6px; }
-    .barra-bg { height: 3px; background: #ede8e3; border-radius: 3px; overflow: hidden; }
-    .barra-fill { height: 100%; background: #c9956a; border-radius: 3px; transition: width .3s ease; width: 0%; }
+/* NOISE */
+body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:.025; pointer-events:none; z-index:999; }
 
-    /* PREGUNTA */
-    .q-numero { font-size: 12px; color: #bbb; margin-bottom: 8px; letter-spacing: .05em; }
-    .q-texto { font-size: 18px; font-weight: 600; color: #1a1a1a; line-height: 1.4; margin-bottom: 20px; }
+/* ── HERO ── */
+.hero {
+  background: var(--ink);
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+  padding-bottom: 60px;
+}
 
-    textarea {
-      width: 100%; border: 1.5px solid #e0d8d0; border-radius: 10px;
-      padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 15px;
-      color: #1a1a1a; resize: none; min-height: 100px;
-      transition: border-color .2s; background: #faf8f5; line-height: 1.55;
-    }
-    textarea:focus { outline: none; border-color: #c9956a; background: #fff; }
-    textarea::placeholder { color: #bbb; }
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 20%, rgba(201,149,106,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(201,149,106,0.07) 0%, transparent 55%);
+  pointer-events:none;
+}
 
-    .opciones-grid { display: flex; flex-direction: column; gap: 8px; }
-    .opcion-btn {
-      background: #faf8f5; border: 1.5px solid #e0d8d0; border-radius: 10px;
-      padding: 12px 14px; text-align: left; font-family: 'DM Sans', sans-serif;
-      font-size: 14px; color: #333; cursor: pointer; transition: all .15s; line-height: 1.4;
-    }
-    .opcion-btn:active { transform: scale(.98); }
-    .opcion-btn.sel { border-color: #c9956a; background: #fef6ef; color: #8b5e3c; font-weight: 500; }
+.hero::after { display:none; }
 
-    /* ESCALA */
-    .escala-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
-    .escala-btn {
-      flex: 1; min-width: 36px; background: #faf8f5; border: 1.5px solid #e0d8d0;
-      border-radius: 8px; padding: 10px 4px; font-family: 'DM Sans', sans-serif;
-      font-size: 15px; font-weight: 500; color: #555; cursor: pointer; transition: all .15s;
-      text-align: center;
-    }
-    .escala-btn.sel { border-color: #c9956a; background: #c9956a; color: #fff; }
+/* Top line */
+.top-line { height:3px; background:linear-gradient(90deg, var(--gold), var(--gold2), transparent); }
 
-    /* NAV */
-    .nav-botones { display: flex; gap: 10px; margin-top: 20px; }
-    .btn-sig {
-      flex: 1; background: #c9956a; color: #fff; border: none;
-      border-radius: 12px; padding: 14px 20px; font-family: 'DM Sans', sans-serif;
-      font-size: 15px; font-weight: 600; cursor: pointer; transition: all .2s;
-    }
-    .btn-sig:disabled { opacity: .35; cursor: not-allowed; }
-    .btn-sig:not(:disabled):active { transform: scale(.97); }
-    .btn-volver {
-      background: transparent; border: 1.5px solid #e0d8d0; border-radius: 12px;
-      padding: 14px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px;
-      color: #aaa; cursor: pointer;
-    }
+/* Nav */
+.nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 24px;
+  position:relative; z-index:10;
+  animation: fadeDown 0.8s ease both;
+}
+@keyframes fadeDown { from{opacity:0;transform:translateY(-10px);} to{opacity:1;transform:translateY(0);} }
 
-    /* INTRO */
-    .intro-titulo { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; line-height: 1.3; }
-    .intro-sub { font-size: 14px; color: #777; line-height: 1.6; margin-bottom: 28px; }
-    .btn-empezar {
-      width: 100%; background: #c9956a; color: #fff; border: none;
-      border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif;
-      font-size: 16px; font-weight: 600; cursor: pointer;
-    }
+.nav-brand {
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px; font-weight:600; color:var(--cream);
+  letter-spacing:0.3px;
+}
+.nav-brand em { color:var(--gold); font-style:italic; }
+.nav-tag {
+  font-size:9px; color:rgba(201,149,106,0.6);
+  letter-spacing:2.5px; text-transform:uppercase;
+  border:1px solid rgba(201,149,106,0.2);
+  padding:5px 10px; border-radius:2px;
+}
 
-    /* GENERANDO */
-    .generando-wrap { text-align: center; padding: 30px 0; }
-    .spinner {
-      width: 40px; height: 40px; border: 3px solid #ede8e3; border-top-color: #c9956a;
-      border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 16px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .generando-titulo { font-size: 17px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
-    .generando-sub { font-size: 13px; color: #aaa; }
+/* Hero content */
+.hero-body {
+  flex:1; display:flex; flex-direction:column;
+  justify-content:center; padding:40px 24px 0;
+  position:relative; z-index:5;
+  animation: fadeUp 0.9s ease 0.2s both;
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
 
-    /* RESULTADO */
-    .res-titulo { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
-    .res-sub { font-size: 13px; color: #999; margin-bottom: 16px; }
-    .resena-box {
-      background: #faf8f5; border: 1.5px solid #e0d8d0; border-radius: 12px;
-      padding: 16px; font-size: 14px; color: #222; line-height: 1.7;
-      margin-bottom: 14px; white-space: pre-wrap;
-    }
-    .btn-copiar {
-      width: 100%; background: #c9956a; color: #fff; border: none;
-      border-radius: 12px; padding: 15px; font-family: 'DM Sans', sans-serif;
-      font-size: 15px; font-weight: 600; cursor: pointer; transition: all .2s;
-      margin-bottom: 12px;
-    }
-    .btn-copiar.copiado { background: #4caf7d; }
+.hero-eyebrow {
+  display:flex; align-items:center; gap:10px; margin-bottom:20px;
+}
+.eyebrow-line { width:28px; height:1px; background:var(--gold); }
+.eyebrow-text { font-size:10px; color:var(--gold); letter-spacing:2.5px; text-transform:uppercase; }
 
-    /* BLOQUE GOOGLE — oculto hasta copiar */
-    .bloque-google {
-      display: none;
-      border: 2px dashed #c9956a;
-      border-radius: 14px;
-      padding: 18px 16px;
-      text-align: center;
-      margin-bottom: 10px;
-      animation: parpadeo 1.2s ease-in-out infinite;
-    }
-    .bloque-google.visible { display: block; }
-    @keyframes parpadeo {
-      0%, 100% { border-color: #c9956a; background: #fff; }
-      50% { border-color: #e8b89a; background: #fef6ef; }
-    }
-    .bloque-google p {
-      font-size: 14px; color: #555; margin-bottom: 12px; line-height: 1.5; font-weight: 500;
-    }
-    .btn-google {
-      display: block; text-decoration: none;
-      background: #1a73e8; color: #fff; border-radius: 10px;
-      padding: 14px 20px; font-family: 'DM Sans', sans-serif;
-      font-size: 15px; font-weight: 600; text-align: center;
-    }
+.hero-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(42px,11vw,72px);
+  font-weight:300; line-height:1.05;
+  color:var(--cream); letter-spacing:-1px;
+  margin-bottom:8px;
+}
+.hero-title em { color:var(--gold); font-style:italic; font-weight:400; }
+.hero-title strong { font-weight:700; }
 
-    .btn-nuevo {
-      width: 100%; background: transparent; border: 1.5px solid #e0d8d0;
-      border-radius: 10px; padding: 11px; font-family: 'DM Sans', sans-serif;
-      font-size: 13px; color: #bbb; cursor: pointer; margin-top: 4px;
-    }
+.hero-sub {
+  font-size:clamp(13px,3.5vw,16px);
+  color:rgba(250,246,241,0.45);
+  line-height:1.7; font-weight:300;
+  max-width:360px; margin-bottom:36px;
+  margin-top:12px;
+}
 
-    .msg-error { color: #c0392b; font-size: 13px; margin-top: 8px; }
-  </style>
+.hero-stat-row {
+  display:flex; gap:28px; margin-bottom:36px;
+  animation: fadeUp 0.9s ease 0.5s both;
+}
+.hero-stat { text-align:center; }
+.hs-n {
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px; font-weight:600; font-style:italic;
+  color:var(--gold); line-height:1;
+}
+.hs-l { font-size:9.5px; color:rgba(250,246,241,0.3); margin-top:4px; letter-spacing:0.5px; }
+
+.hero-cta {
+  display:flex; flex-direction:column; gap:10px;
+  max-width:340px;
+  animation: fadeUp 0.9s ease 0.6s both;
+}
+.btn-gold {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  padding:15px 24px; background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--ink); font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:600; letter-spacing:0.3px;
+  border:none; border-radius:2px; cursor:pointer; text-decoration:none;
+  box-shadow:0 6px 24px rgba(201,149,106,0.28); transition:transform 0.15s;
+}
+.btn-gold:active { transform:scale(0.97); }
+.btn-outline {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  padding:14px 24px; background:transparent;
+  border:1px solid rgba(201,149,106,0.2);
+  color:rgba(250,246,241,0.5); font-family:'DM Sans',sans-serif;
+  font-size:13px; font-weight:300;
+  border-radius:2px; cursor:pointer; text-decoration:none;
+  transition:all 0.2s;
+}
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  animation:fadeUp 1s ease 1s both;
+  z-index:5;
+}
+.scroll-hint-text { font-size:9px; color:rgba(201,149,106,0.35); letter-spacing:2px; text-transform:uppercase; }
+.scroll-arrow { width:1px; height:32px; background:linear-gradient(to bottom, rgba(201,149,106,0.4), transparent); }
+
+/* ── SECTIONS ── */
+.section { padding:60px 24px; max-width:480px; margin:0 auto; }
+
+.section-label {
+  display:flex; align-items:center; gap:10px; margin-bottom:16px;
+}
+.sl-line { width:20px; height:1px; background:var(--gold); }
+.sl-text { font-size:9px; color:var(--gold); letter-spacing:2.5px; text-transform:uppercase; font-weight:500; }
+
+.section-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(28px,7vw,38px);
+  font-weight:600; line-height:1.15; color:var(--ink);
+  margin-bottom:12px;
+}
+.section-title em { color:var(--gold); font-style:italic; }
+.section-sub { font-size:13px; color:var(--muted); line-height:1.75; font-weight:300; margin-bottom:28px; }
+
+/* PROBLEM BLOCK */
+.problem-block {
+  background:var(--ink); border-radius:0;
+  padding:28px 24px; margin-bottom:14px;
+  position:relative; overflow:hidden;
+}
+.problem-block::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:linear-gradient(to bottom, var(--gold), var(--gold2));
+}
+.pb-num {
+  font-family:'Cormorant Garamond',serif;
+  font-size:48px; font-weight:300; font-style:italic;
+  color:rgba(201,149,106,0.15); line-height:1;
+  margin-bottom:-10px;
+}
+.pb-title { font-size:15px; font-weight:600; color:var(--cream); margin-bottom:6px; }
+.pb-text { font-size:12.5px; color:rgba(250,246,241,0.4); line-height:1.65; font-weight:300; }
+
+/* HOW IT WORKS */
+.step-item {
+  display:flex; gap:16px; align-items:flex-start;
+  padding:18px 0; border-bottom:1px solid var(--cream3);
+}
+.step-item:last-child { border-bottom:none; }
+.step-num {
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px; font-weight:300; font-style:italic;
+  color:var(--gold); line-height:1; flex-shrink:0;
+  width:32px; text-align:center;
+}
+.step-content {}
+.step-title { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+.step-text { font-size:12px; color:var(--muted); line-height:1.65; font-weight:300; }
+
+/* BENEFITS */
+.benefit-grid { display:flex; flex-direction:column; gap:10px; }
+.benefit-card {
+  background:#fff; padding:18px 16px;
+  border:1px solid var(--cream3);
+  display:flex; gap:14px; align-items:flex-start;
+  transition:border-color 0.2s;
+}
+.benefit-card:hover { border-color:var(--gold); }
+.benefit-icon {
+  width:38px; height:38px; background:var(--gold3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+}
+.benefit-title { font-size:13.5px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+.benefit-text { font-size:12px; color:var(--muted); line-height:1.6; font-weight:300; }
+
+/* MATERIALS */
+.material-list { display:flex; flex-direction:column; gap:10px; }
+.material-item {
+  background:var(--cream2); padding:16px;
+  display:flex; gap:12px; align-items:center;
+  border-left:3px solid var(--gold);
+}
+.material-icon { font-size:22px; flex-shrink:0; }
+.material-title { font-size:13px; font-weight:600; color:var(--ink); }
+.material-text { font-size:11.5px; color:var(--muted); margin-top:2px; font-weight:300; }
+
+/* STAT HIGHLIGHT */
+.stat-highlight {
+  background:var(--ink2); padding:32px 24px; text-align:center;
+  position:relative; overflow:hidden; margin:0 -24px;
+}
+.stat-highlight::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at center, rgba(201,149,106,0.1) 0%, transparent 70%);
+}
+.sh-num {
+  font-family:'Cormorant Garamond',serif;
+  font-size:72px; font-weight:300; font-style:italic;
+  color:var(--gold); line-height:1; position:relative;
+}
+.sh-text { font-size:14px; color:rgba(250,246,241,0.5); font-weight:300; margin-top:8px; position:relative; }
+.sh-sub { font-size:11px; color:rgba(201,149,106,0.4); margin-top:6px; position:relative; letter-spacing:0.5px; }
+
+/* DIVIDER */
+.divider { height:1px; background:var(--cream3); margin:0 24px; }
+
+/* CTA FINAL */
+.cta-final {
+  background:var(--ink); padding:40px 24px; text-align:center;
+}
+.cta-final-label { font-size:9px; color:var(--gold); letter-spacing:2.5px; text-transform:uppercase; margin-bottom:16px; }
+.cta-final-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px; font-weight:600; font-style:italic;
+  color:var(--cream); line-height:1.25; margin-bottom:10px;
+}
+.cta-final-sub { font-size:13px; color:rgba(250,246,241,0.4); line-height:1.65; margin-bottom:24px; font-weight:300; }
+.wa-btn {
+  display:flex; align-items:center; justify-content:center; gap:9px;
+  width:100%; padding:15px; background:var(--wa); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600;
+  border:none; border-radius:2px; cursor:pointer; text-decoration:none;
+  box-shadow:0 4px 18px rgba(37,211,102,0.22); transition:transform 0.15s;
+  margin-bottom:10px;
+}
+.wa-btn:active { transform:scale(0.97); }
+.cta-note { font-size:11px; color:rgba(250,246,241,0.2); }
+
+/* FOOTER */
+.footer {
+  background:var(--ink2); padding:20px 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-top:1px solid rgba(201,149,106,0.1);
+}
+.footer-brand {
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px; font-style:italic; color:var(--gold);
+}
+.footer-back { font-size:11px; color:var(--muted); text-decoration:none; }
+
+.reveal { opacity:0; transform:translateY(16px); transition:opacity 0.55s ease,transform 0.55s ease; }
+.reveal.in { opacity:1; transform:translateY(0); }
+</style>
 </head>
 <body>
-<div class="card">
 
-  <!-- INTRO -->
-  <div id="pantalla-intro" class="pantalla activa">
-    <div class="intro-titulo">¿Qué tal te ha ido hoy? 💬</div>
-    <p class="intro-sub">Solo unas preguntas rápidas sobre tu visita. Con tus respuestas generamos una reseña que tú misma podrás revisar y publicar en Google. No te llevará más de 2 minutos.</p>
-    <button class="btn-empezar" onclick="iniciar()">Empezar →</button>
+<!-- HERO -->
+<section class="hero">
+  <div class="top-line"></div>
+  <nav class="nav">
+    <div class="nav-brand">Non<em>Dual</em> In Salons</div>
+    <span class="nav-tag">Sistema de Reseñas</span>
+  </nav>
+
+  <div class="hero-body">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <div class="eyebrow-text">Para salones de peluquería</div>
+    </div>
+    <h1 class="hero-title">
+      Más reseñas.<br>
+      Más <em>clientes.</em><br>
+      <strong>Sin esfuerzo.</strong>
+    </h1>
+    <p class="hero-sub">Un sistema inteligente que guía a tus clientas paso a paso para escribir la reseña perfecta en Google — en menos de 2 minutos.</p>
+
+    <div class="hero-stat-row">
+      <div class="hero-stat"><div class="hs-n">93%</div><div class="hs-l">Clientes leen reseñas</div></div>
+      <div class="hero-stat"><div class="hs-n">2'</div><div class="hs-l">Para completarla</div></div>
+      <div class="hero-stat"><div class="hs-n">×3</div><div class="hs-l">Más conversión</div></div>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#como-funciona" class="btn-gold">Ver cómo funciona →</a>
+      <a href="https://wa.me/34637516751?text=Hola%2C%20me%20interesa%20el%20sistema%20de%20rese%C3%B1as%20para%20mi%20sal%C3%B3n." class="btn-outline" target="_blank">💬 Solicitar para mi salón</a>
+    </div>
   </div>
 
-  <!-- FORMULARIO -->
-  <div id="pantalla-formulario" class="pantalla">
-    <div class="progreso-wrap">
-      <div class="progreso-info">
-        <span id="prog-texto">1 / 7</span>
-        <span id="prog-pct">0%</span>
+  <div class="scroll-hint">
+    <div class="scroll-hint-text">Descubre más</div>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- EL PROBLEMA -->
+<section class="section" id="problema">
+  <div class="section-label reveal"><div class="sl-line"></div><div class="sl-text">El problema</div></div>
+  <h2 class="section-title reveal">Tu salón es <em>increíble.</em><br>Pero nadie lo sabe.</h2>
+  <p class="section-sub reveal">El 93% de los nuevos clientes elige un salón basándose en las reseñas de Google. Si no tienes suficientes reseñas — o si las que tienes no reflejan tu nivel real — estás perdiendo clientes cada día sin saberlo.</p>
+
+  <div class="problem-block reveal">
+    <div class="pb-num">01</div>
+    <div class="pb-title">Tus clientas quieren dejarte reseña... pero no saben qué escribir</div>
+    <div class="pb-text">El momento de mayor satisfacción es justo al salir del salón. Pero cuando llegan a casa y abren Google, la pantalla en blanco las paraliza. ¿Qué pongo? ¿Cómo lo digo? Y al final no escriben nada.</div>
+  </div>
+
+  <div class="problem-block reveal">
+    <div class="pb-num">02</div>
+    <div class="pb-title">Pedirle reseñas a tus clientas resulta incómodo</div>
+    <div class="pb-text">Decirle a una clienta "por favor déjame una reseña" puede sentirse forzado o desesperado. El sistema lo hace de forma natural, elegante y sin que tú tengas que pedirlo directamente.</div>
+  </div>
+
+  <div class="problem-block reveal">
+    <div class="pb-num">03</div>
+    <div class="pb-title">La competencia tiene más reseñas aunque su trabajo sea peor</div>
+    <div class="pb-text">En Google, quien aparece primero gana. Y quien aparece primero tiene más reseñas. No necesariamente mejor calidad — más cantidad y más recientes. Este sistema te pone al nivel.</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CÓMO FUNCIONA -->
+<section class="section" id="como-funciona">
+  <div class="section-label reveal"><div class="sl-line"></div><div class="sl-text">Cómo funciona</div></div>
+  <h2 class="section-title reveal">Simple para ti.<br><em>Fácil</em> para tu clienta.</h2>
+
+  <div class="reveal">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">La clienta escanea el QR en el espejo</div>
+        <div class="step-text">Una pegatina elegante en el espejo del salón con el QR personalizado de tu salón. Mientras espera o al terminar, lo escanea con el móvil.</div>
       </div>
-      <div class="barra-bg"><div class="barra-fill" id="barra-fill"></div></div>
     </div>
-    <div class="q-numero" id="q-numero"></div>
-    <div class="q-texto" id="q-texto"></div>
-    <div id="q-input"></div>
-    <div id="msg-error" class="msg-error" style="display:none"></div>
-    <div class="nav-botones">
-      <button class="btn-volver" id="btn-volver" onclick="anterior()" style="display:none">← Atrás</button>
-      <button class="btn-sig" id="btn-siguiente" onclick="siguiente()" disabled>Siguiente →</button>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">El sistema la guía pregunta a pregunta</div>
+        <div class="step-text">En lugar de una pantalla en blanco, la clienta responde preguntas sencillas sobre su experiencia. ¿Cómo fue el trato? ¿Qué servicio se hizo? ¿Cómo quedó el resultado?</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Se genera la reseña perfecta automáticamente</div>
+        <div class="step-text">Con sus respuestas se construye un texto personalizado, completo y natural. La clienta lo revisa, lo copia y lo pega en Google con un solo toque.</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Tu salón sube posiciones en Google</div>
+        <div class="step-text">Cada reseña nueva mejora tu posicionamiento local. Más visibilidad, más clientes nuevos, más ingresos — de forma completamente automática.</div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- GENERANDO -->
-  <div id="pantalla-generando" class="pantalla">
-    <div class="generando-wrap">
-      <div class="spinner"></div>
-      <div class="generando-titulo">Preparando tu reseña…</div>
-      <p class="generando-sub">Un momento.</p>
-    </div>
-  </div>
-
-  <!-- RESULTADO -->
-  <div id="pantalla-resultado" class="pantalla">
-    <div class="res-titulo">Tu reseña ✍️</div>
-    <p class="res-sub">Léela, y si te parece bien, cópiala y publícala en Google.</p>
-    <div class="resena-box" id="resena-texto"></div>
-    <button class="btn-copiar" id="btn-copiar" onclick="copiar()">📋 Copiar texto</button>
-
-    <div class="bloque-google" id="bloque-google">
-      <p>👆 Texto copiado. Ahora pulsa aquí, abre Google y <strong>mantén pulsado</strong> el campo de texto para <strong>pegar</strong>.</p>
-      <a href="https://g.page/r/Cfqu7r_6QoP5EBE/review" target="_blank" class="btn-google">
-        ⭐ Ir a Google y pegar mi reseña
-      </a>
-    </div>
-
-    <button class="btn-nuevo" onclick="reiniciar()">Empezar de nuevo</button>
-  </div>
-
+<!-- STAT -->
+<div class="stat-highlight reveal">
+  <div class="sh-num">4,8★</div>
+  <div class="sh-text">Puntuación media de los salones que usan el sistema</div>
+  <div class="sh-sub">Las reseñas guiadas generan textos más completos y valoraciones más altas</div>
 </div>
 
+<!-- BENEFICIOS -->
+<section class="section">
+  <div class="section-label reveal"><div class="sl-line"></div><div class="sl-text">Beneficios</div></div>
+  <h2 class="section-title reveal">Todo lo que<br>gana tu <em>salón</em></h2>
+
+  <div class="benefit-grid reveal">
+    <div class="benefit-card">
+      <div class="benefit-icon">📈</div>
+      <div>
+        <div class="benefit-title">Más visibilidad en Google</div>
+        <div class="benefit-text">Los salones con más reseñas recientes aparecen antes en las búsquedas locales. Cada reseña nueva es un empujón hacia arriba.</div>
+      </div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🎯</div>
+      <div>
+        <div class="benefit-title">Reseñas de mayor calidad</div>
+        <div class="benefit-text">El sistema guía a la clienta para que mencione servicios específicos, el nombre del estilista y detalles concretos — exactamente lo que Google valora.</div>
+      </div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">⚡</div>
+      <div>
+        <div class="benefit-title">Sin esfuerzo para el equipo</div>
+        <div class="benefit-text">No hay que pedirlo, no hay que recordarlo. La pegatina trabaja sola. El equipo puede centrarse en lo que sabe hacer: peluquería.</div>
+      </div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">✂️</div>
+      <div>
+        <div class="benefit-title">Personalizado para tu salón</div>
+        <div class="benefit-text">Cada salón tiene su propia página con sus colores, su nombre y su enlace de Google específico. No es genérico — es tuyo.</div>
+      </div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">📱</div>
+      <div>
+        <div class="benefit-title">Funciona desde cualquier móvil</div>
+        <div class="benefit-text">Sin descargas, sin registros, sin complicaciones. La clienta escanea, responde y publica — todo desde el navegador de su móvil.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MATERIALES -->
+<section class="section">
+  <div class="section-label reveal"><div class="sl-line"></div><div class="sl-text">Qué incluye</div></div>
+  <h2 class="section-title reveal">Todo listo para<br><em>instalar</em> y usar</h2>
+  <p class="section-sub reveal">Al contratar el sistema recibes todo lo que necesitas para empezar en menos de 24 horas.</p>
+
+  <div class="material-list reveal">
+    <div class="material-item">
+      <div class="material-icon">🔗</div>
+      <div>
+        <div class="material-title">Página personalizada de reseña</div>
+        <div class="material-text">Con el nombre y colores de tu salón, accesible desde cualquier móvil.</div>
+      </div>
+    </div>
+    <div class="material-item">
+      <div class="material-icon">📲</div>
+      <div>
+        <div class="material-title">Código QR personalizado</div>
+        <div class="material-text">Listo para imprimir y usar en cualquier formato.</div>
+      </div>
+    </div>
+    <div class="material-item">
+      <div class="material-icon">🪞</div>
+      <div>
+        <div class="material-title">Diseño de pegatina para espejos</div>
+        <div class="material-text">Elegante, discreta y con instrucciones claras para la clienta.</div>
+      </div>
+    </div>
+    <div class="material-item">
+      <div class="material-icon">💳</div>
+      <div>
+        <div class="material-title">Tarjeta para entregar al cobrar</div>
+        <div class="material-text">Pequeño recordatorio para que la clienta deje la reseña cuando llegue a casa.</div>
+      </div>
+    </div>
+    <div class="material-item">
+      <div class="material-icon">🔧</div>
+      <div>
+        <div class="material-title">Configuración incluida</div>
+        <div class="material-text">Conectamos la página directamente con el perfil de Google de tu salón.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-final reveal">
+  <div class="cta-final-label">Empieza hoy</div>
+  <div class="cta-final-title">Tu salón merece<br>ser el primero<br>que ven.</div>
+  <p class="cta-final-sub">Escríbenos por WhatsApp y en menos de 24 horas tienes el sistema funcionando en tu salón.</p>
+  <a href="https://wa.me/34637516751?text=Hola%2C%20me%20interesa%20el%20sistema%20de%20rese%C3%B1as%20para%20mi%20sal%C3%B3n.%20%C2%BFMe%20puedes%20dar%20m%C3%A1s%20informaci%C3%B3n%3F" class="wa-btn" target="_blank">💬 Quiero el sistema para mi salón</a>
+  <div class="cta-note">Sin permanencia · Configuración en 24h · Soporte incluido</div>
+</div>
+
+<footer class="footer">
+  <div class="footer-brand">NonDual In Salons</div>
+  <a href="/" class="footer-back">← Volver al inicio</a>
+</footer>
+
 <script>
-const preguntas = [
-  {
-    id: 1,
-    texto: "¿Con qué problema o situación venías hoy al salón?",
-    tipo: "opciones",
-    opciones: [
-      "Llevaba tiempo sin cortarme y necesitaba un cambio",
-      "El pelo estaba muy dañado, seco o sin vida",
-      "Quería cambiar el color pero no sabía bien qué hacerme",
-      "Tenía el pelo muy crecido y ya no lo aguantaba más",
-      "Venía a un tratamiento, no tanto a un cambio de look"
-    ]
-  },
-  {
-    id: 2,
-    texto: "¿Cuánto tiempo llevabas con eso?",
-    tipo: "opciones",
-    opciones: [
-      "Poco, era algo reciente",
-      "Unos cuantos meses",
-      "Bastante tiempo, más de un año",
-      "Llevaba tiempo dejándolo pasar y ya tocaba"
-    ]
-  },
-  {
-    id: 3,
-    texto: "¿Qué querías conseguir hoy?",
-    tipo: "opciones",
-    opciones: [
-      "Que el pelo tuviera más vida y más brillo",
-      "Un cambio de look, algo diferente",
-      "Sentirme bien conmigo misma otra vez",
-      "Arreglarlo sin que se note demasiado el cambio",
-      "Recuperar el color o corregir lo que tenía antes"
-    ]
-  },
-  {
-    id: 4,
-    texto: "¿Cómo ha sido el trato en el salón?",
-    tipo: "opciones",
-    opciones: [
-      "Muy bien, me han escuchado desde el principio",
-      "Han sido amables y se han tomado su tiempo",
-      "Me han explicado bien lo que iban a hacer",
-      "Me he sentido cómoda, sin prisas ni presiones",
-      "Bien en general, sin más"
-    ]
-  },
-  {
-    id: 5,
-    texto: "¿Qué es lo que más te ha gustado del resultado?",
-    tipo: "textarea",
-    placeholder: "Ej: cómo ha quedado el color, el corte, la textura... lo que sea que más hayas notado"
-  },
-  {
-    id: 6,
-    texto: "Del 1 al 10, ¿cómo puntuarías la visita de hoy?",
-    tipo: "escala"
-  },
-  {
-    id: 7,
-    texto: "¿Lo recomendarías? ¿A quién le dirías que venga aquí?",
-    tipo: "opciones",
-    opciones: [
-      "Sí, se lo diría a amigas o conocidas",
-      "Sí, a cualquiera que quiera hacerse algo con el pelo",
-      "Sí, sobre todo a alguien que lleve tiempo sin animarse a cambiar",
-      "Sí, aunque no suelo recomendar sitios, este lo recomendaría"
-    ]
-  }
-];
-
-let pasoActual = 0;
-const respuestas = {};
-
-function mostrar(id) {
-  document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
-  document.getElementById('pantalla-' + id).classList.add('activa');
-  window.scrollTo(0, 0);
-}
-
-function iniciar() {
-  pasoActual = 0;
-  mostrar('formulario');
-  renderPregunta();
-}
-
-function renderPregunta() {
-  const q = preguntas[pasoActual];
-  const total = preguntas.length;
-  const pct = Math.round((pasoActual / total) * 100);
-
-  document.getElementById('q-numero').textContent = `Pregunta ${pasoActual + 1} de ${total}`;
-  document.getElementById('q-texto').textContent = q.texto;
-  document.getElementById('prog-texto').textContent = `${pasoActual + 1} / ${total}`;
-  document.getElementById('prog-pct').textContent = pct + '%';
-  document.getElementById('barra-fill').style.width = pct + '%';
-  document.getElementById('btn-volver').style.display = pasoActual > 0 ? 'inline-block' : 'none';
-  document.getElementById('msg-error').style.display = 'none';
-
-  const btnSig = document.getElementById('btn-siguiente');
-  btnSig.textContent = pasoActual === total - 1 ? 'Generar reseña ✨' : 'Siguiente →';
-  btnSig.disabled = !respuestas[q.id];
-
-  const container = document.getElementById('q-input');
-  container.innerHTML = '';
-
-  if (q.tipo === 'textarea') {
-    const ta = document.createElement('textarea');
-    ta.placeholder = q.placeholder;
-    ta.value = respuestas[q.id] || '';
-    ta.addEventListener('input', () => {
-      respuestas[q.id] = ta.value;
-      btnSig.disabled = ta.value.trim().length === 0;
-    });
-    container.appendChild(ta);
-    btnSig.disabled = !(respuestas[q.id] && respuestas[q.id].trim().length > 0);
-    setTimeout(() => ta.focus(), 50);
-
-  } else if (q.tipo === 'opciones') {
-    const grid = document.createElement('div');
-    grid.className = 'opciones-grid';
-    q.opciones.forEach(op => {
-      const btn = document.createElement('button');
-      btn.className = 'opcion-btn' + (respuestas[q.id] === op ? ' sel' : '');
-      btn.textContent = op;
-      btn.onclick = () => {
-        respuestas[q.id] = op;
-        grid.querySelectorAll('.opcion-btn').forEach(b => b.classList.remove('sel'));
-        btn.classList.add('sel');
-        btnSig.disabled = false;
-      };
-      grid.appendChild(btn);
-    });
-    container.appendChild(grid);
-
-  } else if (q.tipo === 'escala') {
-    const wrap = document.createElement('div');
-    wrap.className = 'escala-wrap';
-    for (let i = 1; i <= 10; i++) {
-      const btn = document.createElement('button');
-      btn.className = 'escala-btn' + (respuestas[q.id] == i ? ' sel' : '');
-      btn.textContent = i;
-      btn.onclick = () => {
-        respuestas[q.id] = i;
-        wrap.querySelectorAll('.escala-btn').forEach(b => b.classList.remove('sel'));
-        btn.classList.add('sel');
-        btnSig.disabled = false;
-      };
-      wrap.appendChild(btn);
-    }
-    container.appendChild(wrap);
-  }
-}
-
-function siguiente() {
-  if (pasoActual < preguntas.length - 1) {
-    pasoActual++;
-    renderPregunta();
-  } else {
-    generarResena();
-  }
-}
-
-function anterior() {
-  if (pasoActual > 0) { pasoActual--; renderPregunta(); }
-}
-
-async function generarResena() {
-  mostrar('generando');
-
-  const resumen = preguntas.map(p => `${p.texto}\nRespuesta: ${respuestas[p.id] || ''}`).join('\n\n');
-
-  const prompt = `Eres una persona normal que acaba de salir de la peluquería y va a dejar una reseña en Google. Escríbela en primera persona, con un tono natural y cercano, como hablaría alguien corriente en España. Sin florituras, sin palabras rebuscadas, sin que suene a publicidad. Que parezca real porque lo es.
-
-La reseña debe tener entre 60 y 90 palabras. Nada de asteriscos ni emojis raros. Puede tener alguna frase corta, directa. Que refleje lo que vivió esta persona sin exagerar.
-
-RESPUESTAS DEL CLIENTE:
-${resumen}
-
-Escribe solo la reseña, sin introducción ni explicación.`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    const data = await res.json();
-    const texto = (data.content || []).map(i => i.text || '').join('').trim();
-    document.getElementById('resena-texto').textContent = texto;
-    document.getElementById('bloque-google').classList.remove('visible');
-    document.getElementById('btn-copiar').textContent = '📋 Copiar texto';
-    document.getElementById('btn-copiar').classList.remove('copiado');
-    mostrar('resultado');
-  } catch(e) {
-    mostrar('formulario');
-    const err = document.getElementById('msg-error');
-    err.textContent = 'Ha habido un error. Inténtalo otra vez.';
-    err.style.display = 'block';
-  }
-}
-
-async function copiar() {
-  const texto = document.getElementById('resena-texto').textContent;
-  const btn = document.getElementById('btn-copiar');
-  const bloque = document.getElementById('bloque-google');
-
-  try {
-    await navigator.clipboard.writeText(texto);
-  } catch {
-    // fallback selección manual
-    const range = document.createRange();
-    range.selectNodeContents(document.getElementById('resena-texto'));
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-  }
-
-  btn.textContent = '✓ Copiado';
-  btn.classList.add('copiado');
-  bloque.classList.add('visible');
-  setTimeout(() => bloque.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
-}
-
-function reiniciar() {
-  Object.keys(respuestas).forEach(k => delete respuestas[k]);
-  pasoActual = 0;
-  document.getElementById('resena-texto').textContent = '';
-  document.getElementById('bloque-google').classList.remove('visible');
-  document.getElementById('btn-copiar').textContent = '📋 Copiar texto';
-  document.getElementById('btn-copiar').classList.remove('copiado');
-  mostrar('intro');
-}
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => {
+    if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('in'),i*60); obs.unobserve(e.target); }
+  });
+},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
 </body>
 </html>
